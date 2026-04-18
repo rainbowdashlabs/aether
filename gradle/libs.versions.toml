@@ -46,11 +46,13 @@ ocular = { group = "dev.chojo", name = "ocular", version = "2.1.4" }
 jackson-yaml = { group = "tools.jackson.dataformat", name = "jackson-dataformat-yaml", version.ref = "jackson" }
 jackson-toml = { group = "tools.jackson.dataformat", name = "jackson-dataformat-toml", version.ref = "jackson" }
 jackson-core = { group = "tools.jackson.core", name = "jackson-core", version.ref = "jackson" }
+jackson-annotation = { group = "com.fasterxml.jackson.core", name = "jackson-annotations", version = "2.21" }
 jackson-databind = { group = "tools.jackson.core", name = "jackson-databind", version.ref = "jackson" }
 
 # Other
 guava = { group = "com.google.guava", name = "guava", version = "33.3.0-jre" }
 commons-validator = { group = "commons-validator", name = "commons-validator", version = "1.10.1" }
+apache-httpclient = {group="org.apache.httpcomponents.client5", name = "httpclient5", version = "5.3.1"}
 
 # Testing
 junit-bom = { group = "org.junit", name = "junit-bom", version.ref = "junit" }

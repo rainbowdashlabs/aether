@@ -16,6 +16,9 @@ import java.util.Set;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+/**
+ * Registry for {@link MailSource}s.
+ */
 public final class MailSourceRegistry {
     private static final Logger log = getLogger(MailSourceRegistry.class);
     private static final Set<MailSource> SOURCES = new HashSet<>();
@@ -26,6 +29,11 @@ public final class MailSourceRegistry {
         register(MailSource.KOFI);
     }
 
+    /**
+     * Register a new {@link MailSource}.
+     *
+     * @param source the source to register
+     */
     public static void register(MailSource source) {
         if (SOURCES.contains(source)) {
             throw new IllegalArgumentException("Source already registered");
@@ -34,10 +42,21 @@ public final class MailSourceRegistry {
         SOURCES.add(source);
     }
 
+    /**
+     * Get all registered {@link MailSource}s.
+     *
+     * @return an unmodifiable set of all registered sources
+     */
     public static Set<MailSource> sources() {
         return Collections.unmodifiableSet(SOURCES);
     }
 
+    /**
+     * Get a {@link MailSource} by its name.
+     *
+     * @param name the name of the source
+     * @return an optional containing the source if found
+     */
     public Optional<MailSource> byName(String name) {
         return sources().stream()
                 .filter(source -> source.name().equalsIgnoreCase(name))

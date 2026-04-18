@@ -15,3 +15,6 @@ pluginManagement {
         }
     }
 }
+
+include("discord-oauth")
+include("common-web")

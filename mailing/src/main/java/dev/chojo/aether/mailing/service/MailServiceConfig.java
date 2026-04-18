@@ -8,5 +8,14 @@ package dev.chojo.aether.mailing.service;
 
 import dev.chojo.aether.mailing.configuration.Mailing;
 
+/**
+ * Configuration for the {@link MailService}.
+ *
+ * @param host              the configured public host for URLs
+ * @param mailing           the mailing configuration (SMTP, IMAP, credentials)
+ * @param templates         the mail templates
+ * @param userMailsProvider the provider for user mails
+ * @param cleanup           a runnable to clean up expired mails
+ */
 public record MailServiceConfig(
         String host, Mailing mailing, MailTemplates templates, UserMailsProvider userMailsProvider, Runnable cleanup) {}

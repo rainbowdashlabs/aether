@@ -12,20 +12,39 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Handles mail templates loading and preparation.
+ */
 public class MailTemplates {
     private final String mailRoot;
     private final ClassLoader classLoader;
 
+    /**
+     * Create a new {@link MailTemplates} instance with default mail root.
+     */
     public MailTemplates() {
         mailRoot = "mails/";
         classLoader = getClass().getClassLoader();
     }
 
+    /**
+     * Create a new {@link MailTemplates} instance with the given mail root and class loader.
+     *
+     * @param mailRoot    the root directory for templates
+     * @param classLoader the class loader to use
+     */
     public MailTemplates(String mailRoot, ClassLoader classLoader) {
         this.mailRoot = mailRoot;
         this.classLoader = classLoader;
     }
 
+    /**
+     * Prepare a mail for a user not found on Ko-fi.
+     *
+     * @param address the mail address
+     * @param host    the configured host
+     * @return the prepared mail
+     */
     public Mail kofiUserNotFound(String address, String host) {
         String subject = "Thank you for your purchase! - Link your Account to your Ko-fi Account";
         String html =
@@ -33,6 +52,15 @@ public class MailTemplates {
         return new Mail(address, subject, html);
     }
 
+    /**
+     * Prepare a mail for account confirmation.
+     *
+     * @param address  the mail address
+     * @param host     the configured host
+     * @param mailHash the mail hash
+     * @param code     the verification code
+     * @return the prepared mail
+     */
     public Mail accountConfirmation(String address, String host, String mailHash, String code) {
         String subject = "Confirm your email address";
         String url = "{{ host }}/user/settings?code={{ code }}&hash={{ mailhash }}"
@@ -46,6 +74,12 @@ public class MailTemplates {
         return new Mail(address, subject, html);
     }
 
+    /**
+     * Load a template by its name.
+     *
+     * @param name the template name
+     * @return the template content
+     */
     public String loadTemplate(String name) {
         try (InputStream is = Mail.class.getClassLoader().getResourceAsStream(mailRoot + name)) {
             if (is == null) {

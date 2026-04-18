@@ -45,17 +45,33 @@ import java.util.regex.Pattern;
 
 import static org.slf4j.LoggerFactory.getLogger;
 
+/**
+ * Core mail service for handling mail registration, verification, and sending.
+ */
 public abstract class MailService {
     private static final Pattern MAIL_SHORTER = Pattern.compile("(.{2}).+?@.+?(.{2}\\..+)");
     private static final Logger log = getLogger(MailService.class);
     private final MailServiceConfig config;
     private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
+    /**
+     * Create a new mail service with the given configuration.
+     *
+     * @param config the configuration
+     */
     public MailService(MailServiceConfig config) {
         this.config = config;
         executor.scheduleAtFixedRate(this::cleanupExpiredMails, 30, 60, TimeUnit.MINUTES);
     }
 
+    /**
+     * Register a new mail address for a user and send a verification email.
+     *
+     * @param user   the user id
+     * @param mail   the mail address
+     * @param source the source of the mail registration
+     * @return the result of the registration
+     */
     public Result<MailEntry, FailureReason> registerAndPromptVerify(long user, String mail, MailSource source) {
         String hash = mailHash(mail);
         Optional<UserMails> entry = mailProvider().byHash(hash);
@@ -102,6 +118,14 @@ public abstract class MailService {
         return null;
     }
 
+    /**
+     * Register a verified mail address for a user.
+     *
+     * @param user   the user id
+     * @param mail   the mail address
+     * @param source the source of the mail registration
+     * @return the result of the registration
+     */
     public Result<MailEntry, FailureReason> registerVerifiedMail(long user, String mail, MailSource source) {
         var mails = mailProvider().byHash(mailHash(mail));
         if (mails.isPresent()) {
@@ -125,6 +149,14 @@ public abstract class MailService {
         return Result.success(mailEntry);
     }
 
+    /**
+     * Create a new {@link MailEntry} for a user.
+     *
+     * @param user   the user id
+     * @param mail   the mail address
+     * @param source the source of the mail registration
+     * @return the result containing the mail entry if successful
+     */
     public Result<MailEntry, FailureReason> createMailEntry(long user, String mail, MailSource source) {
         boolean valid = EmailValidator.getInstance().isValid(mail);
         if (!valid) {
@@ -158,6 +190,12 @@ public abstract class MailService {
             Instant verificationRequested,
             String verificationCode);
 
+    /**
+     * Get the time in seconds a user must wait before they can request another verification mail.
+     *
+     * @param user the user id
+     * @return the retry after time in seconds
+     */
     public long getRetryAfterSeconds(long user) {
         UserMails userMails = mailProvider().byUser(user);
         return userMails.mails().values().stream()
@@ -168,10 +206,21 @@ public abstract class MailService {
                 .orElse(0L);
     }
 
+    /**
+     * Calculate the hash for the given mail address.
+     *
+     * @param mail the mail address
+     * @return the hashed mail address
+     */
     public String mailHash(String mail) {
         return mailing().mailHash(mail);
     }
 
+    /**
+     * Send an email.
+     *
+     * @param mail the email to send
+     */
     public void sendMail(Mail mail) {
         Session session = createSession();
         MimeMessage mimeMessage;
@@ -280,22 +329,45 @@ public abstract class MailService {
         return true;
     }
 
+    /**
+     * Get the configured public host for URLs.
+     *
+     * @return the host
+     */
     public String host() {
         return config.host();
     }
 
+    /**
+     * Get the mailing configuration.
+     *
+     * @return the mailing configuration
+     */
     public Mailing mailing() {
         return config.mailing();
     }
 
+    /**
+     * Get the mail templates.
+     *
+     * @return the mail templates
+     */
     public MailTemplates templates() {
         return config.templates();
     }
 
+    /**
+     * Get the user mails provider.
+     *
+     * @return the user mails provider
+     */
     public UserMailsProvider mailProvider() {
         return config.userMailsProvider();
     }
 
+    /**
+     * Clean up expired mail entries.
+     */
     private void cleanupExpiredMails() {
         config.cleanup().run();
     }

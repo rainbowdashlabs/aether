@@ -6,4 +6,7 @@
 
 package dev.chojo.aether.kofi.exception;
 
+/**
+ * Exception thrown when a Ko-fi webhook request is unauthorized.
+ */
 public class UnauthorizedException extends RuntimeException {}

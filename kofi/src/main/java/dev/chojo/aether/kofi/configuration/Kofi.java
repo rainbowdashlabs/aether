@@ -6,9 +6,15 @@
 
 package dev.chojo.aether.kofi.configuration;
 
+/**
+ * Configuration for Ko-fi integration.
+ */
 public class Kofi {
     private String token;
 
+    /**
+     * @return The verification token for Ko-fi webhooks.
+     */
     public String token() {
         return token;
     }

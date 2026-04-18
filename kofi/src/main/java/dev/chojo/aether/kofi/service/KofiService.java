@@ -42,6 +42,9 @@ import static dev.chojo.aether.supporter.access.SkuTarget.GUILD;
 import static dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.Platform.KOFI;
 import static net.dv8tion.jda.api.entities.Entitlement.EntitlementType.APPLICATION_SUBSCRIPTION;
 
+/**
+ * Service for handling Ko-fi webhooks and managing purchases and subscriptions.
+ */
 public abstract class KofiService {
     private static final Logger log = LoggerFactory.getLogger(KofiService.class);
     private final Kofi configuration;
@@ -50,6 +53,14 @@ public abstract class KofiService {
     private final MailService mailService;
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
+    /**
+     * Creates a new KofiService.
+     *
+     * @param configuration          The Ko-fi configuration.
+     * @param userProvider           The user provider for resolving Discord users.
+     * @param mailService            The mail service for managing user emails and sending notifications.
+     * @param supporterConfiguration The supporter configuration for mapping products to subscriptions.
+     */
     public KofiService(
             Kofi configuration,
             UserProvider userProvider,
@@ -62,6 +73,12 @@ public abstract class KofiService {
         executorService.scheduleAtFixedRate(this::removeExpiredSubs, 40, 60, TimeUnit.MINUTES);
     }
 
+    /**
+     * Handles a Ko-fi transaction from a webhook.
+     *
+     * @param data The transaction data.
+     * @throws UnauthorizedException If the verification token is invalid.
+     */
     public void handle(KofiTransaction data) {
         if (!configuration.token().equals(data.verificationToken())) {
             throw new UnauthorizedException();
@@ -97,8 +114,20 @@ public abstract class KofiService {
         }
     }
 
+    /**
+     * Registers a purchase in the persistent storage.
+     *
+     * @param purchase The purchase to register.
+     */
     protected abstract void registerPurchase(KofiPurchase purchase);
 
+    /**
+     * Enables a subscription for a guild based on a purchase.
+     *
+     * @param purchase The purchase to use.
+     * @param guild    The guild to enable the subscription for.
+     * @return The result of the operation.
+     */
     public SubscriptionResult enableSubscription(KofiPurchase purchase, Guild guild) {
         Subscriptions subs = guildSubscriptions(guild.getIdLong());
 
@@ -136,6 +165,12 @@ public abstract class KofiService {
         return SubscriptionResult.UNKOWN;
     }
 
+    /**
+     * Disables a subscription for a guild.
+     *
+     * @param purchase The purchase to disable.
+     * @return {@code true} if successful, {@code false} otherwise.
+     */
     public boolean disableSubscription(KofiPurchase purchase) {
         if (purchase.guildId() == 0) return false;
         Subscriptions subs = guildSubscriptions(purchase.guildId());
@@ -168,8 +203,17 @@ public abstract class KofiService {
         }
     }
 
+    /**
+     * @return A list of expired purchases that should be removed.
+     */
     protected abstract List<KofiPurchase> expiredPurchases();
 
+    /**
+     * Creates {@link KofiPurchase} objects from a {@link KofiTransaction}.
+     *
+     * @param transaction The transaction to process.
+     * @return A list of created purchases.
+     */
     public List<KofiPurchase> create(KofiTransaction transaction) {
         List<KofiPurchase> purchases = new ArrayList<>();
 
@@ -208,8 +252,25 @@ public abstract class KofiService {
         return purchases;
     }
 
+    /**
+     * Retrieves the subscriptions for a guild.
+     *
+     * @param guildId The ID of the guild.
+     * @return The subscriptions.
+     */
     protected abstract Subscriptions guildSubscriptions(long guildId);
 
+    /**
+     * Builds a {@link KofiPurchase} object.
+     *
+     * @param mailHash       The mail hash of the purchaser.
+     * @param transactionId  The transaction ID.
+     * @param key            The key of the product (tier name or shop item code).
+     * @param type           The type of purchase.
+     * @param subscriptionId The ID of the associated subscription.
+     * @param expiresAt      The expiration date (for subscriptions).
+     * @return The created purchase object.
+     */
     public abstract KofiPurchase buildPurchase(
             String mailHash, String transactionId, String key, Type type, long subscriptionId, Instant expiresAt);
 }
