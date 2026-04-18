@@ -8,7 +8,7 @@ package dev.chojo.aether.supporter.service;
 
 import dev.chojo.aether.supporter.configuration.SupporterConfiguration;
 import dev.chojo.aether.supporter.configuration.modules.Interactions;
-import dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.purchase.Purchase;
+import dev.chojo.aether.supporter.service.context.AccessCheckResult;
 import dev.chojo.aether.supporter.service.context.SubcriptionContextProvider;
 import dev.chojo.aether.supporter.service.context.SubscriptionContext;
 import dev.chojo.aether.supporter.service.context.SupporterErrorSupplier;
@@ -21,21 +21,18 @@ import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInterac
 import net.dv8tion.jda.api.events.interaction.command.MessageContextInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.UserContextInteractionEvent;
-import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 
 import java.util.Collections;
 import java.util.stream.Collectors;
 
-public class SupporterMiddleware<
-                SID extends Enum<?>, FID extends Enum<?>, PF extends Enum<?>, PT extends Enum<PT> & Purchase, PR, FM>
-        implements Middleware {
+public class SupporterMiddleware<FID extends Enum<?>, PR, FM> implements Middleware {
     private final SubcriptionContextProvider contextProvider;
-    private final SupporterConfiguration<SID, FID, PF, PT, PR, FM> configuration;
+    private final SupporterConfiguration<FID, PR, FM> configuration;
     private final SupporterErrorSupplier errorSupplier;
 
     public SupporterMiddleware(
             SubcriptionContextProvider contextProvider,
-            SupporterConfiguration<SID, FID, PF, PT, PR, FM> configuration,
+            SupporterConfiguration<FID, PR, FM> configuration,
             SupporterErrorSupplier errorSupplier) {
         this.contextProvider = contextProvider;
         this.configuration = configuration;
@@ -54,23 +51,21 @@ public class SupporterMiddleware<
     public void accept(InvocationContext<?> context) {
         SubscriptionContext subCtx = buildContext(context.event());
         Interactions interactions = configuration.interactions();
-        boolean hasAccess =
+        AccessCheckResult result =
                 switch (context.event()) {
                     case UserContextInteractionEvent event -> interactions.hasAccess(event, subCtx);
                     case MessageContextInteractionEvent event -> interactions.hasAccess(event, subCtx);
                     case SlashCommandInteractionEvent event -> interactions.hasAccess(event, subCtx);
                     case CommandAutoCompleteInteractionEvent event -> interactions.hasAccess(event, subCtx);
-                    default -> true;
+                    default -> AccessCheckResult.success();
                 };
 
-        if (!hasAccess) {
+        if (!result.hasAccess()) {
             if (context.event() instanceof CommandAutoCompleteInteractionEvent event) {
                 event.replyChoices(Collections.emptyList()).complete();
                 Thread.currentThread().interrupt();
             } else {
-                context.cancel(
-                        errorSupplier.getCommandError(),
-                        MessageCreateData.fromContent("You do not have access to this command."));
+                context.cancel(errorSupplier.getCommandError(result));
             }
             return;
         }

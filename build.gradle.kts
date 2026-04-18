@@ -1,9 +1,7 @@
-import gradle.kotlin.dsl.accessors._83a41c35569feeb28b615dcf8647de1d.api
-
 plugins {
     id("io.freefair.aggregate-javadoc") version("9.0.0")
-    id("sadu.java-conventions")
-    id("sadu.maven-publish-conventions")
+    id("aether.java-conventions")
+    id("aether.maven-publish-conventions")
 }
 
 group = "dev.chojo.aether"

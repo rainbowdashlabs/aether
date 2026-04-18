@@ -7,28 +7,19 @@
 package dev.chojo.aether.supporter.service.context;
 
 import dev.chojo.aether.supporter.configuration.SupporterConfiguration;
-import dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.purchase.Purchase;
 
-public class SupporterValidator<
-        SubscriptionID extends Enum<?>,
-        FeatureID extends Enum<?>,
-        Platform extends Enum<?>,
-        PurchaseType extends Enum<PurchaseType> & Purchase,
-        Price,
-        FeatureMeta> {
+public class SupporterValidator<FeatureID extends Enum<?>, Price, FeatureMeta> {
     private final SubscriptionContext subscriptionContext;
-    private final SupporterConfiguration<SubscriptionID, FeatureID, Platform, PurchaseType, Price, FeatureMeta>
-            configuration;
+    private final SupporterConfiguration<FeatureID, Price, FeatureMeta> configuration;
 
     public SupporterValidator(
             SubscriptionContext subscriptionContext,
-            SupporterConfiguration<SubscriptionID, FeatureID, Platform, PurchaseType, Price, FeatureMeta>
-                    configuration) {
+            SupporterConfiguration<FeatureID, Price, FeatureMeta> configuration) {
         this.subscriptionContext = subscriptionContext;
         this.configuration = configuration;
     }
 
-    public boolean hasAccess(FeatureID feature) {
+    public AccessCheckResult hasAccess(FeatureID feature) {
         return subscriptionContext.hasAccess(configuration.feature(feature));
     }
 }

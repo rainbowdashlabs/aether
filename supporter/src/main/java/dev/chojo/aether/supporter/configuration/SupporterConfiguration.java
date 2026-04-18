@@ -19,10 +19,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
-public class SupporterConfiguration<
-        FeatureID extends Enum<?>,
-        Price,
-        FeatureMeta> {
+public class SupporterConfiguration<FeatureID extends Enum<?>, Price, FeatureMeta> {
     private Map<SubscriptionKey, Subscription> subscriptions;
     private Map<FeatureID, Feature<Price, FeatureMeta>> features;
     private Interactions interactions;
@@ -45,10 +42,9 @@ public class SupporterConfiguration<
 
     public Optional<Subscription> findSubscription(Platform platform, PurchaseType type, String id) {
         return subscriptions().stream()
-                              .filter(sub -> sub.platformSubscription(platform)
-                                                .subscriptionId(type)
-                                                .equals(id))
-                              .findFirst();
+                .filter(sub ->
+                        sub.platformSubscription(platform).subscriptionId(type).equals(id))
+                .findFirst();
     }
 
     public Interactions interactions() {

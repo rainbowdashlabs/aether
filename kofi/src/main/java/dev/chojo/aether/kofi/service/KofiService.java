@@ -107,7 +107,13 @@ public abstract class KofiService {
             if (subs.hasAccess(purchase.subscriptionId())) return SubscriptionResult.ALREADY_SUBSCRIBED;
             if (purchase.guildId() != 0) disableSubscription(purchase);
             subs.addSubscription(new Subscription(
-                    purchase.subscriptionId(), guild.getIdLong(), KOFI, GUILD, APPLICATION_SUBSCRIPTION, purchase.expiresAt(), true));
+                    purchase.subscriptionId(),
+                    guild.getIdLong(),
+                    KOFI,
+                    GUILD,
+                    APPLICATION_SUBSCRIPTION,
+                    purchase.expiresAt(),
+                    true));
         } else if (purchase.type() == Type.SHOP_ORDER) {
             var sub = supporterConfiguration.byId(purchase.subscriptionId());
             if (sub.isEmpty()) {
@@ -144,13 +150,7 @@ public abstract class KofiService {
                 return false;
             }
             subs.deleteSubscription(new Subscription(
-                    sub.get().id(),
-                    purchase.guildId(),
-                    KOFI,
-                    GUILD,
-                    APPLICATION_SUBSCRIPTION,
-                    null,
-                    true));
+                    sub.get().id(), purchase.guildId(), KOFI, GUILD, APPLICATION_SUBSCRIPTION, null, true));
         }
 
         return purchase.unassignPurchaseFromGuild();
@@ -176,9 +176,10 @@ public abstract class KofiService {
         String mailHash = mailService.mailHash(transaction.email());
         Type type = transaction.type();
         if (type == Type.SUBSCRIPTION) {
-            var id = supporterConfiguration.findSubscription(KOFI, PurchaseType.SUBSCRIPTION, transaction.tierName())
-                                           .orElseThrow()
-                                           .id();
+            var id = supporterConfiguration
+                    .findSubscription(KOFI, PurchaseType.SUBSCRIPTION, transaction.tierName())
+                    .orElseThrow()
+                    .id();
             purchases.add(buildPurchase(
                     mailHash,
                     transaction.kofiTransactionId(),
@@ -189,9 +190,10 @@ public abstract class KofiService {
         } else if (type == Type.SHOP_ORDER) {
             int num = 0;
             for (KofiShopItem shopItem : transaction.shopItems()) {
-                var id = supporterConfiguration.findSubscription(KOFI, PurchaseType.LIFETIME, shopItem.directLinkCode())
-                                               .orElseThrow()
-                                               .id();
+                var id = supporterConfiguration
+                        .findSubscription(KOFI, PurchaseType.LIFETIME, shopItem.directLinkCode())
+                        .orElseThrow()
+                        .id();
                 for (int i = 0; i < shopItem.quantity(); i++) {
                     purchases.add(buildPurchase(
                             mailHash,
@@ -208,5 +210,6 @@ public abstract class KofiService {
 
     protected abstract Subscriptions guildSubscriptions(long guildId);
 
-    public abstract KofiPurchase buildPurchase(String mailHash, String transactionId, String key, Type type, long subscriptionId, Instant expiresAt);
+    public abstract KofiPurchase buildPurchase(
+            String mailHash, String transactionId, String key, Type type, long subscriptionId, Instant expiresAt);
 }

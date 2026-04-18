@@ -1,6 +1,10 @@
-package dev.chojo.aether.kofi.pojo;
+/*
+ *     SPDX-License-Identifier: LGPL-3.0-or-later
+ *
+ *     Copyright (C) RainbowDashLabs and Contributor
+ */
 
-import dev.chojo.aether.supporter.configuration.modules.subscriptions.Subscription;
+package dev.chojo.aether.kofi.pojo;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -35,8 +39,10 @@ public abstract class KofiPurchase {
     ///
     /// @param mailHash      mail hash of the purchase
     /// @param transactionId transaction id of the purchase
-    /// @param key           Key of the product. For purchases, it's the shop shortcode. For subscriptions, it's the tier name.
-    public KofiPurchase(String mailHash, String transactionId, String key, Type type, long subscriptionId, Instant expiresAt) {
+    /// @param key           Key of the product. For purchases, it's the shop shortcode. For subscriptions, it's the
+    // tier name.
+    public KofiPurchase(
+            String mailHash, String transactionId, String key, Type type, long subscriptionId, Instant expiresAt) {
         this(-1, mailHash, transactionId, key, type, subscriptionId, expiresAt, 0);
     }
 
@@ -102,11 +108,11 @@ public abstract class KofiPurchase {
 
     /// Unassign a kofi purchase from a guild
     /// This keeps the purchase but reverts the associated guild id to 0
-    public abstract boolean unassignPurchaseFromGuild() ;
+    public abstract boolean unassignPurchaseFromGuild();
 
     /// Renew a kofi purchase that represents a subscription
     /// Sets the expiration date to 32 days from now
-    public abstract void renew() ;
+    public abstract void renew();
 
     /// Delete the kofi purchase
     public abstract void delete();

@@ -1,3 +1,9 @@
+/*
+ *     SPDX-License-Identifier: LGPL-3.0-or-later
+ *
+ *     Copyright (C) RainbowDashLabs and Contributor
+ */
+
 package dev.chojo.aether.supporter.access;
 
 import dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.Platform;
@@ -9,7 +15,7 @@ public interface Subscriptions {
     /// Subscriptions of the entity
     List<Subscription> subscriptions();
 
-    default boolean hasAccess(long subscriptionId){
+    default boolean hasAccess(long subscriptionId) {
         return subscriptions().stream().anyMatch(sub -> sub.id() == subscriptionId);
     }
 

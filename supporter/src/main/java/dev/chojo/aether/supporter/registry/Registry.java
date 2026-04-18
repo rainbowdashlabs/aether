@@ -1,3 +1,9 @@
+/*
+ *     SPDX-License-Identifier: LGPL-3.0-or-later
+ *
+ *     Copyright (C) RainbowDashLabs and Contributor
+ */
+
 package dev.chojo.aether.supporter.registry;
 
 import org.slf4j.Logger;
@@ -33,7 +39,7 @@ public class Registry<V extends Key> {
 
     public Optional<V> byName(String name) {
         return sources().stream()
-                        .filter(source -> source.name().equalsIgnoreCase(name))
-                        .findFirst();
+                .filter(source -> source.name().equalsIgnoreCase(name))
+                .findFirst();
     }
 }
