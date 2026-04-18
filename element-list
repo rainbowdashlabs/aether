@@ -1,4 +1,9 @@
 dev.chojo.aether.common
+dev.chojo.aether.commonweb.error
+dev.chojo.aether.commonweb.util
+dev.chojo.aether.discordoauth.configuration
+dev.chojo.aether.discordoauth.pojo
+dev.chojo.aether.discordoauth.service
 dev.chojo.aether.kofi.configuration
 dev.chojo.aether.kofi.exception
 dev.chojo.aether.kofi.pojo
