@@ -1,1 +1,1 @@
-moduleSearchIndex = [];updateSearchResults();
+moduleSearchIndex = [{"l":"dev.chojo.aether.common"},{"l":"dev.chojo.aether.commonweb"},{"l":"dev.chojo.aether.discordoauth"},{"l":"dev.chojo.aether.kofi"},{"l":"dev.chojo.aether.mailing"},{"l":"dev.chojo.aether.supporter"}];updateSearchResults();
