@@ -13,4 +13,8 @@ dependencies {
     api(project(":mailing"))
     api(project(":kofi"))
     api(project(":common"))
+    javadoc(project(":supporter"))
+    javadoc(project(":mailing"))
+    javadoc(project(":kofi"))
+    javadoc(project(":common"))
 }
