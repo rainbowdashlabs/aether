@@ -1,0 +1,65 @@
+plugins {
+    java
+    `java-library`
+    id("com.diffplug.spotless")
+}
+
+repositories {
+    mavenCentral()
+    maven("https://eldonexus.de/repository/maven-public/")
+    maven("https://eldonexus.de/repository/maven-proxies/")
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(25))
+    }
+}
+
+dependencies {
+    testImplementation("org.junit.jupiter:junit-jupiter-api:6.0.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:6.0.1")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-params:6.0.1")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:6.0.1")
+    testImplementation("org.mockito:mockito-core:5.+")
+}
+
+tasks {
+    withType<Test>().configureEach {
+        useJUnitPlatform()
+        testLogging {
+            events("passed", "skipped", "failed")
+        }
+    }
+
+    withType<JavaCompile>().configureEach {
+        dependsOn(spotlessApply)
+    }
+
+    withType<Javadoc>().configureEach {
+        val options = options as StandardJavadocDocletOptions
+        val version = project.extensions
+            .findByType(JavaPluginExtension::class.java)
+            ?.toolchain?.languageVersion?.orNull?.asInt()
+
+        options.links(
+            // javadoc.io is down since an eternity
+            //"https://javadoc.io/doc/org.jetbrains/annotations/latest/",
+            "https://docs.oracle.com/en/java/javase/${version ?: 25}/docs/api/"
+        )
+    }
+}
+
+spotless {
+    java {
+        target("src/**/*.java")
+        licenseHeaderFile(rootProject.file("HEADER.txt"))
+        trimTrailingWhitespace()
+        endWithNewline()
+        palantirJavaFormat("2.84.0")
+            .formatJavadoc(false)
+        removeUnusedImports()
+        importOrder("", "java", "javax", "\\#")
+        encoding("UTF-8")
+    }
+}

@@ -1,0 +1,60 @@
+name: Verify
+
+on: [ push, pull_request ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: adopt
+          java-version: 25
+      - name: Build
+        run: ./gradlew build -x test
+
+  test:
+    runs-on: ubuntu-latest
+    name: Test
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: adopt
+          java-version: 25
+      - name: Test
+        run: ./gradlew test -x spotlessCheck
+
+  license:
+    runs-on: ubuntu-latest
+    name: License
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: adopt
+          java-version: 25
+      - name: Test
+        run: ./gradlew spotlessCheck
+
+  javadocs:
+    runs-on: ubuntu-latest
+    name: Javadocs
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: adopt
+          java-version: 25
+      - name: Build
+        run: ./gradlew javadoc

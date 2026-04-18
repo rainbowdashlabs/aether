@@ -1,0 +1,31 @@
+name: Publish
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - dev*
+
+jobs:
+  publish-central:
+    environment: build
+    runs-on: ubuntu-latest
+    name: Publish to Maven Central
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: adopt
+          java-version: 25
+      - name: Test with Gradle
+        run: ./gradlew --build-cache test
+      - name: Publish to Maven Central
+        run: ./gradlew publishToMavenCentral --no-configuration-cache
+        env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: "${{ secrets.SONATYPE_USERNAME }}"
+          ORG_GRADLE_PROJECT_mavenCentralPassword: "${{ secrets.SONATYPE_PASSWORD }}"
+          ORG_GRADLE_PROJECT_signingInMemoryKey: "${{ secrets.RAINBOWDASHLABS_SIGN_KEY }}"
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: "${{ secrets.RAINBOWDASHLABS_GPG_PASSWORD }}"
