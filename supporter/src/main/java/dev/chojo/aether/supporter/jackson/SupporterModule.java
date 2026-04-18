@@ -24,6 +24,10 @@ import tools.jackson.databind.ser.std.StdSerializer;
 
 import java.io.IOException;
 
+/**
+ * A Jackson module for serializing and deserializing {@link Key} implementations.
+ * This module ensures that keys are correctly resolved from their string names during deserialization by looking them up in their respective registries.
+ */
 public class SupporterModule extends SimpleModule {
     public SupporterModule() {
         super("SupporterModule");

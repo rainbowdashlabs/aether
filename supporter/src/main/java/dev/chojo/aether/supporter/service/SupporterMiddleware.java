@@ -25,6 +25,14 @@ import net.dv8tion.jda.api.events.interaction.command.UserContextInteractionEven
 import java.util.Collections;
 import java.util.stream.Collectors;
 
+/**
+ * Middleware for the JDAC dispatcher.
+ * This middleware manages the subscription context and access validation for Discord interactions.
+ *
+ * @param <FID> The enum type representing the features.
+ * @param <PR>  The type representing the price of a feature.
+ * @param <FM>  The type representing additional metadata for a feature.
+ */
 public class SupporterMiddleware<FID extends Enum<?>, PR, FM> implements Middleware {
     private final SubcriptionContextProvider contextProvider;
     private final SupporterConfiguration<FID, PR, FM> configuration;
@@ -39,6 +47,12 @@ public class SupporterMiddleware<FID extends Enum<?>, PR, FM> implements Middlew
         this.errorSupplier = errorSupplier;
     }
 
+    /**
+     * Builds the subscription context for the given event.
+     *
+     * @param event The interaction event.
+     * @return The subscription context.
+     */
     public SubscriptionContext buildContext(GenericInteractionCreateEvent event) {
         SubscriptionContext context = convert(event);
         if (event.isFromGuild()) {

@@ -8,8 +8,21 @@ package dev.chojo.aether.supporter.service.context;
 
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 
+/**
+ * Provides error messages for the {@link dev.chojo.aether.supporter.service.SupporterMiddleware}.
+ */
 public interface SupporterErrorSupplier {
+    /**
+     * Returns the error message for command interactions.
+     *
+     * @param result The result of the access check.
+     * @return The error message.
+     */
     MessageCreateData getCommandError(AccessCheckResult result);
 
+    /**
+     * Returns the error message for auto-complete interactions.
+     * @return The error message.
+     */
     String getAutoCompleteError();
 }

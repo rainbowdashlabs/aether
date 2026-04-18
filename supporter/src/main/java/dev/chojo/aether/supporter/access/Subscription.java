@@ -14,14 +14,23 @@ import java.time.OffsetDateTime;
 import java.util.Optional;
 
 public class Subscription {
-    /// unique id for this subscription
+    /**
+     * unique id for this subscription
+     */
     private final long id;
-    /// ID of the [dev.chojo.aether.supporter.configuration.modules.subscriptions.Subscription]
+    /**
+     * ID of the {@link dev.chojo.aether.supporter.configuration.modules.subscriptions.Subscription}
+     */
     private final long subscriptionId;
-    /// The platform this subscription was purchased on
+    /**
+     * The platform this subscription was purchased on
+     */
     private final Platform source;
-    /// The target of the subscription
+    /**
+     * The target of the subscription
+     */
     private final SkuTarget skuTarget;
+
     private final Entitlement.EntitlementType purchaseType;
     private final Instant endsAt;
     private final boolean persistent;

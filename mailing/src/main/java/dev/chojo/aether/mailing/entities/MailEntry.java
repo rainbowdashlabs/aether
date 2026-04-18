@@ -34,11 +34,15 @@ public abstract class MailEntry {
         this.verificationCode = verificationCode;
     }
 
-    /// Mark this mail as verified.
+    /**
+     * Mark this mail as verified.
+     */
     public abstract void verify();
 
-    /// Regenerates the verification code.
-    /// This also sets [#verificationRequested] to [Instant#now()] and marks the mail as unverified.
+    /**
+     * Regenerates the verification code.
+     * This also sets {@link #verificationRequested} to {@link java.time.Instant#now()} and marks the mail as unverified.
+     */
     public abstract void regenerateVerificationCode();
 
     public long userId() {
@@ -69,10 +73,12 @@ public abstract class MailEntry {
         return verificationCode;
     }
 
-    /// Update the user tied to this mail entry.
-    /// Regenerates the verification code.
-    /// This also regenerated the verification code.
-    ///
-    /// @param user user to update
+    /**
+     * Update the user tied to this mail entry.
+     * Regenerates the verification code.
+     * This also regenerated the verification code.
+     *
+     * @param user user to update
+     */
     public abstract void updateUser(long user);
 }

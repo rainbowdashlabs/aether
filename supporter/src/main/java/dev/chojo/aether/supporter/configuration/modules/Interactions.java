@@ -19,6 +19,10 @@ import java.util.Set;
 
 import static java.util.Collections.emptySet;
 
+/**
+ * Holds the interaction based access rules.
+ * This class manages access rules for slash commands, message context interactions and user context interactions.
+ */
 @SuppressWarnings({"FieldMayBeFinal", "MismatchedQueryAndUpdateOfCollection"})
 public class Interactions {
     private Map<String, Set<Long>> slash = new HashMap<>();
@@ -27,21 +31,49 @@ public class Interactions {
 
     public Interactions() {}
 
+    /**
+     * Checks if the given interaction has access based on the configured rules and the user's subscription context.
+     *
+     * @param interaction         The interaction event.
+     * @param subscriptionContext The user's subscription context.
+     * @return The result of the access check.
+     */
     public AccessCheckResult hasAccess(
             SlashCommandInteractionEvent interaction, SubscriptionContext subscriptionContext) {
         return hasAccess(slash(interaction.getFullCommandName()), subscriptionContext);
     }
 
+    /**
+     * Checks if the given interaction has access based on the configured rules and the user's subscription context.
+     *
+     * @param interaction         The interaction event.
+     * @param subscriptionContext The user's subscription context.
+     * @return The result of the access check.
+     */
     public AccessCheckResult hasAccess(
             CommandAutoCompleteInteractionEvent interaction, SubscriptionContext subscriptionContext) {
         return hasAccess(slash(interaction.getFullCommandName()), subscriptionContext);
     }
 
+    /**
+     * Checks if the given interaction has access based on the configured rules and the user's subscription context.
+     *
+     * @param interaction         The interaction event.
+     * @param subscriptionContext The user's subscription context.
+     * @return The result of the access check.
+     */
     public AccessCheckResult hasAccess(
             MessageContextInteractionEvent interaction, SubscriptionContext subscriptionContext) {
         return hasAccess(message(interaction.getFullCommandName()), subscriptionContext);
     }
 
+    /**
+     * Checks if the given interaction has access based on the configured rules and the user's subscription context.
+     *
+     * @param interaction         The interaction event.
+     * @param subscriptionContext The user's subscription context.
+     * @return The result of the access check.
+     */
     public AccessCheckResult hasAccess(
             UserContextInteractionEvent interaction, SubscriptionContext subscriptionContext) {
         return hasAccess(user(interaction.getFullCommandName()), subscriptionContext);

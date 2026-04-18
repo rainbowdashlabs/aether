@@ -11,28 +11,53 @@ import dev.chojo.aether.supporter.configuration.modules.feature.Feature;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Represents the set of enabled subscriptions for a user or guild.
+ */
 public interface SubscriptionContext {
+    /**
+     * Returns the set of enabled subscription IDs.
+     * @return The set of enabled subscription IDs.
+     */
     Set<Long> enabledSubscriptions();
 
-    /// Merges two contexts
-    ///
-    /// @param other The context to merge with
-    /// @return A new context with merged subscriptions
+    /**
+     * Merges this context with another one.
+     *
+     * @param other The context to merge with.
+     * @return A new context containing the merged subscriptions.
+     */
     default SubscriptionContext merge(SubscriptionContext other) {
         Set<Long> mergedSubscriptions = new HashSet<>(Set.copyOf(enabledSubscriptions()));
         mergedSubscriptions.addAll(other.enabledSubscriptions());
         return () -> mergedSubscriptions;
     }
 
+    /**
+     * Checks if the given feature is accessible with the current subscriptions.
+     *
+     * @param feature The feature.
+     * @return The result of the access check.
+     */
     default AccessCheckResult hasAccess(Feature<?, ?> feature) {
         return feature.test(this);
     }
 
+    /**
+     * Checks if any of the given subscription IDs are enabled.
+     *
+     * @param enabledBy The set of subscription IDs.
+     * @return The result of the access check.
+     */
     default AccessCheckResult hasAccess(Set<Long> enabledBy) {
         if (enabledBy.isEmpty()) return AccessCheckResult.success();
         return new AccessCheckResult(enabledBy, enabledBy.stream().anyMatch(enabledSubscriptions()::contains));
     }
 
+    /**
+     * Returns whether the context has no enabled subscriptions.
+     * @return true if no subscriptions are enabled.
+     */
     default boolean isEmpty() {
         return enabledSubscriptions().isEmpty();
     }

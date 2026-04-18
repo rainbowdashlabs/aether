@@ -12,27 +12,39 @@ import dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.P
 import java.util.HashMap;
 import java.util.Map;
 
-/// Represents a subscription configuration
-/// A subscription might be retrieved on different platforms
-/// A default platform set can be found in [Platform]
+/**
+ * Represents a subscription configuration
+ * A subscription might be retrieved on different platforms
+ * A default platform set can be found in {@link dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.Platform}
+ */
 @SuppressWarnings({"FieldMayBeFinal", "MismatchedQueryAndUpdateOfCollection"})
 public class Subscription {
-    /// Human-readable name of the subscription
+    /**
+     * Human-readable name of the subscription
+     */
     private String name;
 
-    /// Unique id for this subscription
-    /// This id should be unique across all features, and subscriptions should not be changed once set.
+    /**
+     * Unique id for this subscription
+     * This id should be unique across all features, and subscriptions should not be changed once set.
+     */
     private int id;
 
-    /// Map holding subscription information for each platform
+    /**
+     * Map holding subscription information for each platform
+     */
     private Map<Platform, PlatformSubscription> platforms = new HashMap<>();
 
-    /// Human-readable name of the subscription
+    /**
+     * Human-readable name of the subscription
+     */
     public String name() {
         return name;
     }
 
-    /// Subscription info for the platform
+    /**
+     * Subscription info for the platform
+     */
     public PlatformSubscription platformSubscription(Platform platform) {
         return platforms.get(platform);
     }

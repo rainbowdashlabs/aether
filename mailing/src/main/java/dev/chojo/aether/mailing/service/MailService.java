@@ -81,12 +81,14 @@ public abstract class MailService {
         return Result.success(mailEntry);
     }
 
-    /// Attempts to verify the mail entry with the given verification code.
-    ///
-    /// @param user             user that owns that mail entry
-    /// @param mailHash         hash of the mail entry
-    /// @param verificationCode verification code to verify with
-    /// @return a failure reason if the verification failed, otherwise null
+    /**
+     * Attempts to verify the mail entry with the given verification code.
+     *
+     * @param user             user that owns that mail entry
+     * @param mailHash         hash of the mail entry
+     * @param verificationCode verification code to verify with
+     * @return a failure reason if the verification failed, otherwise null
+     */
     @Nullable
     public FailureReason verifyMail(long user, String mailHash, String verificationCode) {
         var mails = mailProvider().byHash(mailHash);
