@@ -6,7 +6,7 @@
 
 package dev.chojo.aether.kofi.service;
 
-import dev.chojo.aether.common.UserProvider;
+import dev.chojo.aether.common.provider.UserProvider;
 import dev.chojo.aether.kofi.configuration.Kofi;
 import dev.chojo.aether.kofi.exception.UnauthorizedException;
 import dev.chojo.aether.kofi.pojo.KofiPurchase;

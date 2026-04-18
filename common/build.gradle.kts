@@ -7,4 +7,5 @@ description = "Common implementation for all modules"
 
 dependencies {
     api(libs.jda)
+    api(libs.jspecify)
 }
