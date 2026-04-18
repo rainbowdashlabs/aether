@@ -1,6 +1,26 @@
 # Ko-fi Module
 
+[![Maven Central](https://img.shields.io/maven-central/v/dev.chojo.aether/kofi)](https://central.sonatype.com/artifact/dev.chojo.aether/kofi)
+
 The Ko-fi module provides integration with [Ko-fi](https://ko-fi.com) via webhooks. It allows handling donations, subscriptions, and shop orders, mapping them to internal subscriptions for users and guilds.
+
+## Installation
+
+### Gradle (Kotlin DSL)
+
+```kotlin
+implementation("dev.chojo.aether:kofi:1.0.0")
+```
+
+### Maven
+
+```xml
+<dependency>
+    <groupId>dev.chojo.aether</groupId>
+    <artifactId>kofi</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
 
 ## Features
 

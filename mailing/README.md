@@ -1,6 +1,26 @@
 # Mailing Module
 
+[![Maven Central](https://img.shields.io/maven-central/v/dev.chojo.aether/mailing)](https://central.sonatype.com/artifact/dev.chojo.aether/mailing)
+
 The mailing module provides functionality for managing user email addresses, including registration, verification, and sending emails via SMTP.
+
+## Installation
+
+### Gradle (Kotlin DSL)
+
+```kotlin
+implementation("dev.chojo.aether:mailing:1.0.0")
+```
+
+### Maven
+
+```xml
+<dependency>
+    <groupId>dev.chojo.aether</groupId>
+    <artifactId>mailing</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
 
 ## Features
 

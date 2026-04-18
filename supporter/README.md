@@ -1,6 +1,26 @@
 # Supporter Module
 
+[![Maven Central](https://img.shields.io/maven-central/v/dev.chojo.aether/supporter)](https://central.sonatype.com/artifact/dev.chojo.aether/supporter)
+
 The supporter module provides a flexible way to manage and validate user and guild subscriptions, features, and command access. It integrates with JDAC (JDA Dispatcher and Context) to provide middleware-based access control for Discord interactions.
+
+## Installation
+
+### Gradle (Kotlin DSL)
+
+```kotlin
+implementation("dev.chojo.aether:supporter:1.0.0")
+```
+
+### Maven
+
+```xml
+<dependency>
+    <groupId>dev.chojo.aether</groupId>
+    <artifactId>supporter</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
 
 ## Supporter Middleware
 

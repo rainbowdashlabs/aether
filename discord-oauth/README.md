@@ -1,6 +1,26 @@
 # Discord OAuth Module
 
+[![Maven Central](https://img.shields.io/maven-central/v/dev.chojo.aether/discord-oauth)](https://central.sonatype.com/artifact/dev.chojo.aether/discord-oauth)
+
 This module provides a simple way to integrate Discord OAuth2 authentication into a Javalin application.
+
+## Installation
+
+### Gradle (Kotlin DSL)
+
+```kotlin
+implementation("dev.chojo.aether:discord-oauth:1.0.0")
+```
+
+### Maven
+
+```xml
+<dependency>
+    <groupId>dev.chojo.aether</groupId>
+    <artifactId>discord-oauth</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
 
 ## Features
 

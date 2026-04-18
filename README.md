@@ -1,10 +1,35 @@
 # Aether
 
+[![Maven Central](https://img.shields.io/maven-central/v/dev.chojo.aether/aether)](https://central.sonatype.com/artifact/dev.chojo.aether/aether)
+[![License](https://img.shields.io/github/license/rainbowdashlabs/aether)](https://github.com/rainbowdashlabs/aether/blob/master/LICENSE.md)
+[![Build Status](https://github.com/rainbowdashlabs/aether/actions/workflows/verify.yml/badge.svg)](https://github.com/rainbowdashlabs/aether/actions/workflows/verify.yml)
+[![Javadocs Status](https://github.com/rainbowdashlabs/aether/actions/workflows/javadocs.yml/badge.svg)](https://github.com/rainbowdashlabs/aether/actions/workflows/javadocs.yml)
+[![Last Commit](https://img.shields.io/github/last-commit/rainbowdashlabs/aether)](https://github.com/rainbowdashlabs/aether/commits/master)
+[![Issues](https://img.shields.io/github/issues/rainbowdashlabs/aether)](https://github.com/rainbowdashlabs/aether/issues)
+
 A library for Discord bots based on [JDA](https://github.com/discord-jda/JDA) and [jda-commands](https://github.com/kaktushose/jda-commands).
 
 The Aether framework provides a set of modules designed to simplify common tasks for Discord bot developers, including user email management, Ko-fi integration, and flexible subscription/feature access control.
 
 The project is available on **Maven Central**.
+
+## Installation
+
+### Gradle (Kotlin DSL)
+
+```kotlin
+implementation("dev.chojo.aether:aether:1.0.0")
+```
+
+### Maven
+
+```xml
+<dependency>
+    <groupId>dev.chojo.aether</groupId>
+    <artifactId>aether</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
 
 ## Modules
 
