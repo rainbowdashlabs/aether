@@ -25,7 +25,7 @@ public abstract class KofiPurchase {
     private final Type type;
 
     /// The id associated with this purchase.
-    /// This id has to match the id of a [Subscription]
+    /// This id has to match the id of a [dev.chojo.aether.supporter.configuration.modules.subscriptions.Subscription]
     private final long subscriptionId;
 
     /// The date where this purchase expires.

@@ -7,32 +7,18 @@
 package dev.chojo.aether.mailing.entities;
 
 public enum FailureReason {
-    /**
-     * The email is already registered to another user.
-     */
+    /// The email is already registered to another user.
     ALREADY_REGISTERED,
-    /**
-     * The email has an invalid formal
-     */
+    /// The email has an invalid formal
     INVALID_FORMAT,
-    /**
-     * The email that should be verified is connected to another user.
-     */
+    /// The email that should be verified is connected to another user.
     WRONG_USER,
-    /**
-     * The code provided for verification is invalid
-     */
+    /// The code provided for verification is invalid
     INVALID_CODE,
-    /**
-     * The code provided has already expired.
-     */
+    /// The code provided has already expired.
     CODE_EXPIRED,
-    /**
-     * The address that should be verified is unknown
-     */
+    /// The address that should be verified is unknown
     UNKNOWN_ADDRESS,
-    /**
-     * Too many requests for registration.
-     */
+    /// Too many requests for registration.
     RATE_LIMIT
 }
