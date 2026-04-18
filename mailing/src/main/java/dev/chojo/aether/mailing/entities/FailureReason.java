@@ -22,3 +22,4 @@ public enum FailureReason {
     /// Too many requests for registration.
     RATE_LIMIT
 }
+\

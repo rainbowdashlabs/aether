@@ -6,6 +6,7 @@
 
 package dev.chojo.aether.kofi.pojo;
 
+
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
@@ -86,7 +87,7 @@ public abstract class KofiPurchase {
     }
 
     /// The is of the subscription associated with this purchase
-    /// The id has to match a [Subscription]
+    /// The id has to match a [dev.chojo.aether.supporter.configuration.modules.subscriptions.Subscription]
     public long subscriptionId() {
         return subscriptionId;
     }
