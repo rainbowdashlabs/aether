@@ -9,12 +9,16 @@ version = "1.0.0"
 description = "A library for discord bots based on jda-commands"
 
 dependencies {
-    api(project(":supporter"))
-    api(project(":mailing"))
-    api(project(":kofi"))
     api(project(":common"))
-    javadoc(project(":supporter"))
-    javadoc(project(":mailing"))
-    javadoc(project(":kofi"))
+    api(project(":common-web"))
+    api(project(":discord-oauth"))
+    api(project(":kofi"))
+    api(project(":mailing"))
+    api(project(":supporter"))
     javadoc(project(":common"))
+    javadoc(project(":common-web"))
+    javadoc(project(":discord-oauth"))
+    javadoc(project(":kofi"))
+    javadoc(project(":mailing"))
+    javadoc(project(":supporter"))
 }
