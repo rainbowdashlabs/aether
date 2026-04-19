@@ -70,10 +70,14 @@ public abstract class EntitlementService<V extends DiscordPurchase> extends List
 
     @Override
     public void onEntitlementCreate(@NonNull EntitlementCreateEvent event) {
-        handleEntitlement(event.getEntitlement(), this::registerPurchase).ifPresent(sub -> {
-            if (sub.target() == GUILD) {
-                Guild guild = event.getJDA().getGuildById(sub.guildId());
-                if (guild != null) enableSubscription(sub, guild);
+        handleEntitlement(event.getEntitlement(), this::registerPurchase).ifPresent(purchase -> {
+            if (purchase.target() == GUILD) {
+                Guild guild = event.getJDA().getGuildById(purchase.guildId());
+                if (guild != null) {
+                    enableSubscription(purchase, guild);
+                } else {
+                    log.error("Could not find guild {} for purchase {}", purchase.guildId(), purchase.entitlementId());
+                }
             }
         });
     }
@@ -85,7 +89,15 @@ public abstract class EntitlementService<V extends DiscordPurchase> extends List
 
     @Override
     public void onEntitlementUpdate(@NonNull EntitlementUpdateEvent event) {
-        handleEntitlement(event.getEntitlement(), this::updatePurchase);
+        handleEntitlement(event.getEntitlement(), this::updatePurchase).ifPresent(purchase -> {
+            if (purchase.guildId() == 0) return;
+            Guild guild = event.getJDA().getGuildById(purchase.guildId());
+            if (guild != null) {
+                enableSubscription(purchase, guild);
+            } else {
+                log.error("Could not find guild {} for purchase {}", purchase.guildId(), purchase.entitlementId());
+            }
+        });
     }
 
     /**
@@ -264,9 +276,9 @@ public abstract class EntitlementService<V extends DiscordPurchase> extends List
     /**
      * Get all expired purchases that are still assigned to a guild
      *
+     * @return list of expired purchases
      * @see DiscordPurchase#expiresAt()
      * @see DiscordPurchase#guildId()
-     * @return list of expired purchases
      */
     protected abstract List<V> getExpiredPurchases();
 }

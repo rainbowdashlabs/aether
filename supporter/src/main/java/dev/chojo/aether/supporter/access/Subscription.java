@@ -18,14 +18,17 @@ public class Subscription {
      * unique id for this subscription
      */
     private final long id;
+
     /**
-     * ID of the {@link dev.chojo.aether.supporter.configuration.modules.subscriptions.Subscription}
+     * ID of the {@link dev.chojo.aether.supporter.configuration.modules.subscriptions.Subscription#id()}
      */
     private final long subscriptionId;
+
     /**
      * The platform this subscription was purchased on
      */
     private final Platform source;
+
     /**
      * The target of the subscription
      */
@@ -74,6 +77,10 @@ public class Subscription {
 
     public long id() {
         return id;
+    }
+
+    public long subscriptionId() {
+        return subscriptionId;
     }
 
     public SkuTarget skuTarget() {

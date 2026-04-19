@@ -20,7 +20,7 @@ public interface Subscriptions {
     List<Subscription> subscriptions();
 
     default boolean hasAccess(long subscriptionId) {
-        return subscriptions().stream().anyMatch(sub -> sub.id() == subscriptionId);
+        return subscriptions().stream().anyMatch(sub -> sub.subscriptionId() == subscriptionId);
     }
 
     /**
