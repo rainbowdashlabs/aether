@@ -59,12 +59,11 @@ loadScripts(document, 'script');</script>
 <li><a href="#constructor-detail" tabindex="0">Constructor Details</a>
 <ol class="toc-list">
 <li><a href="#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,dev.chojo.aether.kofi.pojo.Type,long,java.time.Instant)" tabindex="0">KofiPurchase(String, String, String, Type, long, Instant)</a></li>
-<li><a href="#%3Cinit%3E(long,java.lang.String,java.lang.String,java.lang.String,dev.chojo.aether.kofi.pojo.Type,long,java.time.Instant,long)" tabindex="0">KofiPurchase(long, String, String, String, Type, long, Instant, long)</a></li>
+<li><a href="#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,dev.chojo.aether.kofi.pojo.Type,long,java.time.Instant,long)" tabindex="0">KofiPurchase(String, String, String, Type, long, Instant, long)</a></li>
 </ol>
 </li>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
 <ol class="toc-list">
-<li><a href="#id()" tabindex="0">id()</a></li>
 <li><a href="#mailHash()" tabindex="0">mailHash()</a></li>
 <li><a href="#transactionId()" tabindex="0">transactionId()</a></li>
 <li><a href="#key()" tabindex="0">key()</a></li>
@@ -72,8 +71,8 @@ loadScripts(document, 'script');</script>
 <li><a href="#subscriptionId()" tabindex="0">subscriptionId()</a></li>
 <li><a href="#expiresAt()" tabindex="0">expiresAt()</a></li>
 <li><a href="#guildId()" tabindex="0">guildId()</a></li>
-<li><a href="#assignPurchaseToGuild(long)" tabindex="0">assignPurchaseToGuild(long)</a></li>
-<li><a href="#unassignPurchaseFromGuild()" tabindex="0">unassignPurchaseFromGuild()</a></li>
+<li><a href="#assignToGuild(long)" tabindex="0">assignToGuild(long)</a></li>
+<li><a href="#unassignFromGuild()" tabindex="0">unassignFromGuild()</a></li>
 <li><a href="#renew()" tabindex="0">renew()</a></li>
 <li><a href="#delete()" tabindex="0">delete()</a></li>
 <li><a href="#isValid()" tabindex="0">isValid()</a></li>
@@ -95,7 +94,7 @@ loadScripts(document, 'script');</script>
 <div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">KofiPurchase</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Represents a purchase made on kofi. This maybe be a subscription or a lifetime purchase.
-The Mail hash might have a matching <a href="../../../../../../dev.chojo.aether.mailing/dev/chojo/aether/mailing/entities/MailEntry.html" title="class in dev.chojo.aether.mailing.entities"><code>MailEntry</code></a></div>
+The Mail hash might have a matching <a href="../../../../../../dev.chojo.aether.mailing/dev/chojo/aether/mailing/entities/MailEntry.html#hash()"><code>MailEntry.hash()</code></a></div>
 </div>
 </section>
 <section class="summary">
@@ -108,24 +107,23 @@ The Mail hash might have a matching <a href="../../../../../../dev.chojo.aether.
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(long,java.lang.String,java.lang.String,java.lang.String,dev.chojo.aether.kofi.pojo.Type,long,java.time.Instant,long)" class="member-name-link">KofiPurchase</a><wbr>(long&nbsp;id,
- <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;mailHash,
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,dev.chojo.aether.kofi.pojo.Type,long,java.time.Instant)" class="member-name-link">KofiPurchase</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;mailHash,
+ <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;transactionId,
+ <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
+ <a href="Type.html" title="enum class in dev.chojo.aether.kofi.pojo">Type</a>&nbsp;type,
+ long&nbsp;subscriptionId,
+ <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;expiresAt)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Creates a new <a href="KofiPurchase.html" title="class in dev.chojo.aether.kofi.pojo"><code>KofiPurchase</code></a> that is not associated to a guild</div>
+</div>
+<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,dev.chojo.aether.kofi.pojo.Type,long,java.time.Instant,long)" class="member-name-link">KofiPurchase</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;mailHash,
  <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;transactionId,
  <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="Type.html" title="enum class in dev.chojo.aether.kofi.pojo">Type</a>&nbsp;type,
  long&nbsp;subscriptionId,
  <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;expiresAt,
  long&nbsp;guildId)</code></div>
-<div class="col-last even-row-color">&nbsp;</div>
-<div class="col-constructor-name odd-row-color"><code><a href="#%3Cinit%3E(java.lang.String,java.lang.String,java.lang.String,dev.chojo.aether.kofi.pojo.Type,long,java.time.Instant)" class="member-name-link">KofiPurchase</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;mailHash,
- <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;transactionId,
- <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
- <a href="Type.html" title="enum class in dev.chojo.aether.kofi.pojo">Type</a>&nbsp;type,
- long&nbsp;subscriptionId,
- <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;expiresAt)</code></div>
-<div class="col-last odd-row-color">
-<div class="block">Creates a new <a href="KofiPurchase.html" title="class in dev.chojo.aether.kofi.pojo"><code>KofiPurchase</code></a> that is not associated to a guild</div>
-</div>
+<div class="col-last odd-row-color">&nbsp;</div>
 </div>
 </section>
 </li>
@@ -141,7 +139,7 @@ The Mail hash might have a matching <a href="../../../../../../dev.chojo.aether.
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#assignPurchaseToGuild(long)" class="member-name-link">assignPurchaseToGuild</a><wbr>(long&nbsp;guildId)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#assignToGuild(long)" class="member-name-link">assignToGuild</a><wbr>(long&nbsp;guildId)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Assign a kofi purchase to a guild
 This associates the purchase with a guild id</div>
@@ -161,39 +159,38 @@ This associates the purchase with a guild id</div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Guild id associated with this purchase</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#id()" class="member-name-link">id</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isValid()" class="member-name-link">isValid</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isValid()" class="member-name-link">isValid</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Check if the purchase is still valid.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#key()" class="member-name-link">key</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#key()" class="member-name-link">key</a>()</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#mailHash()" class="member-name-link">mailHash</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#mailHash()" class="member-name-link">mailHash</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#renew()" class="member-name-link">renew</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#renew()" class="member-name-link">renew</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Renew a kofi purchase that represents a subscription
 Sets the expiration date to 32 days from now</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#subscriptionId()" class="member-name-link">subscriptionId</a>()</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>long</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#subscriptionId()" class="member-name-link">subscriptionId</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">The is of the subscription associated with this purchase
 The id has to match a <a href="../../../../../../dev.chojo.aether.supporter/dev/chojo/aether/supporter/configuration/modules/subscriptions/Subscription.html" title="class in dev.chojo.aether.supporter.configuration.modules.subscriptions"><code>Subscription</code></a></div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#transactionId()" class="member-name-link">transactionId</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Type.html" title="enum class in dev.chojo.aether.kofi.pojo">Type</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#type()" class="member-name-link">type</a>()</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#transactionId()" class="member-name-link">transactionId</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#unassignPurchaseFromGuild()" class="member-name-link">unassignPurchaseFromGuild</a>()</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Type.html" title="enum class in dev.chojo.aether.kofi.pojo">Type</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#type()" class="member-name-link">type</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract boolean</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#unassignFromGuild()" class="member-name-link">unassignFromGuild</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Unassign a kofi purchase from a guild
 This keeps the purchase but reverts the associated guild id to 0</div>
 </div>
@@ -236,11 +233,10 @@ This keeps the purchase but reverts the associated guild id to 0</div>
 </section>
 </li>
 <li>
-<section class="detail" id="&lt;init&gt;(long,java.lang.String,java.lang.String,java.lang.String,dev.chojo.aether.kofi.pojo.Type,long,java.time.Instant,long)">
+<section class="detail" id="&lt;init&gt;(java.lang.String,java.lang.String,java.lang.String,dev.chojo.aether.kofi.pojo.Type,long,java.time.Instant,long)">
 <h3>KofiPurchase</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">KofiPurchase</span><wbr><span class="parameters">(long&nbsp;id,
- <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;mailHash,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">KofiPurchase</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;mailHash,
  <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;transactionId,
  <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="Type.html" title="enum class in dev.chojo.aether.kofi.pojo">Type</a>&nbsp;type,
@@ -258,14 +254,6 @@ This keeps the purchase but reverts the associated guild id to 0</div>
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
-<li>
-<section class="detail" id="id()">
-<h3>id</h3>
-<div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">long</span>&nbsp;<span class="element-name">id</span>()</div>
-</div>
-</section>
-</li>
 <li>
 <section class="detail" id="mailHash()">
 <h3>mailHash</h3>
@@ -331,20 +319,20 @@ The id has to match a <a href="../../../../../../dev.chojo.aether.supporter/dev/
 </section>
 </li>
 <li>
-<section class="detail" id="assignPurchaseToGuild(long)">
-<h3>assignPurchaseToGuild</h3>
+<section class="detail" id="assignToGuild(long)">
+<h3>assignToGuild</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">assignPurchaseToGuild</span><wbr><span class="parameters">(long&nbsp;guildId)</span></div>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">assignToGuild</span><wbr><span class="parameters">(long&nbsp;guildId)</span></div>
 <div class="block">Assign a kofi purchase to a guild
 This associates the purchase with a guild id</div>
 </div>
 </section>
 </li>
 <li>
-<section class="detail" id="unassignPurchaseFromGuild()">
-<h3>unassignPurchaseFromGuild</h3>
+<section class="detail" id="unassignFromGuild()">
+<h3>unassignFromGuild</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">unassignPurchaseFromGuild</span>()</div>
+<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">unassignFromGuild</span>()</div>
 <div class="block">Unassign a kofi purchase from a guild
 This keeps the purchase but reverts the associated guild id to 0</div>
 </div>
@@ -374,6 +362,11 @@ Sets the expiration date to 32 days from now</div>
 <h3>isValid</h3>
 <div class="horizontal-scroll">
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">isValid</span>()</div>
+<div class="block">Check if the purchase is still valid.</div>
+<dl class="notes">
+<dt>Returns:</dt>
+<dd>true if the purchase is still valid</dd>
+</dl>
 </div>
 </section>
 </li>

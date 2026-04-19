@@ -63,10 +63,11 @@ loadScripts(document, 'script');</script>
 </li>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
 <ol class="toc-list">
+<li><a href="#start()" tabindex="0">start()</a></li>
 <li><a href="#handle(dev.chojo.aether.kofi.pojo.KofiTransaction)" tabindex="0">handle(KofiTransaction)</a></li>
-<li><a href="#registerPurchase(dev.chojo.aether.kofi.pojo.KofiPurchase)" tabindex="0">registerPurchase(KofiPurchase)</a></li>
-<li><a href="#enableSubscription(dev.chojo.aether.kofi.pojo.KofiPurchase,net.dv8tion.jda.api.entities.Guild)" tabindex="0">enableSubscription(KofiPurchase, Guild)</a></li>
-<li><a href="#disableSubscription(dev.chojo.aether.kofi.pojo.KofiPurchase)" tabindex="0">disableSubscription(KofiPurchase)</a></li>
+<li><a href="#registerPurchase(V)" tabindex="0">registerPurchase(V)</a></li>
+<li><a href="#enableSubscription(V,net.dv8tion.jda.api.entities.Guild)" tabindex="0">enableSubscription(V, Guild)</a></li>
+<li><a href="#disableSubscription(V)" tabindex="0">disableSubscription(V)</a></li>
 <li><a href="#expiredPurchases()" tabindex="0">expiredPurchases()</a></li>
 <li><a href="#create(dev.chojo.aether.kofi.pojo.KofiTransaction)" tabindex="0">create(KofiTransaction)</a></li>
 <li><a href="#guildSubscriptions(long)" tabindex="0">guildSubscriptions(long)</a></li>
@@ -78,15 +79,15 @@ loadScripts(document, 'script');</script>
 <main role="main">
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<h1 title="Class KofiService" class="title">Class KofiService</h1>
+<h1 title="Class KofiService" class="title">Class KofiService&lt;<span id="type-param-V">V extends <a href="../pojo/KofiPurchase.html" title="class in dev.chojo.aether.kofi.pojo">KofiPurchase</a></span>&gt;</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">dev.chojo.aether.kofi.service.KofiService</div>
+<div class="inheritance">dev.chojo.aether.kofi.service.KofiService&lt;V&gt;</div>
 </div>
 <section class="class-description" id="class-description">
 <hr>
 <div class="horizontal-scroll">
-<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">KofiService</span>
+<div class="type-signature"><span class="modifiers">public abstract class </span><span class="element-name type-name-label">KofiService&lt;V extends <a href="../pojo/KofiPurchase.html" title="class in dev.chojo.aether.kofi.pojo">KofiPurchase</a>&gt;</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
 <div class="block">Service for handling Ko-fi webhooks and managing purchases and subscriptions.</div>
 </div>
@@ -122,7 +123,7 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract <a href="../pojo/KofiPurchase.html" title="class in dev.chojo.aether.kofi.pojo">KofiPurchase</a></code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract <a href="#type-param-V" title="type parameter in KofiService">V</a></code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#buildPurchase(java.lang.String,java.lang.String,java.lang.String,dev.chojo.aether.kofi.pojo.Type,long,java.time.Instant)" class="member-name-link">buildPurchase</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;mailHash,
  <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;transactionId,
  <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
@@ -132,23 +133,23 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Builds a <a href="../pojo/KofiPurchase.html" title="class in dev.chojo.aether.kofi.pojo"><code>KofiPurchase</code></a> object.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../pojo/KofiPurchase.html" title="class in dev.chojo.aether.kofi.pojo">KofiPurchase</a>&gt;</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="#type-param-V" title="type parameter in KofiService">V</a>&gt;</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#create(dev.chojo.aether.kofi.pojo.KofiTransaction)" class="member-name-link">create</a><wbr>(<a href="../pojo/KofiTransaction.html" title="class in dev.chojo.aether.kofi.pojo">KofiTransaction</a>&nbsp;transaction)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Creates <a href="../pojo/KofiPurchase.html" title="class in dev.chojo.aether.kofi.pojo"><code>KofiPurchase</code></a> objects from a <a href="../pojo/KofiTransaction.html" title="class in dev.chojo.aether.kofi.pojo"><code>KofiTransaction</code></a>.</div>
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#disableSubscription(dev.chojo.aether.kofi.pojo.KofiPurchase)" class="member-name-link">disableSubscription</a><wbr>(<a href="../pojo/KofiPurchase.html" title="class in dev.chojo.aether.kofi.pojo">KofiPurchase</a>&nbsp;purchase)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#disableSubscription(V)" class="member-name-link">disableSubscription</a><wbr>(<a href="#type-param-V" title="type parameter in KofiService">V</a>&nbsp;purchase)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Disables a subscription for a guild.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../pojo/SubscriptionResult.html" title="enum class in dev.chojo.aether.kofi.pojo">SubscriptionResult</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#enableSubscription(dev.chojo.aether.kofi.pojo.KofiPurchase,net.dv8tion.jda.api.entities.Guild)" class="member-name-link">enableSubscription</a><wbr>(<a href="../pojo/KofiPurchase.html" title="class in dev.chojo.aether.kofi.pojo">KofiPurchase</a>&nbsp;purchase,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="../../../../../../dev.chojo.aether.supporter/dev/chojo/aether/supporter/service/context/SubscriptionResult.html" title="enum class in dev.chojo.aether.supporter.service.context">SubscriptionResult</a></code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#enableSubscription(V,net.dv8tion.jda.api.entities.Guild)" class="member-name-link">enableSubscription</a><wbr>(<a href="#type-param-V" title="type parameter in KofiService">V</a>&nbsp;purchase,
  net.dv8tion.jda.api.entities.Guild&nbsp;guild)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Enables a subscription for a guild based on a purchase.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="../pojo/KofiPurchase.html" title="class in dev.chojo.aether.kofi.pojo">KofiPurchase</a>&gt;</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="#type-param-V" title="type parameter in KofiService">V</a>&gt;</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#expiredPurchases()" class="member-name-link">expiredPurchases</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract <a href="../../../../../../dev.chojo.aether.supporter/dev/chojo/aether/supporter/access/Subscriptions.html" title="interface in dev.chojo.aether.supporter.access">Subscriptions</a></code></div>
@@ -162,10 +163,13 @@ loadScripts(document, 'script');</script>
 <div class="block">Handles a Ko-fi transaction from a webhook.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#registerPurchase(dev.chojo.aether.kofi.pojo.KofiPurchase)" class="member-name-link">registerPurchase</a><wbr>(<a href="../pojo/KofiPurchase.html" title="class in dev.chojo.aether.kofi.pojo">KofiPurchase</a>&nbsp;purchase)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#registerPurchase(V)" class="member-name-link">registerPurchase</a><wbr>(<a href="#type-param-V" title="type parameter in KofiService">V</a>&nbsp;purchase)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Registers a purchase in the persistent storage.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#start()" class="member-name-link">start</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -211,6 +215,14 @@ loadScripts(document, 'script');</script>
 <h2>Method Details</h2>
 <ul class="member-list">
 <li>
+<section class="detail" id="start()">
+<h3>start</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">start</span>()</div>
+</div>
+</section>
+</li>
+<li>
 <section class="detail" id="handle(dev.chojo.aether.kofi.pojo.KofiTransaction)">
 <h3>handle</h3>
 <div class="horizontal-scroll">
@@ -226,10 +238,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="registerPurchase(dev.chojo.aether.kofi.pojo.KofiPurchase)">
-<h3>registerPurchase</h3>
+<section class="detail" id="registerPurchase(V)">
+<h3 id="registerPurchase(dev.chojo.aether.kofi.pojo.KofiPurchase)">registerPurchase</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">registerPurchase</span><wbr><span class="parameters">(<a href="../pojo/KofiPurchase.html" title="class in dev.chojo.aether.kofi.pojo">KofiPurchase</a>&nbsp;purchase)</span></div>
+<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">registerPurchase</span><wbr><span class="parameters">(<a href="#type-param-V" title="type parameter in KofiService">V</a>&nbsp;purchase)</span></div>
 <div class="block">Registers a purchase in the persistent storage.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -239,10 +251,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="enableSubscription(dev.chojo.aether.kofi.pojo.KofiPurchase,net.dv8tion.jda.api.entities.Guild)">
-<h3>enableSubscription</h3>
+<section class="detail" id="enableSubscription(V,net.dv8tion.jda.api.entities.Guild)">
+<h3 id="enableSubscription(dev.chojo.aether.kofi.pojo.KofiPurchase,net.dv8tion.jda.api.entities.Guild)">enableSubscription</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../pojo/SubscriptionResult.html" title="enum class in dev.chojo.aether.kofi.pojo">SubscriptionResult</a></span>&nbsp;<span class="element-name">enableSubscription</span><wbr><span class="parameters">(<a href="../pojo/KofiPurchase.html" title="class in dev.chojo.aether.kofi.pojo">KofiPurchase</a>&nbsp;purchase,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="../../../../../../dev.chojo.aether.supporter/dev/chojo/aether/supporter/service/context/SubscriptionResult.html" title="enum class in dev.chojo.aether.supporter.service.context">SubscriptionResult</a></span>&nbsp;<span class="element-name">enableSubscription</span><wbr><span class="parameters">(<a href="#type-param-V" title="type parameter in KofiService">V</a>&nbsp;purchase,
  net.dv8tion.jda.api.entities.Guild&nbsp;guild)</span></div>
 <div class="block">Enables a subscription for a guild based on a purchase.</div>
 <dl class="notes">
@@ -256,10 +268,10 @@ loadScripts(document, 'script');</script>
 </section>
 </li>
 <li>
-<section class="detail" id="disableSubscription(dev.chojo.aether.kofi.pojo.KofiPurchase)">
-<h3>disableSubscription</h3>
+<section class="detail" id="disableSubscription(V)">
+<h3 id="disableSubscription(dev.chojo.aether.kofi.pojo.KofiPurchase)">disableSubscription</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">disableSubscription</span><wbr><span class="parameters">(<a href="../pojo/KofiPurchase.html" title="class in dev.chojo.aether.kofi.pojo">KofiPurchase</a>&nbsp;purchase)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">disableSubscription</span><wbr><span class="parameters">(<a href="#type-param-V" title="type parameter in KofiService">V</a>&nbsp;purchase)</span></div>
 <div class="block">Disables a subscription for a guild.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -274,7 +286,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="expiredPurchases()">
 <h3>expiredPurchases</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../pojo/KofiPurchase.html" title="class in dev.chojo.aether.kofi.pojo">KofiPurchase</a>&gt;</span>&nbsp;<span class="element-name">expiredPurchases</span>()</div>
+<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="#type-param-V" title="type parameter in KofiService">V</a>&gt;</span>&nbsp;<span class="element-name">expiredPurchases</span>()</div>
 <dl class="notes">
 <dt>Returns:</dt>
 <dd>A list of expired purchases that should be removed.</dd>
@@ -286,7 +298,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="create(dev.chojo.aether.kofi.pojo.KofiTransaction)">
 <h3>create</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../pojo/KofiPurchase.html" title="class in dev.chojo.aether.kofi.pojo">KofiPurchase</a>&gt;</span>&nbsp;<span class="element-name">create</span><wbr><span class="parameters">(<a href="../pojo/KofiTransaction.html" title="class in dev.chojo.aether.kofi.pojo">KofiTransaction</a>&nbsp;transaction)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="#type-param-V" title="type parameter in KofiService">V</a>&gt;</span>&nbsp;<span class="element-name">create</span><wbr><span class="parameters">(<a href="../pojo/KofiTransaction.html" title="class in dev.chojo.aether.kofi.pojo">KofiTransaction</a>&nbsp;transaction)</span></div>
 <div class="block">Creates <a href="../pojo/KofiPurchase.html" title="class in dev.chojo.aether.kofi.pojo"><code>KofiPurchase</code></a> objects from a <a href="../pojo/KofiTransaction.html" title="class in dev.chojo.aether.kofi.pojo"><code>KofiTransaction</code></a>.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
@@ -316,7 +328,7 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="buildPurchase(java.lang.String,java.lang.String,java.lang.String,dev.chojo.aether.kofi.pojo.Type,long,java.time.Instant)">
 <h3>buildPurchase</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public abstract</span>&nbsp;<span class="return-type"><a href="../pojo/KofiPurchase.html" title="class in dev.chojo.aether.kofi.pojo">KofiPurchase</a></span>&nbsp;<span class="element-name">buildPurchase</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;mailHash,
+<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type"><a href="#type-param-V" title="type parameter in KofiService">V</a></span>&nbsp;<span class="element-name">buildPurchase</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;mailHash,
  <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;transactionId,
  <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;key,
  <a href="../pojo/Type.html" title="enum class in dev.chojo.aether.kofi.pojo">Type</a>&nbsp;type,

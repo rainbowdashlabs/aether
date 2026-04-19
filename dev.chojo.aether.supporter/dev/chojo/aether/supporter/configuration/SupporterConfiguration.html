@@ -65,6 +65,8 @@ loadScripts(document, 'script');</script>
 <ol class="toc-list">
 <li><a href="#feature(FeatureID)" tabindex="0">feature(FeatureID)</a></li>
 <li><a href="#subscription(dev.chojo.aether.supporter.configuration.modules.subscriptions.SubscriptionKey)" tabindex="0">subscription(SubscriptionKey)</a></li>
+<li><a href="#findPurchaseTypeBySkuID(dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.Platform,java.lang.String)" tabindex="0">findPurchaseTypeBySkuID(Platform, String)</a></li>
+<li><a href="#findSubscriptionBySkuID(dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.Platform,java.lang.String)" tabindex="0">findSubscriptionBySkuID(Platform, String)</a></li>
 <li><a href="#subscriptions()" tabindex="0">subscriptions()</a></li>
 <li><a href="#byId(long)" tabindex="0">byId(long)</a></li>
 <li><a href="#findSubscription(dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.Platform,dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.purchase.PurchaseType,java.lang.String)" tabindex="0">findSubscription(Platform, PurchaseType, String)</a></li>
@@ -132,13 +134,21 @@ This class holds the definition of subscriptions, features and interaction based
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Returns the feature with the given id.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="modules/subscriptions/Subscription.html" title="class in dev.chojo.aether.supporter.configuration.modules.subscriptions">Subscription</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findSubscription(dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.Platform,dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.purchase.PurchaseType,java.lang.String)" class="member-name-link">findSubscription</a><wbr>(<a href="modules/subscriptions/platform/Platform.html" title="class in dev.chojo.aether.supporter.configuration.modules.subscriptions.platform">Platform</a>&nbsp;platform,
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="modules/subscriptions/platform/purchase/PurchaseType.html" title="class in dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.purchase">PurchaseType</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findPurchaseTypeBySkuID(dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.Platform,java.lang.String)" class="member-name-link">findPurchaseTypeBySkuID</a><wbr>(<a href="modules/subscriptions/platform/Platform.html" title="class in dev.chojo.aether.supporter.configuration.modules.subscriptions.platform">Platform</a>&nbsp;platform,
+ <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sku)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="modules/subscriptions/Subscription.html" title="class in dev.chojo.aether.supporter.configuration.modules.subscriptions">Subscription</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findSubscription(dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.Platform,dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.purchase.PurchaseType,java.lang.String)" class="member-name-link">findSubscription</a><wbr>(<a href="modules/subscriptions/platform/Platform.html" title="class in dev.chojo.aether.supporter.configuration.modules.subscriptions.platform">Platform</a>&nbsp;platform,
  <a href="modules/subscriptions/platform/purchase/PurchaseType.html" title="class in dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.purchase">PurchaseType</a>&nbsp;type,
  <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;id)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Finds a subscription by platform, type and platform specific id.</div>
 </div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a><wbr>&lt;<a href="modules/subscriptions/Subscription.html" title="class in dev.chojo.aether.supporter.configuration.modules.subscriptions">Subscription</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#findSubscriptionBySkuID(dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.Platform,java.lang.String)" class="member-name-link">findSubscriptionBySkuID</a><wbr>(<a href="modules/subscriptions/platform/Platform.html" title="class in dev.chojo.aether.supporter.configuration.modules.subscriptions.platform">Platform</a>&nbsp;platform,
+ <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sku)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="modules/Interactions.html" title="class in dev.chojo.aether.supporter.configuration.modules">Interactions</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#interactions()" class="member-name-link">interactions</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
@@ -214,6 +224,24 @@ This class holds the definition of subscriptions, features and interaction based
 <dt>Returns:</dt>
 <dd>The subscription.</dd>
 </dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="findPurchaseTypeBySkuID(dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.Platform,java.lang.String)">
+<h3>findPurchaseTypeBySkuID</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="modules/subscriptions/platform/purchase/PurchaseType.html" title="class in dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.purchase">PurchaseType</a>&gt;</span>&nbsp;<span class="element-name">findPurchaseTypeBySkuID</span><wbr><span class="parameters">(<a href="modules/subscriptions/platform/Platform.html" title="class in dev.chojo.aether.supporter.configuration.modules.subscriptions.platform">Platform</a>&nbsp;platform,
+ <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sku)</span></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="findSubscriptionBySkuID(dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.Platform,java.lang.String)">
+<h3>findSubscriptionBySkuID</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/Optional.html" title="class or interface in java.util" class="external-link">Optional</a>&lt;<a href="modules/subscriptions/Subscription.html" title="class in dev.chojo.aether.supporter.configuration.modules.subscriptions">Subscription</a>&gt;</span>&nbsp;<span class="element-name">findSubscriptionBySkuID</span><wbr><span class="parameters">(<a href="modules/subscriptions/platform/Platform.html" title="class in dev.chojo.aether.supporter.configuration.modules.subscriptions.platform">Platform</a>&nbsp;platform,
+ <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sku)</span></div>
 </div>
 </section>
 </li>
