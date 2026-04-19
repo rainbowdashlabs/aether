@@ -9,7 +9,7 @@
 
 A library for Discord bots based on [JDA](https://github.com/discord-jda/JDA) and [jda-commands](https://github.com/kaktushose/jda-commands).
 
-The Aether framework provides a set of modules designed to simplify common tasks for Discord bot developers, including user email management, Ko-fi integration, and flexible subscription/feature access control.
+The Aether framework provides a set of modules designed to simplify common tasks for Discord bot developers, including user email management, Ko-fi integration, flexible subscription/feature access control, and seamless Discord OAuth2 authentication.
 
 The project is available on **Maven Central**.
 
@@ -18,7 +18,7 @@ The project is available on **Maven Central**.
 ### Gradle (Kotlin DSL)
 
 ```kotlin
-implementation("dev.chojo.aether:aether:1.0.0")
+implementation("dev.chojo.aether:aether:version")
 ```
 
 ### Maven
@@ -27,7 +27,7 @@ implementation("dev.chojo.aether:aether:1.0.0")
 <dependency>
     <groupId>dev.chojo.aether</groupId>
     <artifactId>aether</artifactId>
-    <version>1.0.0</version>
+    <version>version</version>
 </dependency>
 ```
 
@@ -35,6 +35,9 @@ implementation("dev.chojo.aether:aether:1.0.0")
 
 ### Common
 The `common` module provides shared interfaces and utilities used across other Aether modules, such as `UserProvider` for abstracting Discord user and member lookups.
+
+### Common Web
+The `common-web` module provides web-related utilities and error handling for Discord-related web services, including common URL management and exception handling.
 
 ### Mailing
 The `mailing` module handles user email management. It supports:
@@ -53,6 +56,12 @@ The `supporter` module offers a flexible system for managing and validating user
 - **Access Control**: Middleware-based access validation for Discord interactions (Slash Commands, Context Menus).
 - **Extensibility**: Support for multiple platforms (e.g., Discord, Ko-fi) and custom subscription tiers.
 - **JDAC Integration**: Seamlessly integrates with the JDA Commands (JDAC) framework for automated permission checks.
+
+### Discord OAuth
+The `discord-oauth` module provides a simple way to integrate Discord OAuth2 authentication into a Javalin application, handling the authorization code grant flow, token management, and retrieval of user and guild information.
+
+### Serialization
+The `serialization` module provides Jackson serializers for [JDA](https://github.com/discord-jda/JDA) entities, converting them into POJOs that can be easily serialized to JSON.
 
 ## Framework Overview
 

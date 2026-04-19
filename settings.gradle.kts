@@ -4,17 +4,6 @@ include("supporter")
 include("kofi")
 include("mailing")
 include("common")
-
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
-        maven {
-            name = "EldoNexus"
-            url = uri("https://eldonexus.de/repository/maven-public/")
-        }
-    }
-}
-
 include("discord-oauth")
 include("common-web")
+include("serialization")

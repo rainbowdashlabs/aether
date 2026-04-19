@@ -9,7 +9,7 @@ This module provides a simple way to integrate Discord OAuth2 authentication int
 ### Gradle (Kotlin DSL)
 
 ```kotlin
-implementation("dev.chojo.aether:discord-oauth:1.0.0")
+implementation("dev.chojo.aether:discord-oauth:version")
 ```
 
 ### Maven
@@ -18,7 +18,7 @@ implementation("dev.chojo.aether:discord-oauth:1.0.0")
 <dependency>
     <groupId>dev.chojo.aether</groupId>
     <artifactId>discord-oauth</artifactId>
-    <version>1.0.0</version>
+    <version>version</version>
 </dependency>
 ```
 

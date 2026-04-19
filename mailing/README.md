@@ -9,7 +9,7 @@ The mailing module provides functionality for managing user email addresses, inc
 ### Gradle (Kotlin DSL)
 
 ```kotlin
-implementation("dev.chojo.aether:mailing:1.0.0")
+implementation("dev.chojo.aether:mailing:version")
 ```
 
 ### Maven
@@ -18,7 +18,7 @@ implementation("dev.chojo.aether:mailing:1.0.0")
 <dependency>
     <groupId>dev.chojo.aether</groupId>
     <artifactId>mailing</artifactId>
-    <version>1.0.0</version>
+    <version>version</version>
 </dependency>
 ```
 

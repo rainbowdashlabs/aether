@@ -9,7 +9,7 @@ The Ko-fi module provides integration with [Ko-fi](https://ko-fi.com) via webhoo
 ### Gradle (Kotlin DSL)
 
 ```kotlin
-implementation("dev.chojo.aether:kofi:1.0.0")
+implementation("dev.chojo.aether:kofi:version")
 ```
 
 ### Maven
@@ -18,7 +18,7 @@ implementation("dev.chojo.aether:kofi:1.0.0")
 <dependency>
     <groupId>dev.chojo.aether</groupId>
     <artifactId>kofi</artifactId>
-    <version>1.0.0</version>
+    <version>version</version>
 </dependency>
 ```
 

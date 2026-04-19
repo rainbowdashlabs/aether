@@ -9,7 +9,7 @@ The supporter module provides a flexible way to manage and validate user and gui
 ### Gradle (Kotlin DSL)
 
 ```kotlin
-implementation("dev.chojo.aether:supporter:1.0.0")
+implementation("dev.chojo.aether:supporter:version")
 ```
 
 ### Maven
@@ -18,7 +18,7 @@ implementation("dev.chojo.aether:supporter:1.0.0")
 <dependency>
     <groupId>dev.chojo.aether</groupId>
     <artifactId>supporter</artifactId>
-    <version>1.0.0</version>
+    <version>version</version>
 </dependency>
 ```
 
