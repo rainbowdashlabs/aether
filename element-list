@@ -24,6 +24,11 @@ dev.chojo.aether.mailing.configuration
 dev.chojo.aether.mailing.entities
 dev.chojo.aether.mailing.service
 dev.chojo.aether.mailing.util
+module:dev.chojo.aether.serialization
+dev.chojo.aether.serialization.jackson
+dev.chojo.aether.serialization.pojo
+dev.chojo.aether.serialization.pojo.guild
+dev.chojo.aether.serialization.pojo.guild.channel
 module:dev.chojo.aether.supporter
 dev.chojo.aether.supporter.access
 dev.chojo.aether.supporter.configuration
