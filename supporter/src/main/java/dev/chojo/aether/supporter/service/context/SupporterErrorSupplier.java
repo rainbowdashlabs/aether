@@ -6,10 +6,11 @@
 
 package dev.chojo.aether.supporter.service.context;
 
+import dev.chojo.aether.supporter.service.SupporterMiddleware;
 import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 
 /**
- * Provides error messages for the {@link dev.chojo.aether.supporter.service.SupporterMiddleware}.
+ * Provides error messages for the {@link SupporterMiddleware}.
  */
 public interface SupporterErrorSupplier {
     /**

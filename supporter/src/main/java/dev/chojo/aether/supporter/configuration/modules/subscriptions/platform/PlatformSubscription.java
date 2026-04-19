@@ -10,6 +10,7 @@ import dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.p
 
 import java.util.Collections;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Represents a plaform configuration for a subscription on a platform
@@ -37,6 +38,18 @@ public class PlatformSubscription {
      */
     public String subscriptionId(PurchaseType type) {
         return ids.get(type);
+    }
+
+    /**
+     * Get the purchase associated with a sku
+     * @param sku the sku to get the purchase
+     * @return the purchase associated with the sku if found, empty otherwise
+     */
+    public Optional<PurchaseType> subscriptionType(String sku) {
+        return ids.entrySet().stream()
+                .filter(entry -> entry.getValue().equals(sku))
+                .map(Map.Entry::getKey)
+                .findFirst();
     }
 
     /**

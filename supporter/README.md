@@ -156,3 +156,57 @@ public void onSlashCommand(SlashCommandInteractionEvent event, InvocationContext
 The keys used for injection are defined in `SupporterKeys`:
 *   `SupporterKeys.SUBSCRIPTION_CONTEXT`: The raw `SubscriptionContext`.
 *   `SupporterKeys.SUBSCRIPTION_VALIDATOR`: The `SupporterValidator` instance.
+
+## Entitlement Service
+
+The `EntitlementService` is an abstract base class designed to handle Discord Entitlements (App Subscriptions). It integrates Discord's monetization events directly with the supporter module.
+
+### Functionality
+
+1.  **Event Handling**: It extends JDA's `ListenerAdapter` to automatically handle `EntitlementCreateEvent`, `EntitlementUpdateEvent`, and `EntitlementDeleteEvent`.
+2.  **Lifecycle Management**: It manages the registration, updating, and unregistering of purchases in your persistent storage.
+3.  **Subscription Sync**: It provides methods to enable or disable subscriptions for guilds based on these entitlements.
+
+### Implementation
+
+To use it, you must extend `EntitlementService` and provide implementations for persistent storage operations:
+
+```java
+public class MyEntitlementService extends EntitlementService<MyDiscordPurchase> {
+    @Inject
+    public MyEntitlementService(SupporterConfiguration<?, ?, ?> configuration) {
+        super(configuration);
+    }
+
+    @Override
+    protected MyDiscordPurchase buildPurchase(...) {
+        // Build your custom purchase object
+    }
+
+    @Override
+    protected MyDiscordPurchase registerPurchase(MyDiscordPurchase purchase) {
+        // Save to database
+    }
+
+    @Override
+    protected MyDiscordPurchase updatePurchase(MyDiscordPurchase purchase) {
+        // Update in database
+    }
+
+    @Override
+    protected MyDiscordPurchase unregisterPurchase(MyDiscordPurchase purchase) {
+        // Remove or mark as inactive in database
+    }
+
+    @Override
+    protected Subscriptions guildSubscriptions(long guildId) {
+        // Retrieve Subscriptions object for the given guild
+    }
+}
+```
+
+### Key Methods
+
+*   `refresh(Guild guild)`: Forcefully refreshes all Discord entitlements for a specific guild and synchronizes them with the local subscription state.
+*   `enableSubscription(V purchase, Guild guild)`: Manually triggers the activation of a subscription for a guild based on a purchase.
+*   `disableSubscription(V purchase)`: Manually triggers the deactivation of a subscription.

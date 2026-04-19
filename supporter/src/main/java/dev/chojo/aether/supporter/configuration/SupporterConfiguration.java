@@ -52,6 +52,21 @@ public class SupporterConfiguration<FeatureID extends Enum<?>, Price, FeatureMet
         return subscriptions.get(subscriptionID);
     }
 
+    public Optional<PurchaseType> findPurchaseTypeBySkuID(Platform platform, String sku) {
+        return subscriptions().stream()
+                .map(p -> p.platformSubscription(platform).subscriptionType(sku))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .findFirst();
+    }
+
+    public Optional<Subscription> findSubscriptionBySkuID(Platform platform, String sku) {
+        return subscriptions().stream()
+                .filter(p ->
+                        p.platformSubscription(platform).subscriptionType(sku).isPresent())
+                .findFirst();
+    }
+
     /**
      * Returns all registered subscriptions.
      *

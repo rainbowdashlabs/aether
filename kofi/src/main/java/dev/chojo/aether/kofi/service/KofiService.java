@@ -12,7 +12,6 @@ import dev.chojo.aether.kofi.exception.UnauthorizedException;
 import dev.chojo.aether.kofi.pojo.KofiPurchase;
 import dev.chojo.aether.kofi.pojo.KofiShopItem;
 import dev.chojo.aether.kofi.pojo.KofiTransaction;
-import dev.chojo.aether.kofi.pojo.SubscriptionResult;
 import dev.chojo.aether.kofi.pojo.Type;
 import dev.chojo.aether.mailing.UserMails;
 import dev.chojo.aether.mailing.entities.FailureReason;
@@ -24,6 +23,7 @@ import dev.chojo.aether.supporter.access.Subscription;
 import dev.chojo.aether.supporter.access.Subscriptions;
 import dev.chojo.aether.supporter.configuration.SupporterConfiguration;
 import dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.purchase.PurchaseType;
+import dev.chojo.aether.supporter.service.context.SubscriptionResult;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 import org.slf4j.Logger;
@@ -45,7 +45,7 @@ import static net.dv8tion.jda.api.entities.Entitlement.EntitlementType.APPLICATI
 /**
  * Service for handling Ko-fi webhooks and managing purchases and subscriptions.
  */
-public abstract class KofiService {
+public abstract class KofiService<V extends KofiPurchase> {
     private static final Logger log = LoggerFactory.getLogger(KofiService.class);
     private final Kofi configuration;
     private final UserProvider userProvider;
@@ -70,6 +70,9 @@ public abstract class KofiService {
         this.supporterConfiguration = supporterConfiguration;
         this.configuration = configuration;
         this.mailService = mailService;
+    }
+
+    protected void start() {
         executorService.scheduleAtFixedRate(this::removeExpiredSubs, 40, 60, TimeUnit.MINUTES);
     }
 
@@ -107,8 +110,8 @@ public abstract class KofiService {
         }
 
         if (data.type() == Type.SHOP_ORDER || data.type() == Type.SUBSCRIPTION) {
-            List<KofiPurchase> kofiPurchases = create(data);
-            for (KofiPurchase kofiPurchase : kofiPurchases) {
+            List<V> kofiPurchases = create(data);
+            for (V kofiPurchase : kofiPurchases) {
                 registerPurchase(kofiPurchase);
             }
         }
@@ -119,7 +122,7 @@ public abstract class KofiService {
      *
      * @param purchase The purchase to register.
      */
-    protected abstract void registerPurchase(KofiPurchase purchase);
+    protected abstract void registerPurchase(V purchase);
 
     /**
      * Enables a subscription for a guild based on a purchase.
@@ -128,7 +131,7 @@ public abstract class KofiService {
      * @param guild    The guild to enable the subscription for.
      * @return The result of the operation.
      */
-    public SubscriptionResult enableSubscription(KofiPurchase purchase, Guild guild) {
+    public SubscriptionResult enableSubscription(V purchase, Guild guild) {
         Subscriptions subs = guildSubscriptions(guild.getIdLong());
 
         if (purchase.type() == Type.SUBSCRIPTION) {
@@ -159,7 +162,7 @@ public abstract class KofiService {
             return SubscriptionResult.UNKOWN;
         }
 
-        if (purchase.assignPurchaseToGuild(guild.getIdLong())) {
+        if (purchase.assignToGuild(guild.getIdLong())) {
             return SubscriptionResult.SUCCESS;
         }
         return SubscriptionResult.UNKOWN;
@@ -171,7 +174,7 @@ public abstract class KofiService {
      * @param purchase The purchase to disable.
      * @return {@code true} if successful, {@code false} otherwise.
      */
-    public boolean disableSubscription(KofiPurchase purchase) {
+    public boolean disableSubscription(V purchase) {
         if (purchase.guildId() == 0) return false;
         Subscriptions subs = guildSubscriptions(purchase.guildId());
         if (purchase.type() == Type.SUBSCRIPTION) {
@@ -188,7 +191,7 @@ public abstract class KofiService {
                     sub.get().id(), purchase.guildId(), KOFI, GUILD, APPLICATION_SUBSCRIPTION, null, true));
         }
 
-        return purchase.unassignPurchaseFromGuild();
+        return purchase.unassignFromGuild();
     }
 
     private Optional<User> resolveUser(KofiTransaction data) {
@@ -197,7 +200,7 @@ public abstract class KofiService {
     }
 
     private void removeExpiredSubs() {
-        for (KofiPurchase kofiPurchase : expiredPurchases()) {
+        for (V kofiPurchase : expiredPurchases()) {
             disableSubscription(kofiPurchase);
             kofiPurchase.delete();
         }
@@ -206,7 +209,7 @@ public abstract class KofiService {
     /**
      * @return A list of expired purchases that should be removed.
      */
-    protected abstract List<KofiPurchase> expiredPurchases();
+    protected abstract List<V> expiredPurchases();
 
     /**
      * Creates {@link KofiPurchase} objects from a {@link KofiTransaction}.
@@ -214,8 +217,8 @@ public abstract class KofiService {
      * @param transaction The transaction to process.
      * @return A list of created purchases.
      */
-    public List<KofiPurchase> create(KofiTransaction transaction) {
-        List<KofiPurchase> purchases = new ArrayList<>();
+    public List<V> create(KofiTransaction transaction) {
+        List<V> purchases = new ArrayList<>();
 
         String mailHash = mailService.mailHash(transaction.email());
         Type type = transaction.type();
@@ -271,6 +274,6 @@ public abstract class KofiService {
      * @param expiresAt      The expiration date (for subscriptions).
      * @return The created purchase object.
      */
-    public abstract KofiPurchase buildPurchase(
+    protected abstract V buildPurchase(
             String mailHash, String transactionId, String key, Type type, long subscriptionId, Instant expiresAt);
 }

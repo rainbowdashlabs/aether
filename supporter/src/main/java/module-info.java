@@ -4,6 +4,9 @@ module dev.chojo.aether.supporter {
     requires tools.jackson.databind;
     requires io.github.kaktushose.jdac.core;
     requires org.slf4j;
+    requires org.jspecify;
+    requires com.google.common;
+    requires com.google.guice;
 
     exports dev.chojo.aether.supporter.access;
     exports dev.chojo.aether.supporter.configuration;

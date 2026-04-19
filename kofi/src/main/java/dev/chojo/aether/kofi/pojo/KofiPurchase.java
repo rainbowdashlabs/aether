@@ -6,27 +6,35 @@
 
 package dev.chojo.aether.kofi.pojo;
 
+import dev.chojo.aether.mailing.entities.MailEntry;
+
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 
 /**
  * Represents a purchase made on kofi. This maybe be a subscription or a lifetime purchase.
- * The Mail hash might have a matching {@link dev.chojo.aether.mailing.entities.MailEntry}
+ * The Mail hash might have a matching {@link MailEntry#hash()}
  */
 public abstract class KofiPurchase {
-    private final long id;
     /**
      * A hash of the user mail.
+     * @see MailEntry#hash()
      */
     private final String mailHash;
 
+    /**
+     * Transaction id of the purchase.
+     * If the purchase it is a {@link Type#SHOP_ORDER}, there will be a number appended, so each item is unique
+     * @see KofiPurchase#transactionId()
+     */
     private final String transactionId;
     /**
      * Key of the product
      * For purchases, it's the shop shortcode.
      * For subscriptions, it's the tier name.
+     * @see KofiPurchase#key()
      */
     private final String key;
+
     /**
      * The type of purchase.
      */
@@ -34,7 +42,7 @@ public abstract class KofiPurchase {
 
     /**
      * The id associated with this purchase.
-     * This id has to match the id of a {@link dev.chojo.aether.supporter.configuration.modules.subscriptions.Subscription}
+     * @see dev.chojo.aether.supporter.configuration.modules.subscriptions.Subscription#id()
      */
     private final long subscriptionId;
 
@@ -59,11 +67,10 @@ public abstract class KofiPurchase {
      */
     public KofiPurchase(
             String mailHash, String transactionId, String key, Type type, long subscriptionId, Instant expiresAt) {
-        this(-1, mailHash, transactionId, key, type, subscriptionId, expiresAt, 0);
+        this(mailHash, transactionId, key, type, subscriptionId, expiresAt, 0);
     }
 
     public KofiPurchase(
-            long id,
             String mailHash,
             String transactionId,
             String key,
@@ -71,7 +78,6 @@ public abstract class KofiPurchase {
             long subscriptionId,
             Instant expiresAt,
             long guildId) {
-        this.id = id;
         this.mailHash = mailHash;
         this.transactionId = transactionId;
         this.guildId = guildId;
@@ -79,10 +85,6 @@ public abstract class KofiPurchase {
         this.type = type;
         this.subscriptionId = subscriptionId;
         this.expiresAt = expiresAt;
-    }
-
-    public long id() {
-        return id;
     }
 
     public String mailHash() {
@@ -128,13 +130,13 @@ public abstract class KofiPurchase {
      * Assign a kofi purchase to a guild
      * This associates the purchase with a guild id
      */
-    public abstract boolean assignPurchaseToGuild(long guildId);
+    public abstract boolean assignToGuild(long guildId);
 
     /**
      * Unassign a kofi purchase from a guild
      * This keeps the purchase but reverts the associated guild id to 0
      */
-    public abstract boolean unassignPurchaseFromGuild();
+    public abstract boolean unassignFromGuild();
 
     /**
      * Renew a kofi purchase that represents a subscription
@@ -147,7 +149,11 @@ public abstract class KofiPurchase {
      */
     public abstract void delete();
 
+    /**
+     * Check if the purchase is still valid.
+     * @return true if the purchase is still valid
+     */
     public boolean isValid() {
-        return expiresAt.isAfter(Instant.now().minus(32, ChronoUnit.DAYS));
+        return expiresAt.isAfter(Instant.now());
     }
 }
