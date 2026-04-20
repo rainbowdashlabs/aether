@@ -6,7 +6,6 @@
 
 package dev.chojo.aether.supporter.configuration.modules.dummy;
 
-@SuppressWarnings("InstantiationOfUtilityClass")
-public final class Empty {
-    public static final Empty INSTANCE = new Empty();
-}
+import net.dv8tion.jda.api.interactions.commands.Command;
+
+public record InteractionMeta(Command.Type type) {}

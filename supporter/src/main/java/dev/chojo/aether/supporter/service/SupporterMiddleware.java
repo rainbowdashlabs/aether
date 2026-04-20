@@ -28,19 +28,15 @@ import java.util.stream.Collectors;
 /**
  * Middleware for the JDAC dispatcher.
  * This middleware manages the subscription context and access validation for Discord interactions.
- *
- * @param <FID> The enum type representing the features.
- * @param <PR>  The type representing the price of a feature.
- * @param <FM>  The type representing additional metadata for a feature.
  */
-public class SupporterMiddleware<FID extends Enum<?>, PR, FM> implements Middleware {
+public class SupporterMiddleware<FID extends Enum<FID>> implements Middleware {
     private final SubcriptionContextProvider contextProvider;
-    private final SupporterConfiguration<FID, PR, FM> configuration;
+    private final SupporterConfiguration<FID, ?, ?> configuration;
     private final SupporterErrorSupplier errorSupplier;
 
     public SupporterMiddleware(
             SubcriptionContextProvider contextProvider,
-            SupporterConfiguration<FID, PR, FM> configuration,
+            SupporterConfiguration<FID, ?, ?> configuration,
             SupporterErrorSupplier errorSupplier) {
         this.contextProvider = contextProvider;
         this.configuration = configuration;
@@ -71,7 +67,7 @@ public class SupporterMiddleware<FID extends Enum<?>, PR, FM> implements Middlew
                     case MessageContextInteractionEvent event -> interactions.hasAccess(event, subCtx);
                     case SlashCommandInteractionEvent event -> interactions.hasAccess(event, subCtx);
                     case CommandAutoCompleteInteractionEvent event -> interactions.hasAccess(event, subCtx);
-                    default -> AccessCheckResult.success();
+                    default -> AccessCheckResult.success(null);
                 };
 
         if (!result.hasAccess()) {

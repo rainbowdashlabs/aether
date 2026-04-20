@@ -7,6 +7,7 @@ module dev.chojo.aether.supporter {
     requires org.jspecify;
     requires com.google.common;
     requires com.google.guice;
+    requires org.apache.commons.collections4;
 
     exports dev.chojo.aether.supporter.access;
     exports dev.chojo.aether.supporter.configuration;

@@ -87,9 +87,9 @@ public abstract class Feature<Price, Meta> {
     }
 
     public AccessCheckResult test(SubscriptionContext subscriptionContext) {
-        if (enabledBy.isEmpty()) return AccessCheckResult.hasAccess(true);
-        if (subscriptionContext.enabledSubscriptions().contains(id)) return AccessCheckResult.hasAccess(true);
+        if (enabledBy.isEmpty()) return AccessCheckResult.hasAccess(this, true);
+        if (subscriptionContext.enabledSubscriptions().contains(id)) return AccessCheckResult.hasAccess(this, true);
         return AccessCheckResult.hasAccess(
-                enabledBy.stream().anyMatch(subscriptionContext.enabledSubscriptions()::contains));
+                this, enabledBy.stream().anyMatch(subscriptionContext.enabledSubscriptions()::contains));
     }
 }

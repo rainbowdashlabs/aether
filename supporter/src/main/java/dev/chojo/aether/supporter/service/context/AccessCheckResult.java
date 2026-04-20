@@ -6,39 +6,53 @@
 
 package dev.chojo.aether.supporter.service.context;
 
-import java.util.Collections;
-import java.util.Set;
+import dev.chojo.aether.supporter.configuration.modules.feature.Feature;
+
+import java.util.function.Function;
 
 /**
  * Represents the result of an access check.
  *
- * @param enabledBy A set of subscription IDs that would grant access.
+ * @param feature   The feature that was checked.
  * @param hasAccess Whether the access is granted.
  */
-public record AccessCheckResult(Set<Long> enabledBy, boolean hasAccess) {
+public record AccessCheckResult(Feature<?, ?> feature, boolean hasAccess) {
     /**
      * Creates a result with no specific enabling subscriptions.
+     *
      * @param result The result.
      * @return The access check result.
      */
-    public static AccessCheckResult hasAccess(boolean result) {
-        return new AccessCheckResult(Set.of(), result);
+    public static AccessCheckResult hasAccess(Feature<?, ?> feature, boolean result) {
+        return new AccessCheckResult(feature, result);
     }
 
     /**
      * Creates a successful result.
+     *
      * @return The access check result.
      */
-    public static AccessCheckResult success() {
-        return new AccessCheckResult(Collections.emptySet(), true);
+    public static AccessCheckResult success(Feature<?, ?> feature) {
+        return new AccessCheckResult(feature, true);
     }
 
     /**
      * Creates a failed result with the given enabling subscriptions.
-     * @param enabledBy The set of enabling subscriptions.
+     *
+     * @param feature The feature that failed the access check.
      * @return The access check result.
      */
-    public static AccessCheckResult failure(Set<Long> enabledBy) {
-        return new AccessCheckResult(enabledBy, false);
+    public static AccessCheckResult failure(Feature<?, ?> feature) {
+        return new AccessCheckResult(feature, false);
+    }
+
+    /**
+     * Throws an exception if the access check failed.
+     *
+     * @param exception The exception to throw.
+     * @param <T>       The type of exception to throw.
+     */
+    public <T extends RuntimeException> void accessOrThrow(Function<Feature<?, ?>, T> exception) {
+        if (!hasAccess()) throw exception.apply(feature);
     }
 }

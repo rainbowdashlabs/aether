@@ -6,12 +6,14 @@
 
 package dev.chojo.aether.supporter.configuration.modules;
 
+import dev.chojo.aether.supporter.configuration.modules.dummy.InteractionFeature;
 import dev.chojo.aether.supporter.service.context.AccessCheckResult;
 import dev.chojo.aether.supporter.service.context.SubscriptionContext;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.MessageContextInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.UserContextInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.CommandInteractionPayload;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +42,7 @@ public class Interactions {
      */
     public AccessCheckResult hasAccess(
             SlashCommandInteractionEvent interaction, SubscriptionContext subscriptionContext) {
-        return hasAccess(slash(interaction.getFullCommandName()), subscriptionContext);
+        return hasAccess(get(interaction), subscriptionContext);
     }
 
     /**
@@ -52,7 +54,7 @@ public class Interactions {
      */
     public AccessCheckResult hasAccess(
             CommandAutoCompleteInteractionEvent interaction, SubscriptionContext subscriptionContext) {
-        return hasAccess(slash(interaction.getFullCommandName()), subscriptionContext);
+        return hasAccess(get(interaction), subscriptionContext);
     }
 
     /**
@@ -64,7 +66,7 @@ public class Interactions {
      */
     public AccessCheckResult hasAccess(
             MessageContextInteractionEvent interaction, SubscriptionContext subscriptionContext) {
-        return hasAccess(message(interaction.getFullCommandName()), subscriptionContext);
+        return hasAccess(get(interaction), subscriptionContext);
     }
 
     /**
@@ -76,25 +78,25 @@ public class Interactions {
      */
     public AccessCheckResult hasAccess(
             UserContextInteractionEvent interaction, SubscriptionContext subscriptionContext) {
-        return hasAccess(user(interaction.getFullCommandName()), subscriptionContext);
+        return hasAccess(get(interaction), subscriptionContext);
     }
 
-    public Set<Long> slash(String name) {
-        return slash.getOrDefault(name, emptySet());
+    private Map<String, Set<Long>> getMap(CommandInteractionPayload event) {
+        return switch (event.getCommandType()) {
+            case SLASH -> slash;
+            case MESSAGE -> messages;
+            case USER -> users;
+            default -> throw new IllegalArgumentException("Unsupported interaction type: " + event.getType());
+        };
     }
 
-    public Set<Long> message(String name) {
-        return messages.getOrDefault(name, emptySet());
+    private InteractionFeature get(CommandInteractionPayload event) {
+        Map<String, Set<Long>> map = getMap(event);
+        String name = event.getFullCommandName();
+        return new InteractionFeature(name, map.getOrDefault(name, emptySet()), event.getCommandType());
     }
 
-    public Set<Long> user(String name) {
-        return users.getOrDefault(name, emptySet());
-    }
-
-    private AccessCheckResult hasAccess(Set<Long> enabledBy, SubscriptionContext subscriptionContext) {
-        if (!enabledBy.isEmpty()) {
-            return subscriptionContext.hasAccess(enabledBy);
-        }
-        return AccessCheckResult.success();
+    private AccessCheckResult hasAccess(InteractionFeature enabledBy, SubscriptionContext subscriptionContext) {
+        return enabledBy.test(subscriptionContext);
     }
 }

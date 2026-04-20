@@ -13,16 +13,13 @@ import dev.chojo.aether.supporter.configuration.SupporterConfiguration;
  * This class is typically injected into the command's key-value store.
  *
  * @param <FeatureID>   The enum type representing the features.
- * @param <Price>       The type representing the price of a feature.
- * @param <FeatureMeta> The type representing additional metadata for a feature.
  */
-public class SupporterValidator<FeatureID extends Enum<?>, Price, FeatureMeta> {
+public class SupporterValidator<FeatureID extends Enum<?>> {
     private final SubscriptionContext subscriptionContext;
-    private final SupporterConfiguration<FeatureID, Price, FeatureMeta> configuration;
+    private final SupporterConfiguration<FeatureID, ?, ?> configuration;
 
     public SupporterValidator(
-            SubscriptionContext subscriptionContext,
-            SupporterConfiguration<FeatureID, Price, FeatureMeta> configuration) {
+            SubscriptionContext subscriptionContext, SupporterConfiguration<FeatureID, ?, ?> configuration) {
         this.subscriptionContext = subscriptionContext;
         this.configuration = configuration;
     }

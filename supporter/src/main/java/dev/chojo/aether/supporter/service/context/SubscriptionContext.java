@@ -44,17 +44,6 @@ public interface SubscriptionContext {
     }
 
     /**
-     * Checks if any of the given subscription IDs are enabled.
-     *
-     * @param enabledBy The set of subscription IDs.
-     * @return The result of the access check.
-     */
-    default AccessCheckResult hasAccess(Set<Long> enabledBy) {
-        if (enabledBy.isEmpty()) return AccessCheckResult.success();
-        return new AccessCheckResult(enabledBy, enabledBy.stream().anyMatch(enabledSubscriptions()::contains));
-    }
-
-    /**
      * Returns whether the context has no enabled subscriptions.
      * @return true if no subscriptions are enabled.
      */
