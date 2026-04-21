@@ -58,7 +58,7 @@ loadScripts(document, 'script');</script>
 <li><a href="#method-summary" tabindex="0">Method Summary</a></li>
 <li><a href="#constructor-detail" tabindex="0">Constructor Details</a>
 <ol class="toc-list">
-<li><a href="#%3Cinit%3E(java.util.function.BiConsumer)" tabindex="0">InterceptingEventManager(BiConsumer)</a></li>
+<li><a href="#%3Cinit%3E(io.github.kaktushose.jdac.JDACommands)" tabindex="0">InterceptingEventManager(JDACommands)</a></li>
 </ol>
 </li>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
@@ -67,6 +67,9 @@ loadScripts(document, 'script');</script>
 <li><a href="#unregister(java.lang.Object)" tabindex="0">unregister(Object)</a></li>
 <li><a href="#getRegisteredListeners()" tabindex="0">getRegisteredListeners()</a></li>
 <li><a href="#handle(net.dv8tion.jda.api.events.GenericEvent)" tabindex="0">handle(GenericEvent)</a></li>
+<li><a href="#exception(java.lang.Class,dev.chojo.aether.common.eventmanager.ExceptionHandler)" tabindex="0">exception(Class, ExceptionHandler)</a></li>
+<li><a href="#accept(io.github.kaktushose.jdac.property.events.InteractionFinishedEvent,io.github.kaktushose.jdac.property.JDACIntrospection)" tabindex="0">accept(InteractionFinishedEvent, JDACIntrospection)</a></li>
+<li><a href="#event()" tabindex="0">event()</a></li>
 </ol>
 </li>
 </ol>
@@ -82,13 +85,13 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code>net.dv8tion.jda.api.hooks.IEventManager</code></dd>
+<dd><code>dev.goldmensch.propane.event.Listener&lt;io.github.kaktushose.jdac.property.events.InteractionFinishedEvent, io.github.kaktushose.jdac.property.JDACScope, io.github.kaktushose.jdac.property.JDACIntrospection&gt;, net.dv8tion.jda.api.hooks.IEventManager</code></dd>
 </dl>
 <hr>
 <div class="horizontal-scroll">
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">InterceptingEventManager</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements net.dv8tion.jda.api.hooks.IEventManager</span></div>
+implements net.dv8tion.jda.api.hooks.IEventManager, dev.goldmensch.propane.event.Listener&lt;io.github.kaktushose.jdac.property.events.InteractionFinishedEvent, io.github.kaktushose.jdac.property.JDACScope, io.github.kaktushose.jdac.property.JDACIntrospection&gt;</span></div>
 </div>
 </section>
 <section class="summary">
@@ -101,7 +104,7 @@ implements net.dv8tion.jda.api.hooks.IEventManager</span></div>
 <div class="summary-table two-column-summary">
 <div class="table-header col-first">Constructor</div>
 <div class="table-header col-last">Description</div>
-<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(java.util.function.BiConsumer)" class="member-name-link">InterceptingEventManager</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/function/BiConsumer.html" title="class or interface in java.util.function" class="external-link">BiConsumer</a>&lt;net.dv8tion.jda.api.events.GenericEvent, <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&gt;&nbsp;exceptionHandler)</code></div>
+<div class="col-constructor-name even-row-color"><code><a href="#%3Cinit%3E(io.github.kaktushose.jdac.JDACommands)" class="member-name-link">InterceptingEventManager</a><wbr>(io.github.kaktushose.jdac.JDACommands&nbsp;commands)</code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 </div>
 </section>
@@ -117,18 +120,31 @@ implements net.dv8tion.jda.api.hooks.IEventManager</span></div>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRegisteredListeners()" class="member-name-link">getRegisteredListeners</a>()</code></div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#accept(io.github.kaktushose.jdac.property.events.InteractionFinishedEvent,io.github.kaktushose.jdac.property.JDACIntrospection)" class="member-name-link">accept</a><wbr>(io.github.kaktushose.jdac.property.events.InteractionFinishedEvent&nbsp;event,
+ io.github.kaktushose.jdac.property.JDACIntrospection&nbsp;introspection)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#handle(net.dv8tion.jda.api.events.GenericEvent)" class="member-name-link">handle</a><wbr>(net.dv8tion.jda.api.events.GenericEvent&nbsp;event)</code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a><wbr>&lt;io.github.kaktushose.jdac.property.events.InteractionFinishedEvent&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#event()" class="member-name-link">event</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>&lt;V extends <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&gt;<br>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#exception(java.lang.Class,dev.chojo.aether.common.eventmanager.ExceptionHandler)" class="member-name-link">exception</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;V&gt;&nbsp;err,
+ <a href="ExceptionHandler.html" title="interface in dev.chojo.aether.common.eventmanager">ExceptionHandler</a>&nbsp;handler)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Register an exception handler.</div>
+</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>@NonNull <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getRegisteredListeners()" class="member-name-link">getRegisteredListeners</a>()</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#register(java.lang.Object)" class="member-name-link">register</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;listener)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#handle(net.dv8tion.jda.api.events.GenericEvent)" class="member-name-link">handle</a><wbr>(@NonNull net.dv8tion.jda.api.events.GenericEvent&nbsp;event)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unregister(java.lang.Object)" class="member-name-link">unregister</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;listener)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#register(java.lang.Object)" class="member-name-link">register</a><wbr>(@NonNull <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;listener)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#unregister(java.lang.Object)" class="member-name-link">unregister</a><wbr>(@NonNull <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;listener)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 </div>
 </div>
 </div>
@@ -147,10 +163,10 @@ implements net.dv8tion.jda.api.hooks.IEventManager</span></div>
 <h2>Constructor Details</h2>
 <ul class="member-list">
 <li>
-<section class="detail" id="&lt;init&gt;(java.util.function.BiConsumer)">
+<section class="detail" id="&lt;init&gt;(io.github.kaktushose.jdac.JDACommands)">
 <h3>InterceptingEventManager</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">InterceptingEventManager</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/function/BiConsumer.html" title="class or interface in java.util.function" class="external-link">BiConsumer</a>&lt;net.dv8tion.jda.api.events.GenericEvent, <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&gt;&nbsp;exceptionHandler)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="element-name">InterceptingEventManager</span><wbr><span class="parameters">(io.github.kaktushose.jdac.JDACommands&nbsp;commands)</span></div>
 </div>
 </section>
 </li>
@@ -166,7 +182,7 @@ implements net.dv8tion.jda.api.hooks.IEventManager</span></div>
 <section class="detail" id="register(java.lang.Object)">
 <h3>register</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;listener)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">register</span><wbr><span class="parameters">(@NonNull <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;listener)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>register</code>&nbsp;in interface&nbsp;<code>net.dv8tion.jda.api.hooks.IEventManager</code></dd>
@@ -178,7 +194,7 @@ implements net.dv8tion.jda.api.hooks.IEventManager</span></div>
 <section class="detail" id="unregister(java.lang.Object)">
 <h3>unregister</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">unregister</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;listener)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">unregister</span><wbr><span class="parameters">(@NonNull <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&nbsp;listener)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>unregister</code>&nbsp;in interface&nbsp;<code>net.dv8tion.jda.api.hooks.IEventManager</code></dd>
@@ -190,7 +206,7 @@ implements net.dv8tion.jda.api.hooks.IEventManager</span></div>
 <section class="detail" id="getRegisteredListeners()">
 <h3>getRegisteredListeners</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name">getRegisteredListeners</span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">@NonNull <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>&gt;</span>&nbsp;<span class="element-name">getRegisteredListeners</span>()</div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>getRegisteredListeners</code>&nbsp;in interface&nbsp;<code>net.dv8tion.jda.api.hooks.IEventManager</code></dd>
@@ -202,10 +218,53 @@ implements net.dv8tion.jda.api.hooks.IEventManager</span></div>
 <section class="detail" id="handle(net.dv8tion.jda.api.events.GenericEvent)">
 <h3>handle</h3>
 <div class="horizontal-scroll">
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">handle</span><wbr><span class="parameters">(net.dv8tion.jda.api.events.GenericEvent&nbsp;event)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">handle</span><wbr><span class="parameters">(@NonNull net.dv8tion.jda.api.events.GenericEvent&nbsp;event)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
 <dd><code>handle</code>&nbsp;in interface&nbsp;<code>net.dv8tion.jda.api.hooks.IEventManager</code></dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="exception(java.lang.Class,dev.chojo.aether.common.eventmanager.ExceptionHandler)">
+<h3>exception</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="type-parameters">&lt;V extends <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Throwable.html" title="class or interface in java.lang" class="external-link">Throwable</a>&gt;</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">exception</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;V&gt;&nbsp;err,
+ <a href="ExceptionHandler.html" title="interface in dev.chojo.aether.common.eventmanager">ExceptionHandler</a>&nbsp;handler)</span></div>
+<div class="block">Register an exception handler.
+Exception handlers are called in the order they were registered.</div>
+<dl class="notes">
+<dt>Type Parameters:</dt>
+<dd><span id="exception(java.lang.Class,dev.chojo.aether.common.eventmanager.ExceptionHandler)-type-param-V"><code>V</code> - exception type to handle</span></dd>
+<dt>Parameters:</dt>
+<dd><code>err</code> - error class to handle</dd>
+<dd><code>handler</code> - handler to call when the error is thrown</dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="accept(io.github.kaktushose.jdac.property.events.InteractionFinishedEvent,io.github.kaktushose.jdac.property.JDACIntrospection)">
+<h3>accept</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">accept</span><wbr><span class="parameters">(io.github.kaktushose.jdac.property.events.InteractionFinishedEvent&nbsp;event,
+ io.github.kaktushose.jdac.property.JDACIntrospection&nbsp;introspection)</span></div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>accept</code>&nbsp;in interface&nbsp;<code>dev.goldmensch.propane.event.Listener&lt;io.github.kaktushose.jdac.property.events.InteractionFinishedEvent, io.github.kaktushose.jdac.property.JDACScope, io.github.kaktushose.jdac.property.JDACIntrospection&gt;</code></dd>
+</dl>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="event()">
+<h3>event</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/Class.html" title="class or interface in java.lang" class="external-link">Class</a>&lt;io.github.kaktushose.jdac.property.events.InteractionFinishedEvent&gt;</span>&nbsp;<span class="element-name">event</span>()</div>
+<dl class="notes">
+<dt>Specified by:</dt>
+<dd><code>event</code>&nbsp;in interface&nbsp;<code>dev.goldmensch.propane.event.Listener&lt;io.github.kaktushose.jdac.property.events.InteractionFinishedEvent, io.github.kaktushose.jdac.property.JDACScope, io.github.kaktushose.jdac.property.JDACIntrospection&gt;</code></dd>
 </dl>
 </div>
 </section>

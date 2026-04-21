@@ -57,9 +57,11 @@ loadScripts(document, 'script');</script>
 <li><a href="dev.chojo.aether.common/dev/chojo/aether/common/eventmanager/package-tree.html">dev.chojo.aether.common.eventmanager</a>, </li>
 <li><a href="dev.chojo.aether.common/dev/chojo/aether/common/functions/package-tree.html">dev.chojo.aether.common.functions</a>, </li>
 <li><a href="dev.chojo.aether.common/dev/chojo/aether/common/provider/package-tree.html">dev.chojo.aether.common.provider</a>, </li>
+<li><a href="dev.chojo.aether.common/dev/chojo/aether/common/services/package-tree.html">dev.chojo.aether.common.services</a>, </li>
 <li><a href="dev.chojo.aether.common/dev/chojo/aether/common/util/package-tree.html">dev.chojo.aether.common.util</a>, </li>
 <li><a href="dev.chojo.aether.commonweb/dev/chojo/aether/commonweb/error/package-tree.html">dev.chojo.aether.commonweb.error</a>, </li>
 <li><a href="dev.chojo.aether.commonweb/dev/chojo/aether/commonweb/util/package-tree.html">dev.chojo.aether.commonweb.util</a>, </li>
+<li><a href="dev.chojo.aether.discordoauth/dev/chojo/aether/discordoauth/access/package-tree.html">dev.chojo.aether.discordoauth.access</a>, </li>
 <li><a href="dev.chojo.aether.discordoauth/dev/chojo/aether/discordoauth/configuration/package-tree.html">dev.chojo.aether.discordoauth.configuration</a>, </li>
 <li><a href="dev.chojo.aether.discordoauth/dev/chojo/aether/discordoauth/pojo/package-tree.html">dev.chojo.aether.discordoauth.pojo</a>, </li>
 <li><a href="dev.chojo.aether.discordoauth/dev/chojo/aether/discordoauth/service/package-tree.html">dev.chojo.aether.discordoauth.service</a>, </li>
@@ -114,9 +116,10 @@ loadScripts(document, 'script');</script>
 <li class="circle">dev.chojo.aether.supporter.configuration.modules.dummy.<a href="dev.chojo.aether.supporter/dev/chojo/aether/supporter/configuration/modules/dummy/InteractionFeature.html" class="type-name-link" title="class in dev.chojo.aether.supporter.configuration.modules.dummy">InteractionFeature</a></li>
 </ul>
 </li>
+<li class="circle">dev.chojo.aether.common.services.<a href="dev.chojo.aether.common/dev/chojo/aether/common/services/GlobalErrorHandler.html" class="type-name-link" title="class in dev.chojo.aether.common.services">GlobalErrorHandler</a></li>
 <li class="circle">dev.chojo.aether.serialization.pojo.<a href="dev.chojo.aether.serialization/dev/chojo/aether/serialization/pojo/GuildPOJO.html" class="type-name-link" title="class in dev.chojo.aether.serialization.pojo">GuildPOJO</a></li>
 <li class="circle">dev.chojo.aether.supporter.configuration.modules.<a href="dev.chojo.aether.supporter/dev/chojo/aether/supporter/configuration/modules/Interactions.html" class="type-name-link" title="class in dev.chojo.aether.supporter.configuration.modules">Interactions</a></li>
-<li class="circle">dev.chojo.aether.common.eventmanager.<a href="dev.chojo.aether.common/dev/chojo/aether/common/eventmanager/InterceptingEventManager.html" class="type-name-link" title="class in dev.chojo.aether.common.eventmanager">InterceptingEventManager</a> (implements net.dv8tion.jda.api.hooks.IEventManager)</li>
+<li class="circle">dev.chojo.aether.common.eventmanager.<a href="dev.chojo.aether.common/dev/chojo/aether/common/eventmanager/InterceptingEventManager.html" class="type-name-link" title="class in dev.chojo.aether.common.eventmanager">InterceptingEventManager</a> (implements net.dv8tion.jda.api.hooks.IEventManager, dev.goldmensch.propane.event.Listener&lt;E,<wbr>S,<wbr>I&gt;)</li>
 <li class="circle">tools.jackson.databind.JacksonModule (implements tools.jackson.core.Versioned)
 <ul>
 <li class="circle">tools.jackson.databind.module.SimpleModule (implements java.io.<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a>)
@@ -178,6 +181,7 @@ loadScripts(document, 'script');</script>
 <section class="hierarchy">
 <h2 title="Interface Hierarchy">Interface Hierarchy</h2>
 <ul>
+<li class="circle">dev.chojo.aether.common.eventmanager.<a href="dev.chojo.aether.common/dev/chojo/aether/common/eventmanager/ExceptionHandler.html" class="type-name-link" title="interface in dev.chojo.aether.common.eventmanager">ExceptionHandler</a></li>
 <li class="circle">dev.chojo.aether.supporter.registry.<a href="dev.chojo.aether.supporter/dev/chojo/aether/supporter/registry/Key.html" class="type-name-link" title="interface in dev.chojo.aether.supporter.registry">Key</a></li>
 <li class="circle">dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.purchase.<a href="dev.chojo.aether.supporter/dev/chojo/aether/supporter/configuration/modules/subscriptions/platform/purchase/Purchase.html" class="type-name-link" title="interface in dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.purchase">Purchase</a></li>
 <li class="circle">dev.chojo.aether.common.consumer.<a href="dev.chojo.aether.common/dev/chojo/aether/common/consumer/QuadConsumer.html" class="type-name-link" title="interface in dev.chojo.aether.common.consumer">QuadConsumer</a>&lt;T1,<wbr>T2,<wbr>T3,<wbr>T4&gt;</li>
@@ -194,6 +198,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">dev.chojo.aether.mailing.<a href="dev.chojo.aether.mailing/dev/chojo/aether/mailing/UserMails.html" class="type-name-link" title="interface in dev.chojo.aether.mailing">UserMails</a></li>
 <li class="circle">dev.chojo.aether.mailing.service.<a href="dev.chojo.aether.mailing/dev/chojo/aether/mailing/service/UserMailsProvider.html" class="type-name-link" title="interface in dev.chojo.aether.mailing.service">UserMailsProvider</a></li>
 <li class="circle">dev.chojo.aether.common.provider.<a href="dev.chojo.aether.common/dev/chojo/aether/common/provider/UserProvider.html" class="type-name-link" title="interface in dev.chojo.aether.common.provider">UserProvider</a></li>
+<li class="circle">dev.chojo.aether.discordoauth.access.<a href="dev.chojo.aether.discordoauth/dev/chojo/aether/discordoauth/access/UserToken.html" class="type-name-link" title="interface in dev.chojo.aether.discordoauth.access">UserToken</a></li>
 </ul>
 </section>
 <section class="hierarchy">
@@ -224,6 +229,7 @@ loadScripts(document, 'script');</script>
 <li class="circle">dev.chojo.aether.supporter.service.context.<a href="dev.chojo.aether.supporter/dev/chojo/aether/supporter/service/context/AccessCheckResult.html" class="type-name-link" title="class in dev.chojo.aether.supporter.service.context">AccessCheckResult</a></li>
 <li class="circle">dev.chojo.aether.discordoauth.pojo.<a href="dev.chojo.aether.discordoauth/dev/chojo/aether/discordoauth/pojo/DiscordGuild.html" class="type-name-link" title="class in dev.chojo.aether.discordoauth.pojo">DiscordGuild</a></li>
 <li class="circle">dev.chojo.aether.discordoauth.pojo.<a href="dev.chojo.aether.discordoauth/dev/chojo/aether/discordoauth/pojo/DiscordUser.html" class="type-name-link" title="class in dev.chojo.aether.discordoauth.pojo">DiscordUser</a></li>
+<li class="circle">dev.chojo.aether.common.eventmanager.<a href="dev.chojo.aether.common/dev/chojo/aether/common/eventmanager/ExceptionContext.html" class="type-name-link" title="class in dev.chojo.aether.common.eventmanager">ExceptionContext</a></li>
 <li class="circle">dev.chojo.aether.supporter.configuration.modules.dummy.<a href="dev.chojo.aether.supporter/dev/chojo/aether/supporter/configuration/modules/dummy/InteractionMeta.html" class="type-name-link" title="class in dev.chojo.aether.supporter.configuration.modules.dummy">InteractionMeta</a></li>
 <li class="circle">dev.chojo.aether.kofi.pojo.<a href="dev.chojo.aether.kofi/dev/chojo/aether/kofi/pojo/KofiShopItem.html" class="type-name-link" title="class in dev.chojo.aether.kofi.pojo">KofiShopItem</a></li>
 <li class="circle">dev.chojo.aether.kofi.pojo.<a href="dev.chojo.aether.kofi/dev/chojo/aether/kofi/pojo/KofiTransaction.html" class="type-name-link" title="class in dev.chojo.aether.kofi.pojo">KofiTransaction</a></li>

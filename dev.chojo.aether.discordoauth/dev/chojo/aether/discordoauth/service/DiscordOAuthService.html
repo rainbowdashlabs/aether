@@ -63,6 +63,9 @@ loadScripts(document, 'script');</script>
 </li>
 <li><a href="#method-detail" tabindex="0">Method Details</a>
 <ol class="toc-list">
+<li><a href="#start()" tabindex="0">start()</a></li>
+<li><a href="#refreshExpiredTokens()" tabindex="0">refreshExpiredTokens()</a></li>
+<li><a href="#getExpiringtokens(java.time.Instant)" tabindex="0">getExpiringtokens(Instant)</a></li>
 <li><a href="#startDiscordLogin(io.javalin.http.Context)" tabindex="0">startDiscordLogin(Context)</a></li>
 <li><a href="#handleDiscordCallback(io.javalin.http.Context)" tabindex="0">handleDiscordCallback(Context)</a></li>
 <li><a href="#userToken(long)" tabindex="0">userToken(long)</a></li>
@@ -116,25 +119,38 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#handleDiscordCallback(io.javalin.http.Context)" class="member-name-link">handleDiscordCallback</a><wbr>(io.javalin.http.Context&nbsp;ctx)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
-<div class="block">Handles the callback from Discord after the user has authorized the application.</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>protected abstract <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a><wbr>&lt;? extends <a href="../access/UserToken.html" title="interface in dev.chojo.aether.discordoauth.access">UserToken</a>&gt;</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#getExpiringtokens(java.time.Instant)" class="member-name-link">getExpiringtokens</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;instant)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="block">Get the tokens that will expire before the given instant.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#startDiscordLogin(io.javalin.http.Context)" class="member-name-link">startDiscordLogin</a><wbr>(io.javalin.http.Context&nbsp;ctx)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#handleDiscordCallback(io.javalin.http.Context)" class="member-name-link">handleDiscordCallback</a><wbr>(io.javalin.http.Context&nbsp;ctx)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Handles the callback from Discord after the user has authorized the application.</div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>protected void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#refreshExpiredTokens()" class="member-name-link">refreshExpiredTokens</a>()</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#start()" class="member-name-link">start</a>()</code></div>
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
+<div class="block">Starts the scheduled task <a href="#refreshExpiredTokens()"><code>refreshExpiredTokens()</code></a></div>
+</div>
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#startDiscordLogin(io.javalin.http.Context)" class="member-name-link">startDiscordLogin</a><wbr>(io.javalin.http.Context&nbsp;ctx)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Starts the Discord login flow by redirecting the user to Discord.</div>
 </div>
-<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateUser(dev.chojo.aether.discordoauth.pojo.DiscordUser,dev.chojo.aether.discordoauth.pojo.TokenResponse)" class="member-name-link">updateUser</a><wbr>(<a href="../pojo/DiscordUser.html" title="class in dev.chojo.aether.discordoauth.pojo">DiscordUser</a>&nbsp;user,
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract void</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#updateUser(dev.chojo.aether.discordoauth.pojo.DiscordUser,dev.chojo.aether.discordoauth.pojo.TokenResponse)" class="member-name-link">updateUser</a><wbr>(<a href="../pojo/DiscordUser.html" title="class in dev.chojo.aether.discordoauth.pojo">DiscordUser</a>&nbsp;user,
  <a href="../pojo/TokenResponse.html" title="class in dev.chojo.aether.discordoauth.pojo">TokenResponse</a>&nbsp;token)</code></div>
-<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Handle the user after a token was issued.</div>
 </div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#userToken(long)" class="member-name-link">userToken</a><wbr>(long&nbsp;userId)</code></div>
-<div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
+<div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code>abstract <a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3"><code><a href="#userToken(long)" class="member-name-link">userToken</a><wbr>(long&nbsp;userId)</code></div>
+<div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab3">
 <div class="block">Gets the token for a user can can be used to authenticate it in the backend.</div>
 </div>
 </div>
@@ -177,6 +193,44 @@ loadScripts(document, 'script');</script>
 <section class="method-details" id="method-detail">
 <h2>Method Details</h2>
 <ul class="member-list">
+<li>
+<section class="detail" id="start()">
+<h3>start</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">start</span>()</div>
+<div class="block">Starts the scheduled task <a href="#refreshExpiredTokens()"><code>refreshExpiredTokens()</code></a></div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="refreshExpiredTokens()">
+<h3>refreshExpiredTokens</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">refreshExpiredTokens</span>()</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="getExpiringtokens(java.time.Instant)">
+<h3>getExpiringtokens</h3>
+<div class="horizontal-scroll">
+<div class="member-signature"><span class="modifiers">protected abstract</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;? extends <a href="../access/UserToken.html" title="interface in dev.chojo.aether.discordoauth.access">UserToken</a>&gt;</span>&nbsp;<span class="element-name">getExpiringtokens</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/25/docs/api/java.base/java/time/Instant.html" title="class or interface in java.time" class="external-link">Instant</a>&nbsp;instant)</span></div>
+<div class="block">Get the tokens that will expire before the given instant.</div>
+<dl class="notes">
+<dt>Parameters:</dt>
+<dd><code>instant</code> - the instant to check</dd>
+<dt>Returns:</dt>
+<dd>the tokens that will expire before the given instant</dd>
+<dt>See Also:</dt>
+<dd>
+<ul class="tag-list">
+<li><a href="../access/UserToken.html" title="interface in dev.chojo.aether.discordoauth.access"><code>UserToken</code></a></li>
+</ul>
+</dd>
+</dl>
+</div>
+</section>
+</li>
 <li>
 <section class="detail" id="startDiscordLogin(io.javalin.http.Context)">
 <h3>startDiscordLogin</h3>
