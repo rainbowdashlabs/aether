@@ -11,4 +11,5 @@ module dev.chojo.aether.discordoauth {
     exports dev.chojo.aether.discordoauth.configuration;
     exports dev.chojo.aether.discordoauth.pojo;
     exports dev.chojo.aether.discordoauth.service;
+    exports dev.chojo.aether.discordoauth.access;
 }

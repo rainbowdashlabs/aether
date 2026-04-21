@@ -7,21 +7,31 @@
 package dev.chojo.aether.discordoauth.service;
 
 import dev.chojo.aether.commonweb.error.ErrorResponseWrapper;
+import dev.chojo.aether.discordoauth.access.UserToken;
 import dev.chojo.aether.discordoauth.configuration.DiscordOAuth;
 import dev.chojo.aether.discordoauth.pojo.DiscordUser;
 import dev.chojo.aether.discordoauth.pojo.TokenResponse;
 import io.javalin.http.Context;
 import io.javalin.http.Cookie;
 import io.javalin.http.HttpStatus;
+import org.slf4j.Logger;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+
+import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * Base service for handling Discord OAuth2 flow with Javalin.
  */
 public abstract class DiscordOAuthService {
+    private static final Logger log = getLogger(DiscordOAuthService.class);
     private final DiscordClient discordClient;
     private final String host;
 
@@ -34,7 +44,41 @@ public abstract class DiscordOAuthService {
     public DiscordOAuthService(DiscordOAuth config, String host) {
         this.discordClient = new DiscordClient(config);
         this.host = host;
+        start();
     }
+
+    /**
+     * Starts the scheduled task {@link #refreshExpiredTokens()}
+     */
+    public void start() {
+        Executors.newSingleThreadScheduledExecutor()
+                .scheduleAtFixedRate(this::refreshExpiredTokens, 2, 60, TimeUnit.MINUTES);
+    }
+
+    protected void refreshExpiredTokens() {
+        log.info("Refreshing expired discord tokens");
+        List<? extends UserToken> expiringTokens =
+                getExpiringtokens(Instant.now().plus(1, ChronoUnit.HOURS));
+        for (var token : expiringTokens) {
+            try {
+                TokenResponse response = discordClient.refreshToken(token.refreshToken());
+                token.update(response);
+                log.info("Refreshed discord access token for user {}", token.userId());
+            } catch (Exception e) {
+                token.delete();
+                log.error("Failed to refresh discord access token for user {}", token.userId(), e);
+            }
+        }
+    }
+
+    /**
+     * Get the tokens that will expire before the given instant.
+     *
+     * @param instant the instant to check
+     * @return the tokens that will expire before the given instant
+     * @see UserToken
+     */
+    protected abstract List<? extends UserToken> getExpiringtokens(Instant instant);
 
     /**
      * Starts the Discord login flow by redirecting the user to Discord.
@@ -98,7 +142,7 @@ public abstract class DiscordOAuthService {
             updateUser(user, token);
             var accessToken = userToken(user.id());
 
-            // Redirect back to frontend with session token
+            // Redirect back to the frontend with a session token
             if (nextPath.isBlank() || !nextPath.startsWith("/")) {
                 nextPath = "/";
             }
@@ -124,6 +168,7 @@ public abstract class DiscordOAuthService {
 
     /**
      * Gets the token for a user can can be used to authenticate it in the backend.
+     *
      * @param userId the user id
      * @return the token
      */

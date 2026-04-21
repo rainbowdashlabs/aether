@@ -44,10 +44,8 @@ public class DiscordClient {
             .build();
     private final DiscordOAuth configuration;
 
-    private final Cache<String, DiscordUser> userCache =
-            CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).build();
-    private final Cache<String, List<DiscordGuild>> userGuildsCache =
-            CacheBuilder.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).build();
+    private final Cache<String, DiscordUser> userCache;
+    private final Cache<String, List<DiscordGuild>> userGuildsCache;
 
     /**
      * Creates a new Discord client.
@@ -56,6 +54,12 @@ public class DiscordClient {
      */
     public DiscordClient(DiscordOAuth configuration) {
         this.configuration = configuration;
+        userCache = CacheBuilder.newBuilder()
+                .expireAfterWrite(configuration.cacheRetentionMinutes(), TimeUnit.MINUTES)
+                .build();
+        userGuildsCache = CacheBuilder.newBuilder()
+                .expireAfterWrite(configuration.cacheRetentionMinutes(), TimeUnit.MINUTES)
+                .build();
     }
 
     private static String enc(String value) {

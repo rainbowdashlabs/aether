@@ -8,6 +8,7 @@ module dev.chojo.aether.supporter {
     requires com.google.common;
     requires com.google.guice;
     requires org.apache.commons.collections4;
+    requires org.jetbrains.annotations;
 
     exports dev.chojo.aether.supporter.access;
     exports dev.chojo.aether.supporter.configuration;
