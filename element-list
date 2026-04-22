@@ -5,6 +5,7 @@ dev.chojo.aether.common.container
 dev.chojo.aether.common.eventmanager
 dev.chojo.aether.common.functions
 dev.chojo.aether.common.provider
+dev.chojo.aether.common.registry
 dev.chojo.aether.common.services
 dev.chojo.aether.common.util
 module:dev.chojo.aether.commonweb
