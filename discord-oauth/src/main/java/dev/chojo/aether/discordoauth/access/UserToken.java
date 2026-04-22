@@ -8,6 +8,8 @@ package dev.chojo.aether.discordoauth.access;
 
 import dev.chojo.aether.discordoauth.pojo.TokenResponse;
 
+import java.time.Instant;
+
 /**
  * A token associated with a user.
  */
@@ -32,6 +34,20 @@ public interface UserToken {
      * @return refresh token
      */
     String refreshToken();
+
+    /**
+     * Get the access token associated with the token.
+     *
+     * @return access token
+     */
+    String accessToken();
+
+    /**
+     * Get the time at which the token expires.
+     *
+     * @return expiration time
+     */
+    Instant expiry();
 
     /**
      * Delete the token.
