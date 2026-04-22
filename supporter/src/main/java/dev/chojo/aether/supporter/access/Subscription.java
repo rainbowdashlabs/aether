@@ -16,8 +16,8 @@ import java.util.Optional;
 public class Subscription {
     /**
      * The id this subscription is targeted.
-     * This is a user id, if the {@link #skuTarget} is {@link SkuTarget#USER}
-     * This is a guild id, if the {@link #skuTarget} is {@link SkuTarget#GUILD}
+     * This is a user id, if the {@link #target} is {@link SkuTarget#USER}
+     * This is a guild id, if the {@link #target} is {@link SkuTarget#GUILD}
      */
     private final long targetId;
 
@@ -34,7 +34,7 @@ public class Subscription {
     /**
      * The target of the subscription
      */
-    private final SkuTarget skuTarget;
+    private final SkuTarget target;
 
     private final Entitlement.EntitlementType purchaseType;
     private final Instant endsAt;
@@ -44,14 +44,14 @@ public class Subscription {
             long subscriptionId,
             long targetId,
             Platform source,
-            SkuTarget skuTarget,
+            SkuTarget target,
             Entitlement.EntitlementType purchaseType,
             Instant endsAt,
             boolean persistent) {
         this.subscriptionId = subscriptionId;
         this.targetId = targetId;
         this.source = source;
-        this.skuTarget = skuTarget;
+        this.target = target;
         this.purchaseType = purchaseType;
         this.endsAt = endsAt;
         this.persistent = persistent;
@@ -77,7 +77,7 @@ public class Subscription {
                 persistent);
     }
 
-    public long id() {
+    public long targetId() {
         return targetId;
     }
 
@@ -85,8 +85,8 @@ public class Subscription {
         return subscriptionId;
     }
 
-    public SkuTarget skuTarget() {
-        return skuTarget;
+    public SkuTarget target() {
+        return target;
     }
 
     public Instant endsAt() {
@@ -111,13 +111,13 @@ public class Subscription {
         if (!super.equals(o)) return false;
 
         Subscription that = (Subscription) o;
-        return targetId == that.targetId && skuTarget == that.skuTarget;
+        return targetId == that.targetId && target == that.target;
     }
 
     @Override
     public int hashCode() {
         int result = Long.hashCode(targetId);
-        result = 31 * result + skuTarget.hashCode();
+        result = 31 * result + target.hashCode();
         return result;
     }
 }
