@@ -6,7 +6,7 @@
 
 package dev.chojo.aether.supporter.service.context;
 
-import dev.chojo.aether.supporter.configuration.modules.feature.Feature;
+import dev.chojo.aether.supporter.configuration.modules.feature.AFeature;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -39,7 +39,7 @@ public interface SubscriptionContext {
      * @param feature The feature.
      * @return The result of the access check.
      */
-    default AccessCheckResult hasAccess(Feature<?, ?> feature) {
+    default AccessCheckResult hasAccess(AFeature<?, ?> feature) {
         return feature.test(this);
     }
 

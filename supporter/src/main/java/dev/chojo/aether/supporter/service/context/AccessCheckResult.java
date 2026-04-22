@@ -6,7 +6,7 @@
 
 package dev.chojo.aether.supporter.service.context;
 
-import dev.chojo.aether.supporter.configuration.modules.feature.Feature;
+import dev.chojo.aether.supporter.configuration.modules.feature.AFeature;
 
 import java.util.function.Function;
 
@@ -16,14 +16,14 @@ import java.util.function.Function;
  * @param feature   The feature that was checked.
  * @param hasAccess Whether the access is granted.
  */
-public record AccessCheckResult(Feature<?, ?> feature, boolean hasAccess) {
+public record AccessCheckResult(AFeature<?, ?> feature, boolean hasAccess) {
     /**
      * Creates a result with no specific enabling subscriptions.
      *
      * @param result The result.
      * @return The access check result.
      */
-    public static AccessCheckResult hasAccess(Feature<?, ?> feature, boolean result) {
+    public static AccessCheckResult hasAccess(AFeature<?, ?> feature, boolean result) {
         return new AccessCheckResult(feature, result);
     }
 
@@ -32,7 +32,7 @@ public record AccessCheckResult(Feature<?, ?> feature, boolean hasAccess) {
      *
      * @return The access check result.
      */
-    public static AccessCheckResult success(Feature<?, ?> feature) {
+    public static AccessCheckResult success(AFeature<?, ?> feature) {
         return new AccessCheckResult(feature, true);
     }
 
@@ -42,7 +42,7 @@ public record AccessCheckResult(Feature<?, ?> feature, boolean hasAccess) {
      * @param feature The feature that failed the access check.
      * @return The access check result.
      */
-    public static AccessCheckResult failure(Feature<?, ?> feature) {
+    public static AccessCheckResult failure(AFeature<?, ?> feature) {
         return new AccessCheckResult(feature, false);
     }
 
@@ -52,7 +52,7 @@ public record AccessCheckResult(Feature<?, ?> feature, boolean hasAccess) {
      * @param exception The exception to throw.
      * @param <T>       The type of exception to throw.
      */
-    public <T extends RuntimeException> void accessOrThrow(Function<Feature<?, ?>, T> exception) {
+    public <T extends RuntimeException> void accessOrThrow(Function<AFeature<?, ?>, T> exception) {
         if (!hasAccess()) throw exception.apply(feature);
     }
 }

@@ -7,7 +7,7 @@
 package dev.chojo.aether.supporter.service;
 
 import com.google.inject.Inject;
-import dev.chojo.aether.supporter.access.DiscordPurchase;
+import dev.chojo.aether.supporter.access.ADiscordPurchase;
 import dev.chojo.aether.supporter.access.SkuTarget;
 import dev.chojo.aether.supporter.access.Subscription;
 import dev.chojo.aether.supporter.access.Subscriptions;
@@ -47,13 +47,13 @@ import static org.slf4j.LoggerFactory.getLogger;
  *
  * @param <V> The type of Discord purchase handled by this service.
  */
-public abstract class EntitlementService<V extends DiscordPurchase> extends ListenerAdapter {
-    private static final Logger log = getLogger(EntitlementService.class);
+public abstract class AEntitlementService<V extends ADiscordPurchase> extends ListenerAdapter {
+    private static final Logger log = getLogger(AEntitlementService.class);
     private final SupporterConfiguration<?, ?, ?> configuration;
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     @Inject
-    public EntitlementService(SupporterConfiguration<?, ?, ?> configuration) {
+    public AEntitlementService(SupporterConfiguration<?, ?, ?> configuration) {
         this.configuration = configuration;
         start();
     }
@@ -277,8 +277,8 @@ public abstract class EntitlementService<V extends DiscordPurchase> extends List
      * Get all expired purchases that are still assigned to a guild
      *
      * @return list of expired purchases
-     * @see DiscordPurchase#expiresAt()
-     * @see DiscordPurchase#guildId()
+     * @see ADiscordPurchase#expiresAt()
+     * @see ADiscordPurchase#guildId()
      */
     protected abstract List<V> getExpiredPurchases();
 }

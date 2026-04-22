@@ -7,7 +7,7 @@
 package dev.chojo.aether.supporter.configuration;
 
 import dev.chojo.aether.supporter.configuration.modules.Interactions;
-import dev.chojo.aether.supporter.configuration.modules.feature.Feature;
+import dev.chojo.aether.supporter.configuration.modules.feature.AFeature;
 import dev.chojo.aether.supporter.configuration.modules.subscriptions.Subscription;
 import dev.chojo.aether.supporter.configuration.modules.subscriptions.SubscriptionKey;
 import dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.Platform;
@@ -29,7 +29,7 @@ import java.util.Optional;
 @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
 public class SupporterConfiguration<FeatureID extends Enum<?>, Price, FeatureMeta> {
     private Map<SubscriptionKey, Subscription> subscriptions;
-    private Map<FeatureID, Feature<Price, FeatureMeta>> features;
+    private Map<FeatureID, AFeature<Price, FeatureMeta>> features;
     private Interactions interactions;
 
     /**
@@ -38,7 +38,7 @@ public class SupporterConfiguration<FeatureID extends Enum<?>, Price, FeatureMet
      * @param featureID The id of the feature.
      * @return The feature.
      */
-    public Feature<Price, FeatureMeta> feature(FeatureID featureID) {
+    public AFeature<Price, FeatureMeta> feature(FeatureID featureID) {
         return features.get(featureID);
     }
 

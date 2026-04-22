@@ -49,12 +49,12 @@ Kofi kofiConfig = new Kofi();
 You need to implement the abstract methods of `KofiService` to handle persistence and guild-specific logic:
 
 ```java
-public class MyKofiService extends KofiService {
+public class MyKofiService extends AKofiService {
     public MyKofiService(Kofi configuration, 
-                        UserProvider userProvider, 
+                        UserProvider IUserProvider, 
                         MailService mailService, 
                         SupporterConfiguration<?, ?, ?> supporterConfiguration) {
-        super(configuration, userProvider, mailService, supporterConfiguration);
+        super(configuration, IUserProvider, mailService, supporterConfiguration);
     }
 
     @Override

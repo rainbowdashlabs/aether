@@ -30,8 +30,8 @@ import static org.slf4j.LoggerFactory.getLogger;
 /**
  * Base service for handling Discord OAuth2 flow with Javalin.
  */
-public abstract class DiscordOAuthService {
-    private static final Logger log = getLogger(DiscordOAuthService.class);
+public abstract class ADiscordOAuthService {
+    private static final Logger log = getLogger(ADiscordOAuthService.class);
     private final DiscordClient discordClient;
     private final String host;
 
@@ -41,7 +41,7 @@ public abstract class DiscordOAuthService {
      * @param config The Discord OAuth configuration
      * @param host   The frontend host to redirect back to after login
      */
-    public DiscordOAuthService(DiscordOAuth config, String host) {
+    public ADiscordOAuthService(DiscordOAuth config, String host) {
         this.discordClient = new DiscordClient(config);
         this.host = host;
         start();

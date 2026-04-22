@@ -13,7 +13,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.time.Instant;
 
-public abstract class DiscordPurchase {
+public abstract class ADiscordPurchase {
     /**
      * The user id of the user that owns this entitlement.
      *

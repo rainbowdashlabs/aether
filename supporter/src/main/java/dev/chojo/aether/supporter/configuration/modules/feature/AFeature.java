@@ -20,7 +20,7 @@ import java.util.Set;
  * @param <Price> Price information for a feature.
  */
 @SuppressWarnings("FieldMayBeFinal")
-public abstract class Feature<Price, Meta> {
+public abstract class AFeature<Price, Meta> {
     /**
      * General unique id for the feature
      * This id should be unique across all features, and subscriptions should not be changed once set.
@@ -59,7 +59,7 @@ public abstract class Feature<Price, Meta> {
      * @param enabledBy List of ids which show that an entity is eligible for accessing this feature. This id might
      *                  also contain the {@link dev.chojo.aether.supporter.configuration.modules.subscriptions.Subscription#id()}
      */
-    public Feature(int id, String name, Price price, Meta meta, Set<Long> enabledBy) {
+    public AFeature(int id, String name, Price price, Meta meta, Set<Long> enabledBy) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -78,7 +78,7 @@ public abstract class Feature<Price, Meta> {
      * @param enabledBy List of ids which show that an entity is eligible for accessing this feature. This id might
      *                  also contain the {@link dev.chojo.aether.supporter.configuration.modules.subscriptions.Subscription#id()}
      */
-    public Feature(int id, Price price, Meta meta, Set<Long> enabledBy) {
+    public AFeature(int id, Price price, Meta meta, Set<Long> enabledBy) {
         this.id = id;
         this.name = getClass().getSimpleName();
         this.price = price;

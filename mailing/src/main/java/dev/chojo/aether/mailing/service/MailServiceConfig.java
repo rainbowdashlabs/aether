@@ -9,7 +9,7 @@ package dev.chojo.aether.mailing.service;
 import dev.chojo.aether.mailing.configuration.Mailing;
 
 /**
- * Configuration for the {@link MailService}.
+ * Configuration for the {@link AMailService}.
  *
  * @param host              the configured public host for URLs
  * @param mailing           the mailing configuration (SMTP, IMAP, credentials)

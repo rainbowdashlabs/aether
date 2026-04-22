@@ -6,19 +6,19 @@
 
 package dev.chojo.aether.kofi.service;
 
-import dev.chojo.aether.common.provider.UserProvider;
+import dev.chojo.aether.common.provider.IUserProvider;
 import dev.chojo.aether.kofi.configuration.Kofi;
 import dev.chojo.aether.kofi.exception.UnauthorizedException;
-import dev.chojo.aether.kofi.pojo.KofiPurchase;
+import dev.chojo.aether.kofi.pojo.AKofiPurchase;
 import dev.chojo.aether.kofi.pojo.KofiShopItem;
 import dev.chojo.aether.kofi.pojo.KofiTransaction;
 import dev.chojo.aether.kofi.pojo.Type;
 import dev.chojo.aether.mailing.UserMails;
+import dev.chojo.aether.mailing.entities.AMailEntry;
 import dev.chojo.aether.mailing.entities.FailureReason;
-import dev.chojo.aether.mailing.entities.MailEntry;
 import dev.chojo.aether.mailing.entities.MailSource;
 import dev.chojo.aether.mailing.entities.Result;
-import dev.chojo.aether.mailing.service.MailService;
+import dev.chojo.aether.mailing.service.AMailService;
 import dev.chojo.aether.supporter.access.Subscription;
 import dev.chojo.aether.supporter.access.Subscriptions;
 import dev.chojo.aether.supporter.configuration.SupporterConfiguration;
@@ -45,28 +45,28 @@ import static net.dv8tion.jda.api.entities.Entitlement.EntitlementType.APPLICATI
 /**
  * Service for handling Ko-fi webhooks and managing purchases and subscriptions.
  */
-public abstract class KofiService<V extends KofiPurchase> {
-    private static final Logger log = LoggerFactory.getLogger(KofiService.class);
+public abstract class AKofiService<V extends AKofiPurchase> {
+    private static final Logger log = LoggerFactory.getLogger(AKofiService.class);
     private final Kofi configuration;
-    private final UserProvider userProvider;
+    private final IUserProvider IUserProvider;
     private final SupporterConfiguration<?, ?, ?> supporterConfiguration;
-    private final MailService mailService;
+    private final AMailService mailService;
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     /**
      * Creates a new KofiService.
      *
      * @param configuration          The Ko-fi configuration.
-     * @param userProvider           The user provider for resolving Discord users.
+     * @param IUserProvider           The user provider for resolving Discord users.
      * @param mailService            The mail service for managing user emails and sending notifications.
      * @param supporterConfiguration The supporter configuration for mapping products to subscriptions.
      */
-    public KofiService(
+    public AKofiService(
             Kofi configuration,
-            UserProvider userProvider,
-            MailService mailService,
+            IUserProvider IUserProvider,
+            AMailService mailService,
             SupporterConfiguration<?, ?, ?> supporterConfiguration) {
-        this.userProvider = userProvider;
+        this.IUserProvider = IUserProvider;
         this.supporterConfiguration = supporterConfiguration;
         this.configuration = configuration;
         this.mailService = mailService;
@@ -95,7 +95,7 @@ public abstract class KofiService<V extends KofiPurchase> {
             Optional<User> user = resolveUser(data);
             if (user.isPresent()) {
                 // Register email adress for that user if there is a registered discord account.
-                Result<MailEntry, FailureReason> result =
+                Result<AMailEntry, FailureReason> result =
                         mailService.registerVerifiedMail(user.get().getIdLong(), data.email(), MailSource.KOFI);
                 if (result.isFailure()) {
                     log.error(
@@ -196,7 +196,7 @@ public abstract class KofiService<V extends KofiPurchase> {
 
     private Optional<User> resolveUser(KofiTransaction data) {
         if (data.discordUserId() == null) return Optional.empty();
-        return userProvider.byId(data.discordUserId());
+        return IUserProvider.byId(data.discordUserId());
     }
 
     private void removeExpiredSubs() {
@@ -212,7 +212,7 @@ public abstract class KofiService<V extends KofiPurchase> {
     protected abstract List<V> expiredPurchases();
 
     /**
-     * Creates {@link KofiPurchase} objects from a {@link KofiTransaction}.
+     * Creates {@link AKofiPurchase} objects from a {@link KofiTransaction}.
      *
      * @param transaction The transaction to process.
      * @return A list of created purchases.
@@ -264,7 +264,7 @@ public abstract class KofiService<V extends KofiPurchase> {
     protected abstract Subscriptions guildSubscriptions(long guildId);
 
     /**
-     * Builds a {@link KofiPurchase} object.
+     * Builds a {@link AKofiPurchase} object.
      *
      * @param mailHash       The mail hash of the purchaser.
      * @param transactionId  The transaction ID.

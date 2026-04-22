@@ -15,9 +15,11 @@ import java.util.Optional;
 
 public class Subscription {
     /**
-     * unique id for this subscription
+     * The id this subscription is targeted.
+     * This is a user id, if the {@link #skuTarget} is {@link SkuTarget#USER}
+     * This is a guild id, if the {@link #skuTarget} is {@link SkuTarget#GUILD}
      */
-    private final long id;
+    private final long targetId;
 
     /**
      * ID of the {@link dev.chojo.aether.supporter.configuration.modules.subscriptions.Subscription#id()}
@@ -40,14 +42,14 @@ public class Subscription {
 
     public Subscription(
             long subscriptionId,
-            long id,
+            long targetId,
             Platform source,
             SkuTarget skuTarget,
             Entitlement.EntitlementType purchaseType,
             Instant endsAt,
             boolean persistent) {
         this.subscriptionId = subscriptionId;
-        this.id = id;
+        this.targetId = targetId;
         this.source = source;
         this.skuTarget = skuTarget;
         this.purchaseType = purchaseType;
@@ -76,7 +78,7 @@ public class Subscription {
     }
 
     public long id() {
-        return id;
+        return targetId;
     }
 
     public long subscriptionId() {
@@ -109,12 +111,12 @@ public class Subscription {
         if (!super.equals(o)) return false;
 
         Subscription that = (Subscription) o;
-        return id == that.id && skuTarget == that.skuTarget;
+        return targetId == that.targetId && skuTarget == that.skuTarget;
     }
 
     @Override
     public int hashCode() {
-        int result = Long.hashCode(id);
+        int result = Long.hashCode(targetId);
         result = 31 * result + skuTarget.hashCode();
         return result;
     }

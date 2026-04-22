@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.entities.User;
 
 import java.util.Optional;
 
-public interface UserProvider {
+public interface IUserProvider {
     Optional<User> byId(long id);
 
     Optional<User> byId(String id);

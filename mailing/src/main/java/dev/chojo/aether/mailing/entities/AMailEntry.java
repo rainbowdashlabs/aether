@@ -11,7 +11,7 @@ import java.time.Instant;
 /**
  * Represents a registered mail address for a user.
  */
-public abstract class MailEntry {
+public abstract class AMailEntry {
     private final MailSource source;
     private final String hash;
     private final String mailShort;
@@ -20,7 +20,7 @@ public abstract class MailEntry {
     protected Instant verificationRequested;
     protected String verificationCode;
 
-    public MailEntry(
+    public AMailEntry(
             long userId,
             MailSource source,
             String hash,

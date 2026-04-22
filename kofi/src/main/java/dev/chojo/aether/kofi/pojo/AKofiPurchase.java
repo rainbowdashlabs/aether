@@ -6,32 +6,32 @@
 
 package dev.chojo.aether.kofi.pojo;
 
-import dev.chojo.aether.mailing.entities.MailEntry;
+import dev.chojo.aether.mailing.entities.AMailEntry;
 
 import java.time.Instant;
 
 /**
  * Represents a purchase made on kofi. This maybe be a subscription or a lifetime purchase.
- * The Mail hash might have a matching {@link MailEntry#hash()}
+ * The Mail hash might have a matching {@link AMailEntry#hash()}
  */
-public abstract class KofiPurchase {
+public abstract class AKofiPurchase {
     /**
      * A hash of the user mail.
-     * @see MailEntry#hash()
+     * @see AMailEntry#hash()
      */
     private final String mailHash;
 
     /**
      * Transaction id of the purchase.
      * If the purchase it is a {@link Type#SHOP_ORDER}, there will be a number appended, so each item is unique
-     * @see KofiPurchase#transactionId()
+     * @see AKofiPurchase#transactionId()
      */
     private final String transactionId;
     /**
      * Key of the product
      * For purchases, it's the shop shortcode.
      * For subscriptions, it's the tier name.
-     * @see KofiPurchase#key()
+     * @see AKofiPurchase#key()
      */
     private final String key;
 
@@ -58,19 +58,19 @@ public abstract class KofiPurchase {
     private final long guildId;
 
     /**
-     * Creates a new {@link KofiPurchase} that is not associated to a guild
+     * Creates a new {@link AKofiPurchase} that is not associated to a guild
      *
      * @param mailHash      mail hash of the purchase
      * @param transactionId transaction id of the purchase
      * @param key           Key of the product. For purchases, it's the shop shortcode. For subscriptions, it's the
      *                      tier name.
      */
-    public KofiPurchase(
+    public AKofiPurchase(
             String mailHash, String transactionId, String key, Type type, long subscriptionId, Instant expiresAt) {
         this(mailHash, transactionId, key, type, subscriptionId, expiresAt, 0);
     }
 
-    public KofiPurchase(
+    public AKofiPurchase(
             String mailHash,
             String transactionId,
             String key,

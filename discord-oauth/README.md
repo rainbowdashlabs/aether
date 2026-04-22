@@ -50,8 +50,8 @@ DiscordOAuth config = new DiscordOAuth();
 Extend `DiscordOAuthService` to implement your custom logic for user persistence and token generation.
 
 ```java
-public class MyDiscordOAuthService extends DiscordOAuthService {
-    public MyDiscordOAuthService(DiscordClient discordClient, String host) {
+public class DiscordOAuthService extends ADiscordOAuthService {
+    public DiscordOAuthService(DiscordClient discordClient, String host) {
         super(discordClient, host);
     }
 
@@ -75,7 +75,7 @@ Register the OAuth routes in your Javalin application.
 
 ```java
 DiscordClient client = new DiscordClient(config);
-DiscordOAuthService oauthService = new MyDiscordOAuthService(client, "https://your-frontend-host.com");
+DiscordOAuthService oauthService = new DiscordOAuthService(client, "https://your-frontend-host.com");
 
 app.get("/login/discord", oauthService::startDiscordLogin);
 app.get("/callback/discord", oauthService::handleDiscordCallback);
