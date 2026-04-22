@@ -9,11 +9,12 @@ package dev.chojo.aether.discordoauth.access;
 import dev.chojo.aether.discordoauth.pojo.TokenResponse;
 
 import java.time.Instant;
+import java.util.Set;
 
 /**
  * A token associated with a user.
  */
-public interface UserToken {
+public interface OAuthToken {
     /**
      * User id associated with the token
      *
@@ -34,6 +35,23 @@ public interface UserToken {
      * @return refresh token
      */
     String refreshToken();
+
+    /**
+     * Get the scopes associated with the token.
+     *
+     * @return scopes
+     */
+    Set<OAuthScope> scopes();
+
+    /**
+     * Returns true if the token has the specified scope
+     *
+     * @param OAuthScope the scope to check
+     * @return true if the token has the specified scope
+     */
+    default boolean hasScope(OAuthScope OAuthScope) {
+        return scopes().contains(OAuthScope);
+    }
 
     /**
      * Get the access token associated with the token.

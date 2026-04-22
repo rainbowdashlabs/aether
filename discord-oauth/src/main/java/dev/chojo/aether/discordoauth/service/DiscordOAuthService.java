@@ -7,7 +7,7 @@
 package dev.chojo.aether.discordoauth.service;
 
 import dev.chojo.aether.commonweb.error.ErrorResponseWrapper;
-import dev.chojo.aether.discordoauth.access.UserToken;
+import dev.chojo.aether.discordoauth.access.OAuthToken;
 import dev.chojo.aether.discordoauth.configuration.DiscordOAuth;
 import dev.chojo.aether.discordoauth.pojo.DiscordUser;
 import dev.chojo.aether.discordoauth.pojo.TokenResponse;
@@ -57,12 +57,10 @@ public abstract class DiscordOAuthService {
 
     protected void refreshExpiredTokens() {
         log.info("Refreshing expired discord tokens");
-        List<? extends UserToken> expiringTokens =
-                getExpiringtokens(Instant.now().plus(1, ChronoUnit.HOURS));
+        var expiringTokens = getExpiringtokens(Instant.now().plus(1, ChronoUnit.HOURS));
         for (var token : expiringTokens) {
             try {
-                TokenResponse response = discordClient.refreshToken(token.refreshToken());
-                token.update(response);
+                token.update(discordClient.refreshToken(token.refreshToken()));
                 log.info("Refreshed discord access token for user {}", token.userId());
             } catch (Exception e) {
                 token.delete();
@@ -76,9 +74,9 @@ public abstract class DiscordOAuthService {
      *
      * @param instant the instant to check
      * @return the tokens that will expire before the given instant
-     * @see UserToken
+     * @see OAuthToken
      */
-    protected abstract List<? extends UserToken> getExpiringtokens(Instant instant);
+    protected abstract List<? extends OAuthToken> getExpiringtokens(Instant instant);
 
     /**
      * Starts the Discord login flow by redirecting the user to Discord.
@@ -99,8 +97,8 @@ public abstract class DiscordOAuthService {
         ctx.cookie(cookie);
         // Compose final state: <serverState>::<nextPath>
         String composedState = serverState + "::" + (next != null ? next : "/");
-        String url = discordClient.buildAuthorizeUrl(composedState);
-        ctx.redirect(url);
+        AuthorizeUrl url = discordClient.buildAuthorizeUrl(composedState);
+        ctx.redirect(url.url());
     }
 
     /**
@@ -138,7 +136,7 @@ public abstract class DiscordOAuthService {
             }
 
             var token = discordClient.exchangeCode(code);
-            DiscordUser user = discordClient.getCurrentUser(token.accessToken());
+            DiscordUser user = discordClient.user(token);
             updateUser(user, token);
             var accessToken = userToken(user.id());
 
@@ -181,4 +179,13 @@ public abstract class DiscordOAuthService {
      * @param token the token
      */
     public abstract void updateUser(DiscordUser user, TokenResponse token);
+
+    /**
+     * Get the Discord client used by this service.
+     *
+     * @return the Discord client
+     */
+    public DiscordClient client() {
+        return discordClient;
+    }
 }

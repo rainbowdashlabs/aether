@@ -6,6 +6,10 @@
 
 package dev.chojo.aether.discordoauth.configuration;
 
+import dev.chojo.aether.discordoauth.access.OAuthScope;
+
+import java.util.Set;
+
 /**
  * Configuration for Discord OAuth.
  */
@@ -15,7 +19,7 @@ public class DiscordOAuth {
     private String clientSecret = "";
     private String redirectUri = "";
     private int cacheRetentionMinutes = 10;
-    private String scopes = "identify email guilds";
+    private Set<OAuthScope> OAuthScopes = Set.of(OAuthScope.IDENTIFY, OAuthScope.EMAIL, OAuthScope.GUILDS);
     private Prompt prompt = Prompt.NONE;
 
     /**
@@ -49,8 +53,8 @@ public class DiscordOAuth {
     /**
      * @return The OAuth scopes to request, space-separated
      */
-    public String scopes() {
-        return scopes;
+    public Set<OAuthScope> scopes() {
+        return OAuthScopes;
     }
 
     /**

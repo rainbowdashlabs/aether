@@ -6,7 +6,11 @@
 
 package dev.chojo.aether.discordoauth.pojo;
 
+import dev.chojo.aether.discordoauth.access.OAuthScope;
+import dev.chojo.aether.discordoauth.access.OAuthToken;
+
 import java.time.Instant;
+import java.util.Set;
 
 /**
  * Represents the response from a token exchange or refresh.
@@ -15,4 +19,25 @@ import java.time.Instant;
  * @param refreshToken The refresh token used to get a new access token
  * @param expiry       The time when the access token expires
  */
-public record TokenResponse(String accessToken, String refreshToken, Instant expiry) {}
+public record TokenResponse(String accessToken, String refreshToken, Instant expiry, Set<OAuthScope> oAuthScopes)
+        implements OAuthToken {
+    @Override
+    public long userId() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void update(TokenResponse response) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Set<OAuthScope> scopes() {
+        return oAuthScopes;
+    }
+
+    @Override
+    public void delete() {
+        throw new UnsupportedOperationException();
+    }
+}

@@ -9,9 +9,14 @@ package dev.chojo.aether.discordoauth.service;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
+import dev.chojo.aether.discordoauth.access.OAuthScope;
+import dev.chojo.aether.discordoauth.access.OAuthToken;
 import dev.chojo.aether.discordoauth.configuration.DiscordOAuth;
+import dev.chojo.aether.discordoauth.pojo.Connection;
 import dev.chojo.aether.discordoauth.pojo.DiscordGuild;
 import dev.chojo.aether.discordoauth.pojo.DiscordUser;
+import dev.chojo.aether.discordoauth.pojo.JoinGuildData;
+import dev.chojo.aether.discordoauth.pojo.Member;
 import dev.chojo.aether.discordoauth.pojo.TokenResponse;
 import org.apache.hc.core5.net.URIBuilder;
 import tools.jackson.core.type.TypeReference;
@@ -28,9 +33,12 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * Client for interacting with the Discord API.
@@ -46,6 +54,7 @@ public class DiscordClient {
 
     private final Cache<String, DiscordUser> userCache;
     private final Cache<String, List<DiscordGuild>> userGuildsCache;
+    private final Cache<String, List<Connection>> userConnectionsCache;
 
     /**
      * Creates a new Discord client.
@@ -54,10 +63,13 @@ public class DiscordClient {
      */
     public DiscordClient(DiscordOAuth configuration) {
         this.configuration = configuration;
-        userCache = CacheBuilder.newBuilder()
-                .expireAfterWrite(configuration.cacheRetentionMinutes(), TimeUnit.MINUTES)
-                .build();
-        userGuildsCache = CacheBuilder.newBuilder()
+        userCache = createCache();
+        userGuildsCache = createCache();
+        userConnectionsCache = createCache();
+    }
+
+    private <K, V> Cache<K, V> createCache() {
+        return CacheBuilder.newBuilder()
                 .expireAfterWrite(configuration.cacheRetentionMinutes(), TimeUnit.MINUTES)
                 .build();
     }
@@ -72,7 +84,11 @@ public class DiscordClient {
      * @param state The state to include in the URL for CSRF protection and context
      * @return The authorization URL
      */
-    public String buildAuthorizeUrl(String state) {
+    AuthorizeUrl buildAuthorizeUrl(String state) {
+        return buildAuthorizeUrl(state, cfg().scopes());
+    }
+
+    AuthorizeUrl buildAuthorizeUrl(String state, Set<OAuthScope> OAuthScopes) {
         URIBuilder uriBuilder = new URIBuilder()
                 .setHost(DISCORD_BASE)
                 .setPathSegments("oauth2", "authorize")
@@ -80,11 +96,12 @@ public class DiscordClient {
                 .addParameter("redirect_uri", cfg().redirectUri())
                 .addParameter("response_type", "code")
                 .addParameter("prompt", cfg().prompt().name().toLowerCase())
-                .addParameter("scope", cfg().scopes());
+                .addParameter(
+                        "scope", OAuthScopes.stream().map(OAuthScope::scope).collect(Collectors.joining(" ")));
         if (state != null) uriBuilder.addParameter("state", state);
 
         try {
-            return uriBuilder.build().toString();
+            return new AuthorizeUrl(uriBuilder.build().toString(), OAuthScopes);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }
@@ -98,7 +115,7 @@ public class DiscordClient {
      * @throws IOException          If the exchange fails
      * @throws InterruptedException If the request is interrupted
      */
-    public TokenResponse exchangeCode(String code) throws IOException, InterruptedException {
+    TokenResponse exchangeCode(String code) throws IOException, InterruptedException {
         String form =
                 "grant_type=authorization_code&code=%s&redirect_uri=%s".formatted(enc(code), enc(cfg().redirectUri()));
         return exchange(form);
@@ -112,7 +129,7 @@ public class DiscordClient {
      * @throws IOException          If the refresh fails
      * @throws InterruptedException If the request is interrupted
      */
-    public TokenResponse refreshToken(String refreshToken) throws IOException, InterruptedException {
+    TokenResponse refreshToken(String refreshToken) throws IOException, InterruptedException {
         String form = "grant_type=refresh_token&refresh_token=%s".formatted(enc(refreshToken));
         return exchange(form);
     }
@@ -133,19 +150,22 @@ public class DiscordClient {
 
     /**
      * Fetches the current user's information.
+     * <p>
+     * Requires the {@link OAuthScope#IDENTIFY} scope.
+     * If the {@link OAuthScope#EMAIL} scope is provided, the email field will be populated.
      *
-     * @param accessToken The access token
+     * @param token The access token
      * @return The user's information
      */
-    public synchronized DiscordUser getCurrentUser(String accessToken) {
+    public DiscordUser user(OAuthToken token) {
         try {
-            return userCache.get(accessToken, () -> fetchUser(accessToken));
+            return userCache.get(token.accessToken(), () -> fetchUser(token));
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private synchronized DiscordUser fetchUser(String accessToken) throws IOException, InterruptedException {
+    private DiscordUser fetchUser(OAuthToken accessToken) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(DISCORD_API + "/users/@me"))
                 .header("Authorization", "Bearer " + accessToken)
@@ -160,43 +180,129 @@ public class DiscordClient {
 
     /**
      * Fetches the user's guilds.
+     * <p>
+     * Requires the {@link OAuthScope#GUILDS} scope.
      *
-     * @param accessToken The access token to use for the request
-     * @return The user's guilds
+     * @param token The access token to use for the request
+     * @return A list of the user's guilds, or an empty list if the scope is missing.
      */
-    public synchronized List<DiscordGuild> getUserGuilds(String accessToken) {
+    public List<DiscordGuild> guilds(OAuthToken token) {
+        if (!token.hasScope(OAuthScope.GUILDS)) return Collections.emptyList();
         try {
-            return userGuildsCache.get(accessToken, () -> fetchGuilds(accessToken));
+            return userGuildsCache.get(token.accessToken(), () -> fetchGuilds(token));
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
     }
 
-    private List<DiscordGuild> fetchGuilds(String accessToken) throws IOException, InterruptedException {
+    /**
+     * Fetches the user's third-party connections.
+     * <p>
+     * Requires the {@link OAuthScope#CONNECTIONS} scope.
+     *
+     * @param token The access token to use for the request
+     * @return A list of the user's connections, or an empty list if the scope is missing.
+     */
+    public List<Connection> connections(OAuthToken token) {
+        if (!token.hasScope(OAuthScope.CONNECTIONS)) return Collections.emptyList();
+        try {
+            return userConnectionsCache.get(token.accessToken(), () -> fetchConnections(token));
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Joins a user to a guild.
+     * <p>
+     * Requires the {@link OAuthScope#GUILDS_JOIN} scope.
+     *
+     * @param data     Data to join guild with
+     * @param token    The user's access token
+     * @param botToken Bot token for authorization
+     * @param guildId  ID of the guild to join
+     */
+    public Member joinGuild(JoinGuildData data, OAuthToken token, String botToken, long guildId)
+            throws IOException, InterruptedException {
+        if (!token.hasScope(OAuthScope.GUILDS_JOIN)) {
+            return null;
+        }
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(DISCORD_API + "/guilds/" + guildId + "/members/" + token.userId()))
+                .header("Authorization", "Bot " + botToken)
+                .PUT(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(data.withToken(token))))
+                .build();
+        HttpResponse<String> res = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        if (res.statusCode() / 100 != 2) {
+            return null;
+        }
+        return mapper.readValue(res.body(), Member.class);
+    }
+
+    /**
+     * Fetches the user's member information for a specific guild.
+     * <p>
+     * Requires the {@link OAuthScope#GUILDS_MEMBERS_READ} scope.
+     *
+     * @param token   The user's access token
+     * @param guildId ID of the guild
+     * @return The member information, or {@code null} if the scope is missing or the user is not in the guild.
+     * @throws IOException          If the request fails
+     * @throws InterruptedException If the request is interrupted
+     */
+    public Member guildMember(OAuthToken token, long guildId) throws IOException, InterruptedException {
+        if (!token.hasScope(OAuthScope.GUILDS_MEMBERS_READ)) {
+            return null;
+        }
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(DISCORD_API + "/users/@me/guilds/" + guildId + "/member"))
+                .header("Authorization", "Bearer " + token.accessToken())
+                .GET()
+                .build();
+        HttpResponse<String> res = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        if (res.statusCode() / 100 != 2) {
+            return null;
+        }
+        return mapper.readValue(res.body(), Member.class);
+    }
+
+    private List<Connection> fetchConnections(OAuthToken token) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(DISCORD_API + "/users/@me/connections"))
+                .header("Authorization", "Bearer " + token.accessToken())
+                .GET()
+                .build();
+        HttpResponse<String> res = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        if (res.statusCode() / 100 != 2) {
+            throw new IOException(
+                    "Discord /users/@me/connections failed: %d - %s".formatted(res.statusCode(), res.body()));
+        }
+        return mapper.readValue(res.body(), new TypeReference<>() {});
+    }
+
+    private List<DiscordGuild> fetchGuilds(OAuthToken token) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(DISCORD_API + "/users/@me/guilds"))
-                .header("Authorization", "Bearer " + accessToken)
+                .header("Authorization", "Bearer " + token.accessToken())
                 .GET()
                 .build();
         HttpResponse<String> res = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         if (res.statusCode() / 100 != 2) {
             throw new IOException("Discord /users/@me/guilds failed: %d - %s".formatted(res.statusCode(), res.body()));
         }
-        List<DiscordGuild> guilds = mapper.readValue(res.body(), new TypeReference<>() {});
-        userGuildsCache.put(accessToken, guilds);
-        return guilds;
+        return mapper.readValue(res.body(), new TypeReference<>() {});
     }
 
     /**
      * Revokes a Discord OAuth token for the current application.
-     * See https://discord.com/developers/docs/topics/oauth2#revoking-tokens
+     * See <a href="https://discord.com/developers/docs/topics/oauth2#revoking-tokens">Discord Docs</a>
      *
-     * @param accessToken The access token to revoke
+     * @param token The access token to revoke
      */
-    public void revokeToken(String accessToken) throws IOException, InterruptedException {
-        userCache.invalidate(accessToken);
-        userGuildsCache.invalidate(accessToken);
-        String form = "token=" + enc(accessToken);
+    void revokeToken(OAuthToken token) throws IOException, InterruptedException {
+        userCache.invalidate(token.accessToken());
+        userGuildsCache.invalidate(token.accessToken());
+        String form = "token=" + enc(token.accessToken());
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(DISCORD_API + "/oauth2/token/revoke"))
                 .header("Content-Type", "application/x-www-form-urlencoded")
@@ -221,9 +327,11 @@ public class DiscordClient {
     private record DiscordTokenResponse(
             @JsonProperty("access_token") String accessToken,
             @JsonProperty("refresh_token") String refreshToken,
-            @JsonProperty("expires_in") long expiresIn) {
+            @JsonProperty("expires_in") long expiresIn,
+            @JsonProperty("scope") String scope) {
         public TokenResponse toTokenResponse() {
-            return new TokenResponse(accessToken, refreshToken, Instant.now().plusSeconds(expiresIn));
+            return new TokenResponse(
+                    accessToken, refreshToken, Instant.now().plusSeconds(expiresIn), OAuthScope.fromScope(scope));
         }
     }
 }
