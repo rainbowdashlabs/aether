@@ -4,7 +4,7 @@
  *     Copyright (C) RainbowDashLabs and Contributor
  */
 
-package dev.chojo.aether.supporter.registry;
+package dev.chojo.aether.common.registry;
 
 /**
  * Represents a key that can be registered in a {@link Registry}.
@@ -12,6 +12,7 @@ package dev.chojo.aether.supporter.registry;
 public interface Key {
     /**
      * The name of the key.
+     *
      * @return The name.
      */
     String name();

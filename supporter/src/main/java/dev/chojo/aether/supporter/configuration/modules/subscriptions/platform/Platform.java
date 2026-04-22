@@ -6,7 +6,7 @@
 
 package dev.chojo.aether.supporter.configuration.modules.subscriptions.platform;
 
-import dev.chojo.aether.supporter.registry.Key;
+import dev.chojo.aether.common.registry.Key;
 
 public record Platform(String name) implements Key {
     public static final Platform DISCORD = new Platform("DISCORD");

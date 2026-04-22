@@ -6,11 +6,11 @@
 
 package dev.chojo.aether.supporter.jackson;
 
+import dev.chojo.aether.common.registry.Key;
+import dev.chojo.aether.common.registry.Registry;
 import dev.chojo.aether.supporter.configuration.modules.subscriptions.SubscriptionKey;
 import dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.Platform;
 import dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.purchase.PurchaseType;
-import dev.chojo.aether.supporter.registry.Key;
-import dev.chojo.aether.supporter.registry.Registry;
 import dev.chojo.aether.supporter.registry.SupporterRegistry;
 import tools.jackson.core.JacksonException;
 import tools.jackson.core.JsonGenerator;
@@ -31,7 +31,6 @@ import java.io.IOException;
 public class SupporterModule extends SimpleModule {
     public SupporterModule() {
         super("SupporterModule");
-
         register(Platform.class, SupporterRegistry.PLATFORMS);
         register(SubscriptionKey.class, SupporterRegistry.SUBSCRIPTION_TYPES);
         register(PurchaseType.class, SupporterRegistry.PURCHASE_TYPE);

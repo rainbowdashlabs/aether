@@ -4,7 +4,7 @@
  *     Copyright (C) RainbowDashLabs and Contributor
  */
 
-package dev.chojo.aether.supporter.registry;
+package dev.chojo.aether.common.registry;
 
 import org.slf4j.Logger;
 
@@ -23,7 +23,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  */
 public class Registry<V extends Key> {
     private final Logger log = getLogger(Registry.class);
-    private final Set<V> REGISTRY = new HashSet<>();
+    private final Set<V> registry = new HashSet<>();
     private final Class<V> clazz;
 
     public Registry(Class<V> clazz) {
@@ -31,18 +31,18 @@ public class Registry<V extends Key> {
     }
 
     /**
-     * Registers a new source in the registry.
+     * Registers a new entry in the registry.
      *
-     * @param source The source to register.
+     * @param entry The source to register.
      * @return The registry for chaining.
      * @throws IllegalArgumentException If the source is already registered.
      */
-    public Registry<V> register(V source) {
-        if (REGISTRY.contains(source)) {
-            throw new IllegalArgumentException("Source already registered");
+    public Registry<V> register(V entry) {
+        if (registry.contains(entry)) {
+            throw new IllegalArgumentException("Entry already registered");
         }
-        log.info("Registered source {} in {}Registry", source.name(), clazz.getSimpleName());
-        REGISTRY.add(source);
+        log.info("Registered {} in {}Registry", entry.name(), clazz.getSimpleName());
+        registry.add(entry);
         return this;
     }
 
@@ -51,8 +51,17 @@ public class Registry<V extends Key> {
      *
      * @return An unmodifiable set of all sources.
      */
-    public Set<V> sources() {
-        return Collections.unmodifiableSet(REGISTRY);
+    public Set<V> entries() {
+        return Collections.unmodifiableSet(registry);
+    }
+
+    /**
+     * Unregisters an entry from the registry.
+     * @param entry The entry to unregister.
+     */
+    public void unregister(V entry) {
+        registry.remove(entry);
+        log.info("Unregistered {} in {}Registry", entry.name(), clazz.getSimpleName());
     }
 
     /**
@@ -62,7 +71,7 @@ public class Registry<V extends Key> {
      * @return An optional containing the source if found.
      */
     public Optional<V> byName(String name) {
-        return sources().stream()
+        return entries().stream()
                 .filter(source -> source.name().equalsIgnoreCase(name))
                 .findFirst();
     }

@@ -6,6 +6,7 @@ plugins {
 description = "Implementation for mailing"
 
 dependencies {
+    api(project(":common"))
     api(libs.slf4j)
     api(libs.jda)
     api(libs.angus)

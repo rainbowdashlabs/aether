@@ -6,6 +6,9 @@ module dev.chojo.aether.mailing {
     requires org.jspecify;
     requires org.apache.commons.validator;
     requires org.eclipse.angus.mail;
+    requires java.rmi;
+    requires dev.goldmensch.propane;
+    requires dev.chojo.aether.common;
 
     exports dev.chojo.aether.mailing;
     exports dev.chojo.aether.mailing.configuration;

@@ -6,7 +6,7 @@
 
 package dev.chojo.aether.supporter.configuration.modules.subscriptions;
 
-import dev.chojo.aether.supporter.registry.Key;
+import dev.chojo.aether.common.registry.Key;
 
 /**
  * Represents a unique identifier for a subscription.

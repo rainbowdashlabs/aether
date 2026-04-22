@@ -6,12 +6,14 @@
 
 package dev.chojo.aether.mailing.entities;
 
+import dev.chojo.aether.common.registry.Key;
+
 /**
  * Represents the source of a mail registration.
  *
  * @param name the name of the source
  */
-public record MailSource(String name) {
+public record MailSource(String name) implements Key {
     public static final MailSource DISCORD = MailSource.of("DISCORD");
     public static final MailSource USER = MailSource.of("USER");
     public static final MailSource KOFI = MailSource.of("KOFI");
