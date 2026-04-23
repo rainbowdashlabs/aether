@@ -6,8 +6,8 @@
 
 package dev.chojo.aether.discordoauth.pojo;
 
+import dev.chojo.aether.discordoauth.access.IOAuthToken;
 import dev.chojo.aether.discordoauth.access.OAuthScope;
-import dev.chojo.aether.discordoauth.access.OAuthToken;
 
 import java.time.Instant;
 import java.util.Set;
@@ -20,7 +20,7 @@ import java.util.Set;
  * @param expiry       The time when the access token expires
  */
 public record TokenResponse(String accessToken, String refreshToken, Instant expiry, Set<OAuthScope> oAuthScopes)
-        implements OAuthToken {
+        implements IOAuthToken {
     @Override
     public long userId() {
         throw new UnsupportedOperationException();

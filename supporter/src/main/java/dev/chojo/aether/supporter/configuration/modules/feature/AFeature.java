@@ -7,7 +7,7 @@
 package dev.chojo.aether.supporter.configuration.modules.feature;
 
 import dev.chojo.aether.supporter.service.context.AccessCheckResult;
-import dev.chojo.aether.supporter.service.context.SubscriptionContext;
+import dev.chojo.aether.supporter.service.context.ISubscriptionContext;
 
 import java.util.Set;
 
@@ -86,7 +86,7 @@ public abstract class AFeature<Price, Meta> {
         this.enabledBy = enabledBy;
     }
 
-    public AccessCheckResult test(SubscriptionContext subscriptionContext) {
+    public AccessCheckResult test(ISubscriptionContext subscriptionContext) {
         if (enabledBy.isEmpty()) return AccessCheckResult.hasAccess(this, true);
         if (subscriptionContext.enabledSubscriptions().contains(id)) return AccessCheckResult.hasAccess(this, true);
         return AccessCheckResult.hasAccess(

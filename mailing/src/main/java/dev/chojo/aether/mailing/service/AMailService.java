@@ -6,7 +6,7 @@
 
 package dev.chojo.aether.mailing.service;
 
-import dev.chojo.aether.mailing.UserMails;
+import dev.chojo.aether.mailing.IUserMails;
 import dev.chojo.aether.mailing.configuration.Mailing;
 import dev.chojo.aether.mailing.entities.AMailEntry;
 import dev.chojo.aether.mailing.entities.FailureReason;
@@ -74,7 +74,7 @@ public abstract class AMailService {
      */
     public Result<AMailEntry, FailureReason> registerAndPromptVerify(long user, String mail, MailSource source) {
         String hash = mailHash(mail);
-        Optional<UserMails> entry = mailProvider().byHash(hash);
+        Optional<IUserMails> entry = mailProvider().byHash(hash);
         AMailEntry mailEntry;
         if (entry.isPresent()) {
             mailEntry = entry.get().getMail(hash).get();
@@ -143,7 +143,7 @@ public abstract class AMailService {
         Result<AMailEntry, FailureReason> result = createMailEntry(user, mail, source);
         if (!result.isSuccess()) return result;
         AMailEntry mailEntry = result.result();
-        UserMails userMails = mailProvider().byUser(user);
+        IUserMails userMails = mailProvider().byUser(user);
         userMails.addMail(mailEntry);
         mailEntry.verify();
         return Result.success(mailEntry);
@@ -197,7 +197,7 @@ public abstract class AMailService {
      * @return the retry after time in seconds
      */
     public long getRetryAfterSeconds(long user) {
-        UserMails userMails = mailProvider().byUser(user);
+        IUserMails userMails = mailProvider().byUser(user);
         return userMails.mails().values().stream()
                 .filter(m -> m.source() == MailSource.USER)
                 .map(m -> m.verificationRequested().plus(5, ChronoUnit.MINUTES).getEpochSecond()
@@ -361,7 +361,7 @@ public abstract class AMailService {
      *
      * @return the user mails provider
      */
-    public UserMailsProvider mailProvider() {
+    public IUserMailsProvider mailProvider() {
         return config.userMailsProvider();
     }
 

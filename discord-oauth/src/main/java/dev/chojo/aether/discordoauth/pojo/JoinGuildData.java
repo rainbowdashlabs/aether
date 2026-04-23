@@ -6,7 +6,7 @@
 
 package dev.chojo.aether.discordoauth.pojo;
 
-import dev.chojo.aether.discordoauth.access.OAuthToken;
+import dev.chojo.aether.discordoauth.access.IOAuthToken;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ import java.util.List;
  * @param deaf  Whether to deafen the user. Requires the {@code DEAFEN_MEMBERS} permission
  */
 public record JoinGuildData(String nick, List<String> roles, boolean mute, boolean deaf) {
-    public JoinGuildPayload withToken(OAuthToken token) {
+    public JoinGuildPayload withToken(IOAuthToken token) {
         return new JoinGuildPayload(token.accessToken(), nick(), roles(), mute(), deaf());
     }
 }

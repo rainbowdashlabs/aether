@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.utils.messages.MessageCreateData;
 /**
  * Provides error messages for the {@link SupporterMiddleware}.
  */
-public interface SupporterErrorSupplier {
+public interface ISupporterErrorSupplier {
     /**
      * Returns the error message for command interactions.
      *
@@ -23,6 +23,7 @@ public interface SupporterErrorSupplier {
 
     /**
      * Returns the error message for auto-complete interactions.
+     *
      * @return The error message.
      */
     String getAutoCompleteError();

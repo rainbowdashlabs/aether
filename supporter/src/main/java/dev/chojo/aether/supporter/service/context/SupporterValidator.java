@@ -15,11 +15,11 @@ import dev.chojo.aether.supporter.configuration.SupporterConfiguration;
  * @param <FeatureID>   The enum type representing the features.
  */
 public class SupporterValidator<FeatureID extends Enum<?>> {
-    private final SubscriptionContext subscriptionContext;
+    private final ISubscriptionContext subscriptionContext;
     private final SupporterConfiguration<FeatureID, ?, ?> configuration;
 
     public SupporterValidator(
-            SubscriptionContext subscriptionContext, SupporterConfiguration<FeatureID, ?, ?> configuration) {
+            ISubscriptionContext subscriptionContext, SupporterConfiguration<FeatureID, ?, ?> configuration) {
         this.subscriptionContext = subscriptionContext;
         this.configuration = configuration;
     }

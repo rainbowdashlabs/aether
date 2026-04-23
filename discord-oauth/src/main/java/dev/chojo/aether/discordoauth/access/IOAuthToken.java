@@ -14,7 +14,7 @@ import java.util.Set;
 /**
  * A token associated with a user.
  */
-public interface OAuthToken {
+public interface IOAuthToken {
     /**
      * User id associated with the token
      *

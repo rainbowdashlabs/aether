@@ -9,9 +9,9 @@ package dev.chojo.aether.supporter.service;
 import dev.chojo.aether.supporter.configuration.SupporterConfiguration;
 import dev.chojo.aether.supporter.configuration.modules.Interactions;
 import dev.chojo.aether.supporter.service.context.AccessCheckResult;
+import dev.chojo.aether.supporter.service.context.ISubscriptionContext;
+import dev.chojo.aether.supporter.service.context.ISupporterErrorSupplier;
 import dev.chojo.aether.supporter.service.context.SubcriptionContextProvider;
-import dev.chojo.aether.supporter.service.context.SubscriptionContext;
-import dev.chojo.aether.supporter.service.context.SupporterErrorSupplier;
 import dev.chojo.aether.supporter.service.context.SupporterValidator;
 import io.github.kaktushose.jdac.dispatching.context.InvocationContext;
 import io.github.kaktushose.jdac.dispatching.middleware.Middleware;
@@ -32,12 +32,12 @@ import java.util.stream.Collectors;
 public class SupporterMiddleware<FID extends Enum<FID>> implements Middleware {
     private final SubcriptionContextProvider contextProvider;
     private final SupporterConfiguration<FID, ?, ?> configuration;
-    private final SupporterErrorSupplier errorSupplier;
+    private final ISupporterErrorSupplier errorSupplier;
 
     public SupporterMiddleware(
             SubcriptionContextProvider contextProvider,
             SupporterConfiguration<FID, ?, ?> configuration,
-            SupporterErrorSupplier errorSupplier) {
+            ISupporterErrorSupplier errorSupplier) {
         this.contextProvider = contextProvider;
         this.configuration = configuration;
         this.errorSupplier = errorSupplier;
@@ -49,8 +49,8 @@ public class SupporterMiddleware<FID extends Enum<FID>> implements Middleware {
      * @param event The interaction event.
      * @return The subscription context.
      */
-    public SubscriptionContext buildContext(GenericInteractionCreateEvent event) {
-        SubscriptionContext context = convert(event);
+    public ISubscriptionContext buildContext(GenericInteractionCreateEvent event) {
+        ISubscriptionContext context = convert(event);
         if (event.isFromGuild()) {
             return context.merge(contextProvider.getSubscriptionContext(event.getUser(), event.getGuild()));
         }
@@ -59,7 +59,7 @@ public class SupporterMiddleware<FID extends Enum<FID>> implements Middleware {
 
     @Override
     public void accept(InvocationContext<?> context) {
-        SubscriptionContext subCtx = buildContext(context.event());
+        ISubscriptionContext subCtx = buildContext(context.event());
         Interactions interactions = configuration.interactions();
         AccessCheckResult result =
                 switch (context.event()) {
@@ -85,7 +85,7 @@ public class SupporterMiddleware<FID extends Enum<FID>> implements Middleware {
                 .put(SupporterKeys.SUBSCRIPTION_VALIDATOR, new SupporterValidator<>(subCtx, configuration));
     }
 
-    private SubscriptionContext convert(GenericInteractionCreateEvent event) {
+    private ISubscriptionContext convert(GenericInteractionCreateEvent event) {
         return () ->
                 event.getEntitlements().stream().map(Entitlement::getSkuIdLong).collect(Collectors.toSet());
     }

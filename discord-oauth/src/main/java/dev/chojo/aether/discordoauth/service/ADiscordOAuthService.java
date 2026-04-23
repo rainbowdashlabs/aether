@@ -7,7 +7,7 @@
 package dev.chojo.aether.discordoauth.service;
 
 import dev.chojo.aether.commonweb.error.ErrorResponseWrapper;
-import dev.chojo.aether.discordoauth.access.OAuthToken;
+import dev.chojo.aether.discordoauth.access.IOAuthToken;
 import dev.chojo.aether.discordoauth.configuration.DiscordOAuth;
 import dev.chojo.aether.discordoauth.pojo.DiscordUser;
 import dev.chojo.aether.discordoauth.pojo.TokenResponse;
@@ -74,9 +74,9 @@ public abstract class ADiscordOAuthService {
      *
      * @param instant the instant to check
      * @return the tokens that will expire before the given instant
-     * @see OAuthToken
+     * @see IOAuthToken
      */
-    protected abstract List<? extends OAuthToken> getExpiringtokens(Instant instant);
+    protected abstract List<? extends IOAuthToken> getExpiringtokens(Instant instant);
 
     /**
      * Starts the Discord login flow by redirecting the user to Discord.

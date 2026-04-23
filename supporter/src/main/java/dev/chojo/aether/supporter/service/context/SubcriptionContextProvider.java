@@ -10,7 +10,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 
 /**
- * Provider for {@link SubscriptionContext}s.
+ * Provider for {@link ISubscriptionContext}s.
  * This interface should be implemented to provide subscription information for users and guilds.
  */
 public interface SubcriptionContextProvider {
@@ -21,9 +21,9 @@ public interface SubcriptionContextProvider {
      * @param guild The guild.
      * @return The merged subscription context.
      */
-    default SubscriptionContext getSubscriptionContext(User user, Guild guild) {
-        SubscriptionContext userContext = getSubscriptionContext(user);
-        SubscriptionContext guildContext = getSubscriptionContext(guild);
+    default ISubscriptionContext getSubscriptionContext(User user, Guild guild) {
+        ISubscriptionContext userContext = getSubscriptionContext(user);
+        ISubscriptionContext guildContext = getSubscriptionContext(guild);
         return guildContext.merge(userContext);
     }
 
@@ -33,7 +33,7 @@ public interface SubcriptionContextProvider {
      * @param user The user.
      * @return The subscription context.
      */
-    SubscriptionContext getSubscriptionContext(User user);
+    ISubscriptionContext getSubscriptionContext(User user);
 
     /**
      * Returns the subscription context for a guild.
@@ -41,5 +41,5 @@ public interface SubcriptionContextProvider {
      * @param guild The guild.
      * @return The subscription context.
      */
-    SubscriptionContext getSubscriptionContext(Guild guild);
+    ISubscriptionContext getSubscriptionContext(Guild guild);
 }

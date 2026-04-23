@@ -8,7 +8,7 @@ package dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.
 
 import dev.chojo.aether.common.registry.Key;
 
-public record PurchaseType(String name, boolean isLifetime) implements Purchase, Key {
+public record PurchaseType(String name, boolean isLifetime) implements IPurchase, Key {
     public static final PurchaseType LIFETIME = new PurchaseType("LIFETIME", true);
     public static final PurchaseType SUBSCRIPTION = new PurchaseType("SUBSCRIPTION", false);
 

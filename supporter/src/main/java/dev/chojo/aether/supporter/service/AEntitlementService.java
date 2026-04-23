@@ -8,9 +8,9 @@ package dev.chojo.aether.supporter.service;
 
 import com.google.inject.Inject;
 import dev.chojo.aether.supporter.access.ADiscordPurchase;
+import dev.chojo.aether.supporter.access.ISubscriptions;
 import dev.chojo.aether.supporter.access.SkuTarget;
 import dev.chojo.aether.supporter.access.Subscription;
-import dev.chojo.aether.supporter.access.Subscriptions;
 import dev.chojo.aether.supporter.configuration.SupporterConfiguration;
 import dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.Platform;
 import dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.purchase.PurchaseType;
@@ -114,7 +114,7 @@ public abstract class AEntitlementService<V extends ADiscordPurchase> extends Li
                 .guild(guild.getIdLong())
                 .excludeEnded(true)
                 .complete();
-        Subscriptions subscriptions = guildSubscriptions(guild.getIdLong());
+        ISubscriptions subscriptions = guildSubscriptions(guild.getIdLong());
         subscriptions.clear(DISCORD);
         for (Entitlement entitlement : entitlements) {
             handleEntitlement(entitlement, this::registerPurchase);
@@ -134,7 +134,7 @@ public abstract class AEntitlementService<V extends ADiscordPurchase> extends Li
         // The purchase is expired and should be cleaned up soon.
         if (!purchase.isValid()) return SubscriptionResult.SUBSCRIPTION_EXPIRED;
 
-        Subscriptions subs = guildSubscriptions(guild.getIdLong());
+        ISubscriptions subs = guildSubscriptions(guild.getIdLong());
         if (subs.hasAccess(purchase.subscriptionId())) return SubscriptionResult.ALREADY_SUBSCRIBED;
 
         if (purchase.guildId() != guild.getIdLong() && purchase.guildId() != 0) disableSubscription(purchase);
@@ -163,7 +163,7 @@ public abstract class AEntitlementService<V extends ADiscordPurchase> extends Li
     public boolean disableSubscription(V purchase) {
         // Nothing to disable here
         if (purchase.guildId() == 0) return false;
-        Subscriptions subs = guildSubscriptions(purchase.guildId());
+        ISubscriptions subs = guildSubscriptions(purchase.guildId());
 
         subs.deleteSubscription(new Subscription(
                 purchase.subscriptionId(), purchase.guildId(), DISCORD, GUILD, APPLICATION_SUBSCRIPTION, null, true));
@@ -252,7 +252,7 @@ public abstract class AEntitlementService<V extends ADiscordPurchase> extends Li
      * @param guildId The ID of the guild.
      * @return The subscriptions.
      */
-    protected abstract Subscriptions guildSubscriptions(long guildId);
+    protected abstract ISubscriptions guildSubscriptions(long guildId);
 
     private Optional<V> handleEntitlement(Entitlement ent, Function<V, V> func) {
         var subscription = configuration.findSubscriptionBySkuID(DISCORD, ent.getSkuId());

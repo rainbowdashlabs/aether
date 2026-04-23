@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Access to the subscriptions of an entity
  */
-public interface Subscriptions {
+public interface ISubscriptions {
     /**
      * Subscriptions of the entity
      */

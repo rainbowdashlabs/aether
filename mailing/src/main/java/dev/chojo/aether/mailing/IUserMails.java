@@ -11,7 +11,7 @@ import dev.chojo.aether.mailing.entities.AMailEntry;
 import java.util.Map;
 import java.util.Optional;
 
-public interface UserMails {
+public interface IUserMails {
     /**
      * Retrieve a {@link AMailEntry} for the given hash
      *

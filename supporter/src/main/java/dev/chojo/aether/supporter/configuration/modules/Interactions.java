@@ -8,7 +8,7 @@ package dev.chojo.aether.supporter.configuration.modules;
 
 import dev.chojo.aether.supporter.configuration.modules.dummy.InteractionFeature;
 import dev.chojo.aether.supporter.service.context.AccessCheckResult;
-import dev.chojo.aether.supporter.service.context.SubscriptionContext;
+import dev.chojo.aether.supporter.service.context.ISubscriptionContext;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.MessageContextInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -41,7 +41,7 @@ public class Interactions {
      * @return The result of the access check.
      */
     public AccessCheckResult hasAccess(
-            SlashCommandInteractionEvent interaction, SubscriptionContext subscriptionContext) {
+            SlashCommandInteractionEvent interaction, ISubscriptionContext subscriptionContext) {
         return hasAccess(get(interaction), subscriptionContext);
     }
 
@@ -53,7 +53,7 @@ public class Interactions {
      * @return The result of the access check.
      */
     public AccessCheckResult hasAccess(
-            CommandAutoCompleteInteractionEvent interaction, SubscriptionContext subscriptionContext) {
+            CommandAutoCompleteInteractionEvent interaction, ISubscriptionContext subscriptionContext) {
         return hasAccess(get(interaction), subscriptionContext);
     }
 
@@ -65,7 +65,7 @@ public class Interactions {
      * @return The result of the access check.
      */
     public AccessCheckResult hasAccess(
-            MessageContextInteractionEvent interaction, SubscriptionContext subscriptionContext) {
+            MessageContextInteractionEvent interaction, ISubscriptionContext subscriptionContext) {
         return hasAccess(get(interaction), subscriptionContext);
     }
 
@@ -77,7 +77,7 @@ public class Interactions {
      * @return The result of the access check.
      */
     public AccessCheckResult hasAccess(
-            UserContextInteractionEvent interaction, SubscriptionContext subscriptionContext) {
+            UserContextInteractionEvent interaction, ISubscriptionContext subscriptionContext) {
         return hasAccess(get(interaction), subscriptionContext);
     }
 
@@ -96,7 +96,7 @@ public class Interactions {
         return new InteractionFeature(name, map.getOrDefault(name, emptySet()), event.getCommandType());
     }
 
-    private AccessCheckResult hasAccess(InteractionFeature enabledBy, SubscriptionContext subscriptionContext) {
+    private AccessCheckResult hasAccess(InteractionFeature enabledBy, ISubscriptionContext subscriptionContext) {
         return enabledBy.test(subscriptionContext);
     }
 }

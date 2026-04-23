@@ -6,6 +6,6 @@
 
 package dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.purchase;
 
-public interface Purchase {
+public interface IPurchase {
     boolean isLifetime();
 }

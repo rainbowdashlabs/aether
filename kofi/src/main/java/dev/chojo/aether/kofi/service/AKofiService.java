@@ -13,14 +13,14 @@ import dev.chojo.aether.kofi.pojo.AKofiPurchase;
 import dev.chojo.aether.kofi.pojo.KofiShopItem;
 import dev.chojo.aether.kofi.pojo.KofiTransaction;
 import dev.chojo.aether.kofi.pojo.Type;
-import dev.chojo.aether.mailing.UserMails;
+import dev.chojo.aether.mailing.IUserMails;
 import dev.chojo.aether.mailing.entities.AMailEntry;
 import dev.chojo.aether.mailing.entities.FailureReason;
 import dev.chojo.aether.mailing.entities.MailSource;
 import dev.chojo.aether.mailing.entities.Result;
 import dev.chojo.aether.mailing.service.AMailService;
+import dev.chojo.aether.supporter.access.ISubscriptions;
 import dev.chojo.aether.supporter.access.Subscription;
-import dev.chojo.aether.supporter.access.Subscriptions;
 import dev.chojo.aether.supporter.configuration.SupporterConfiguration;
 import dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.purchase.PurchaseType;
 import dev.chojo.aether.supporter.service.context.SubscriptionResult;
@@ -90,7 +90,7 @@ public abstract class AKofiService<V extends AKofiPurchase> {
         String mailHash = mailService.mailHash(data.email());
 
         // Check whether we know the user already that purchased something.
-        Optional<UserMails> repUser = mailService.mailProvider().byHash(mailHash);
+        Optional<IUserMails> repUser = mailService.mailProvider().byHash(mailHash);
         if (repUser.isEmpty()) {
             Optional<User> user = resolveUser(data);
             if (user.isPresent()) {
@@ -132,7 +132,7 @@ public abstract class AKofiService<V extends AKofiPurchase> {
      * @return The result of the operation.
      */
     public SubscriptionResult enableSubscription(V purchase, Guild guild) {
-        Subscriptions subs = guildSubscriptions(guild.getIdLong());
+        ISubscriptions subs = guildSubscriptions(guild.getIdLong());
 
         if (purchase.type() == Type.SUBSCRIPTION) {
             if (!purchase.isValid()) return SubscriptionResult.SUBSCRIPTION_EXPIRED;
@@ -176,7 +176,7 @@ public abstract class AKofiService<V extends AKofiPurchase> {
      */
     public boolean disableSubscription(V purchase) {
         if (purchase.guildId() == 0) return false;
-        Subscriptions subs = guildSubscriptions(purchase.guildId());
+        ISubscriptions subs = guildSubscriptions(purchase.guildId());
         if (purchase.type() == Type.SUBSCRIPTION) {
             subs.deleteSubscription(new Subscription(
                     purchase.subscriptionId(), purchase.guildId(), KOFI, GUILD, APPLICATION_SUBSCRIPTION, null, true));
@@ -261,7 +261,7 @@ public abstract class AKofiService<V extends AKofiPurchase> {
      * @param guildId The ID of the guild.
      * @return The subscriptions.
      */
-    protected abstract Subscriptions guildSubscriptions(long guildId);
+    protected abstract ISubscriptions guildSubscriptions(long guildId);
 
     /**
      * Builds a {@link AKofiPurchase} object.

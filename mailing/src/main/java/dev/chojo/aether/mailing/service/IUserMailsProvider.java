@@ -6,35 +6,35 @@
 
 package dev.chojo.aether.mailing.service;
 
-import dev.chojo.aether.mailing.UserMails;
+import dev.chojo.aether.mailing.IUserMails;
 import net.dv8tion.jda.api.entities.User;
 
 import java.util.Optional;
 
-public interface UserMailsProvider {
+public interface IUserMailsProvider {
     /**
-     * Get the {@link dev.chojo.aether.mailing.UserMails} for the given user id
+     * Get the {@link IUserMails} for the given user id
      *
      * @param userId the id of the user to get the mails for
      * @return the user mails for the given user id
      */
-    UserMails byUser(long userId);
+    IUserMails byUser(long userId);
 
     /**
-     * Get the {@link dev.chojo.aether.mailing.UserMails} for the given user id
+     * Get the {@link IUserMails} for the given user id
      *
      * @param user the user to get the mails for
      * @return the user mails for the given user id
      */
-    default UserMails byUser(User user) {
+    default IUserMails byUser(User user) {
         return byUser(user.getIdLong());
     }
 
     /**
-     * Get the {@link dev.chojo.aether.mailing.UserMails} by a hash associated with the user.
+     * Get the {@link IUserMails} by a hash associated with the user.
      *
      * @param mailHash the hash of the mail to get
      * @return the user mails for the given hash if it exists
      */
-    Optional<UserMails> byHash(String mailHash);
+    Optional<IUserMails> byHash(String mailHash);
 }

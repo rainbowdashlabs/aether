@@ -14,7 +14,7 @@ import java.util.Set;
 /**
  * Represents the set of enabled subscriptions for a user or guild.
  */
-public interface SubscriptionContext {
+public interface ISubscriptionContext {
     /**
      * Returns the set of enabled subscription IDs.
      * @return The set of enabled subscription IDs.
@@ -27,7 +27,7 @@ public interface SubscriptionContext {
      * @param other The context to merge with.
      * @return A new context containing the merged subscriptions.
      */
-    default SubscriptionContext merge(SubscriptionContext other) {
+    default ISubscriptionContext merge(ISubscriptionContext other) {
         Set<Long> mergedSubscriptions = new HashSet<>(Set.copyOf(enabledSubscriptions()));
         mergedSubscriptions.addAll(other.enabledSubscriptions());
         return () -> mergedSubscriptions;
