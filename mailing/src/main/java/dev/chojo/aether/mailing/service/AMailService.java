@@ -48,10 +48,10 @@ import static org.slf4j.LoggerFactory.getLogger;
 /**
  * Core mail service for handling mail registration, verification, and sending.
  */
-public abstract class AMailService {
+public abstract class AMailService<V extends AMailEntry> {
     private static final Pattern MAIL_SHORTER = Pattern.compile("(.{2}).+?@.+?(.{2}\\..+)");
     private static final Logger log = getLogger(AMailService.class);
-    private final MailServiceConfig config;
+    private final MailServiceConfig<V> config;
     private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
     /**
@@ -59,7 +59,7 @@ public abstract class AMailService {
      *
      * @param config the configuration
      */
-    public AMailService(MailServiceConfig config) {
+    public AMailService(MailServiceConfig<V> config) {
         this.config = config;
         executor.scheduleAtFixedRate(this::cleanupExpiredMails, 30, 60, TimeUnit.MINUTES);
     }
@@ -72,10 +72,10 @@ public abstract class AMailService {
      * @param source the source of the mail registration
      * @return the result of the registration
      */
-    public Result<AMailEntry, FailureReason> registerAndPromptVerify(long user, String mail, MailSource source) {
+    public Result<V, FailureReason> registerAndPromptVerify(long user, String mail, MailSource source) {
         String hash = mailHash(mail);
-        Optional<IUserMails> entry = mailProvider().byHash(hash);
-        AMailEntry mailEntry;
+        Optional<IUserMails<V>> entry = mailProvider().byHash(hash);
+        V mailEntry;
         if (entry.isPresent()) {
             mailEntry = entry.get().getMail(hash).get();
             if (mailEntry.verified()) {
@@ -83,7 +83,7 @@ public abstract class AMailService {
             }
             mailEntry.updateUser(user);
         } else {
-            Result<AMailEntry, FailureReason> newEntry = createMailEntry(user, mail, source);
+            Result<V, FailureReason> newEntry = createMailEntry(user, mail, source);
             if (newEntry.isFailure()) return newEntry;
             mailEntry = newEntry.result();
             mailProvider().byUser(user).addMail(mailEntry);
@@ -126,12 +126,12 @@ public abstract class AMailService {
      * @param source the source of the mail registration
      * @return the result of the registration
      */
-    public Result<AMailEntry, FailureReason> registerVerifiedMail(long user, String mail, MailSource source) {
+    public Result<V, FailureReason> registerVerifiedMail(long user, String mail, MailSource source) {
         var mails = mailProvider().byHash(mailHash(mail));
         if (mails.isPresent()) {
             // This is still considered a success because the mail address is already registered and present in the
             // result.
-            AMailEntry mailEntry = mails.get().getMail(mailHash(mail)).get();
+            V mailEntry = mails.get().getMail(mailHash(mail)).get();
             mailEntry.updateUser(user);
             // If the mail entry is not verified, verify it.
             if (!mailEntry.verified()) {
@@ -140,10 +140,10 @@ public abstract class AMailService {
             return new Result<>(mailEntry, FailureReason.ALREADY_REGISTERED, true);
         }
 
-        Result<AMailEntry, FailureReason> result = createMailEntry(user, mail, source);
+        Result<V, FailureReason> result = createMailEntry(user, mail, source);
         if (!result.isSuccess()) return result;
-        AMailEntry mailEntry = result.result();
-        IUserMails userMails = mailProvider().byUser(user);
+        V mailEntry = result.result();
+        IUserMails<V> userMails = mailProvider().byUser(user);
         userMails.addMail(mailEntry);
         mailEntry.verify();
         return Result.success(mailEntry);
@@ -157,7 +157,7 @@ public abstract class AMailService {
      * @param source the source of the mail registration
      * @return the result containing the mail entry if successful
      */
-    public Result<AMailEntry, FailureReason> createMailEntry(long user, String mail, MailSource source) {
+    public Result<V, FailureReason> createMailEntry(long user, String mail, MailSource source) {
         boolean valid = EmailValidator.getInstance().isValid(mail);
         if (!valid) {
             return Result.failure(FailureReason.INVALID_FORMAT);
@@ -181,7 +181,7 @@ public abstract class AMailService {
                 UUID.randomUUID().toString()));
     }
 
-    protected abstract AMailEntry createMailEntry(
+    protected abstract V createMailEntry(
             long user,
             MailSource source,
             String mailHash,
@@ -197,7 +197,7 @@ public abstract class AMailService {
      * @return the retry after time in seconds
      */
     public long getRetryAfterSeconds(long user) {
-        IUserMails userMails = mailProvider().byUser(user);
+        IUserMails<V> userMails = mailProvider().byUser(user);
         return userMails.mails().values().stream()
                 .filter(m -> m.source() == MailSource.USER)
                 .map(m -> m.verificationRequested().plus(5, ChronoUnit.MINUTES).getEpochSecond()
@@ -361,7 +361,7 @@ public abstract class AMailService {
      *
      * @return the user mails provider
      */
-    public IUserMailsProvider mailProvider() {
+    public IUserMailsProvider<V> mailProvider() {
         return config.userMailsProvider();
     }
 

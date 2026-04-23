@@ -7,18 +7,19 @@
 package dev.chojo.aether.mailing.service;
 
 import dev.chojo.aether.mailing.IUserMails;
+import dev.chojo.aether.mailing.entities.AMailEntry;
 import net.dv8tion.jda.api.entities.User;
 
 import java.util.Optional;
 
-public interface IUserMailsProvider {
+public interface IUserMailsProvider<V extends AMailEntry> {
     /**
      * Get the {@link IUserMails} for the given user id
      *
      * @param userId the id of the user to get the mails for
      * @return the user mails for the given user id
      */
-    IUserMails byUser(long userId);
+    IUserMails<V> byUser(long userId);
 
     /**
      * Get the {@link IUserMails} for the given user id
@@ -26,7 +27,7 @@ public interface IUserMailsProvider {
      * @param user the user to get the mails for
      * @return the user mails for the given user id
      */
-    default IUserMails byUser(User user) {
+    default IUserMails<V> byUser(User user) {
         return byUser(user.getIdLong());
     }
 
@@ -36,5 +37,5 @@ public interface IUserMailsProvider {
      * @param mailHash the hash of the mail to get
      * @return the user mails for the given hash if it exists
      */
-    Optional<IUserMails> byHash(String mailHash);
+    Optional<IUserMails<V>> byHash(String mailHash);
 }

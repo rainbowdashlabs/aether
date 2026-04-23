@@ -7,6 +7,7 @@
 package dev.chojo.aether.mailing.service;
 
 import dev.chojo.aether.mailing.configuration.Mailing;
+import dev.chojo.aether.mailing.entities.AMailEntry;
 
 /**
  * Configuration for the {@link AMailService}.
@@ -17,9 +18,9 @@ import dev.chojo.aether.mailing.configuration.Mailing;
  * @param userMailsProvider the provider for user mails
  * @param cleanup           a runnable to clean up expired mails
  */
-public record MailServiceConfig(
+public record MailServiceConfig<V extends AMailEntry>(
         String host,
         Mailing mailing,
         MailTemplates templates,
-        IUserMailsProvider userMailsProvider,
+        IUserMailsProvider<V> userMailsProvider,
         Runnable cleanup) {}
