@@ -45,7 +45,7 @@ import java.util.stream.Collectors;
  */
 public class DiscordClient {
     private static final String DISCORD_BASE = "discord.com";
-    private static final String DISCORD_API = DISCORD_BASE + "/api/";
+    private static final String DISCORD_API = "https://" + DISCORD_BASE + "/api/";
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper mapper = JsonMapper.builder()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
