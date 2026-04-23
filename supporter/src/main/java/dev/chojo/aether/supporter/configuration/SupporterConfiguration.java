@@ -87,7 +87,7 @@ public class SupporterConfiguration<FeatureID extends Enum<?>, Price, FeatureMet
     }
 
     /**
-     * Finds a subscription by platform, type and platform specific id.
+     * Finds a subscription by platform, type, and platform-specific id.
      *
      * @param platform The platform.
      * @param type     The purchase type.

@@ -19,28 +19,28 @@ public abstract class ADiscordPurchase {
      *
      * @see Entitlement#getUserIdLong()
      */
-    long userId;
+    protected long userId;
 
     /**
      * The id of the sku that this entitlement is for.
      *
      * @see Entitlement#getSkuIdLong()
      */
-    long skuId;
+    protected long skuId;
 
     /**
      * The type of entitlement.
      *
      * @see Entitlement#getType()
      */
-    private EntitlementType type;
+    protected EntitlementType type;
 
     /**
      * The target of the entitlement.
      *
      * @see SkuTarget#fromEntitlement(Entitlement)
      */
-    SkuTarget target;
+    protected SkuTarget target;
 
     /**
      * Id of the subscription that this entitlement is for.
@@ -48,14 +48,14 @@ public abstract class ADiscordPurchase {
      *
      * @see dev.chojo.aether.supporter.configuration.modules.subscriptions.Subscription#id()
      */
-    long subscriptionId;
+    protected long subscriptionId;
 
     /**
      * The id of the entitlement.
      *
      * @see Entitlement#getIdLong()
      */
-    long entitlementId;
+    protected long entitlementId;
 
     /**
      * The time the entitlement expires.
@@ -63,18 +63,52 @@ public abstract class ADiscordPurchase {
      * An expiration date might not be set even if {@link #isPersistent()} returns {@code false}.
      */
     @Nullable
-    private Instant expiresAt;
+    protected Instant expiresAt;
 
     /**
      * Set the persistence of an entitlement. This usally means that the {@link PurchaseType#isLifetime()} returns {@code true}
      */
-    private boolean persistent;
+    protected boolean persistent;
 
     /**
      * The id of the guild that the purchase is attached to.
      * 0 if the purchase is not assigned to a guild.
      */
-    private long guildId;
+    protected long guildId;
+
+    /**
+     * Creates a new {@link ADiscordPurchase} with the given parameters.
+     *
+     * @param userId         the user id
+     * @param skuId          the sku id
+     * @param type           the type
+     * @param target         the target
+     * @param subscriptionId the subscription id
+     * @param entitlementId  the entitlement id
+     * @param expiresAt      the expiration date
+     * @param persistent     if the purchase is persistent
+     * @param guildId        the guild id
+     */
+    public ADiscordPurchase(
+            long userId,
+            long skuId,
+            EntitlementType type,
+            SkuTarget target,
+            long subscriptionId,
+            long entitlementId,
+            @Nullable Instant expiresAt,
+            boolean persistent,
+            long guildId) {
+        this.userId = userId;
+        this.skuId = skuId;
+        this.type = type;
+        this.target = target;
+        this.subscriptionId = subscriptionId;
+        this.entitlementId = entitlementId;
+        this.expiresAt = expiresAt;
+        this.persistent = persistent;
+        this.guildId = guildId;
+    }
 
     public long userId() {
         return userId;
