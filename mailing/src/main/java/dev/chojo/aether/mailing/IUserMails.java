@@ -18,7 +18,7 @@ public interface IUserMails {
      * @param hash The hash of the mail entry to retrieve
      * @return An optional containing the mail entry if found, empty otherwise
      */
-    Optional<AMailEntry> getMail(String hash);
+    Optional<? extends AMailEntry> getMail(String hash);
 
     /**
      * Add a new {@link AMailEntry} to the users mails
@@ -40,7 +40,7 @@ public interface IUserMails {
      *
      * @return An unmodifiable map of mail hashes to mail entries
      */
-    Map<String, AMailEntry> mails();
+    Map<String, ? extends AMailEntry> mails();
 
     long userId();
 }
