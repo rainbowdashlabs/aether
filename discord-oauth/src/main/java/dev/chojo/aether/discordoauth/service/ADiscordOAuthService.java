@@ -137,8 +137,7 @@ public abstract class ADiscordOAuthService {
 
             var token = discordClient.exchangeCode(code);
             DiscordUser user = discordClient.user(token);
-            updateUser(user, token);
-            var accessToken = userToken(user.id());
+            String accessToken = storeToken(user, token);
 
             // Redirect back to the frontend with a session token
             if (nextPath.isBlank() || !nextPath.startsWith("/")) {
@@ -165,20 +164,13 @@ public abstract class ADiscordOAuthService {
     }
 
     /**
-     * Gets the token for a user can can be used to authenticate it in the backend.
-     *
-     * @param userId the user id
-     * @return the token
-     */
-    public abstract String userToken(long userId);
-
-    /**
-     * Handle the user after a token was issued.
+     * Handle the user after an oauth token was issued.
      *
      * @param user  the user
      * @param token the token
+     * @return An access token that can be used to authenticate the user in the backend.
      */
-    public abstract void updateUser(DiscordUser user, TokenResponse token);
+    public abstract String storeToken(DiscordUser user, TokenResponse token);
 
     /**
      * Get the Discord client used by this service.

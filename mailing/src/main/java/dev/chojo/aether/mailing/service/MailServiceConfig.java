@@ -18,4 +18,6 @@ import dev.chojo.aether.mailing.configuration.Mailing;
  * @param cleanup           a runnable to clean up expired mails
  */
 public record MailServiceConfig(
-        String host, Mailing mailing, MailTemplates templates, UserMailsProvider userMailsProvider, Runnable cleanup) {}
+        String host, Mailing mailing, MailTemplates templates, UserMailsProvider userMailsProvider, Runnable cleanup) {
+    public static final MailServiceConfig DEFAULT = new MailServiceConfig("localhost",
+}
