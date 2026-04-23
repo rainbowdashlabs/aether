@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
  * Client for interacting with the Discord API.
  */
 public class DiscordClient {
-    private static final String DISCORD_BASE = "https://discord.com";
+    private static final String DISCORD_BASE = "discord.com";
     private static final String DISCORD_API = DISCORD_BASE + "/api/";
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper mapper = JsonMapper.builder()
@@ -90,6 +90,7 @@ public class DiscordClient {
 
     AuthorizeUrl buildAuthorizeUrl(String state, Set<OAuthScope> OAuthScopes) {
         URIBuilder uriBuilder = new URIBuilder()
+                .setScheme("https")
                 .setHost(DISCORD_BASE)
                 .setPathSegments("oauth2", "authorize")
                 .addParameter("client_id", cfg().clientId())
