@@ -169,7 +169,7 @@ public class DiscordClient {
     private DiscordUser fetchUser(IOAuthToken accessToken) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(DISCORD_API + "/users/@me"))
-                .header("Authorization", "Bearer " + accessToken)
+                .header("Authorization", "Bearer " + accessToken.accessToken())
                 .GET()
                 .build();
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
