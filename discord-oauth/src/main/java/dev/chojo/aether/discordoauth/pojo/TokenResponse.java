@@ -21,11 +21,21 @@ import java.util.Set;
  */
 public record TokenResponse(String accessToken, String refreshToken, Instant expiry, Set<OAuthScope> oAuthScopes)
         implements IOAuthToken {
+    /**
+     * Not supported
+     *
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public long userId() {
         throw new UnsupportedOperationException();
     }
 
+    /**
+     * Not supported
+     *
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public void update(TokenResponse response) {
         throw new UnsupportedOperationException();
@@ -36,6 +46,11 @@ public record TokenResponse(String accessToken, String refreshToken, Instant exp
         return oAuthScopes;
     }
 
+    /**
+     * Not supported
+     *
+     * @throws UnsupportedOperationException always
+     */
     @Override
     public void delete() {
         throw new UnsupportedOperationException();

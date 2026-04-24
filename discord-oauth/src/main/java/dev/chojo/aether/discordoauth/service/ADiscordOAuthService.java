@@ -159,6 +159,7 @@ public abstract class ADiscordOAuthService {
             ctx.removeCookie("oauth_state", "/");
             ctx.redirect(redirectUrl);
         } catch (Exception e) {
+            log.error("Discord OAuth Flow Failed", e);
             ctx.status(HttpStatus.BAD_REQUEST).json(new ErrorResponseWrapper("Discord OAuth Failed", e.getMessage()));
         }
     }

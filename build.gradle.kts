@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.chojo.aether"
-version = "1.2.14"
+version = "1.2.15"
 description = "A library for discord bots based on jda-commands"
 
 dependencies {
