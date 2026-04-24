@@ -300,7 +300,7 @@ public class DiscordClient {
      *
      * @param token The access token to revoke
      */
-    void revokeToken(IOAuthToken token) throws IOException, InterruptedException {
+    public void revokeToken(IOAuthToken token) throws IOException, InterruptedException {
         userCache.invalidate(token.accessToken());
         userGuildsCache.invalidate(token.accessToken());
         String form = "token=" + enc(token.accessToken());
