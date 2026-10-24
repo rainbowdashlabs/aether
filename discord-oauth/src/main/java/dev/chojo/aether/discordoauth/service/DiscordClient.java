@@ -89,7 +89,7 @@ public class DiscordClient {
         return buildAuthorizeUrl(state, cfg().scopes());
     }
 
-    AuthorizeUrl buildAuthorizeUrl(String state, Set<OAuthScope> OAuthScopes) {
+    AuthorizeUrl buildAuthorizeUrl(String state, Set<OAuthScope> scopes) {
         URIBuilder uriBuilder = new URIBuilder()
                 .setScheme("https")
                 .setHost(DISCORD_BASE)
@@ -98,12 +98,11 @@ public class DiscordClient {
                 .addParameter("redirect_uri", cfg().redirectUri())
                 .addParameter("response_type", "code")
                 .addParameter("prompt", cfg().prompt().name().toLowerCase())
-                .addParameter(
-                        "scope", OAuthScopes.stream().map(OAuthScope::scope).collect(Collectors.joining(" ")));
+                .addParameter("scope", scopes.stream().map(OAuthScope::scope).collect(Collectors.joining(" ")));
         if (state != null) uriBuilder.addParameter("state", state);
 
         try {
-            return new AuthorizeUrl(uriBuilder.build().toString(), OAuthScopes);
+            return new AuthorizeUrl(uriBuilder.build().toString(), scopes);
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);
         }

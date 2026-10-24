@@ -22,7 +22,7 @@ implementation("dev.chojo.aether:discord-oauth:2.0.0")
 | `clientSecret` | `""` | Its client secret. |
 | `redirectUri` | `""` | The callback URL. It must be listed as a redirect in the Discord developer portal. |
 | `cacheRetentionMinutes` | `10` | How long user, guild and connection data stays cached. |
-| `OAuthScopes` | `IDENTIFY`, `EMAIL`, `GUILDS` | The scopes to ask for. |
+| `scopes` | `IDENTIFY`, `EMAIL`, `GUILDS` | The scopes to ask for. |
 | `prompt` | `NONE` | `NONE` skips the consent screen for users who agreed before, `CONSENT` always shows it. |
 
 ```yaml
@@ -30,7 +30,7 @@ discordOAuth:
   clientId: "1234567890123456789"
   clientSecret: secret
   redirectUri: https://api.example.com/auth/callback
-  OAuthScopes: [IDENTIFY, EMAIL, GUILDS]
+  scopes: [IDENTIFY, EMAIL, GUILDS]
 ```
 
 The class keeps its values in private fields. Read it with a mapper that can see private fields, for example
@@ -43,7 +43,7 @@ Extend `ADiscordOAuthService`. You implement two methods:
 | Method | What it should do |
 |---|---|
 | `storeToken(user, token)` | Store the Discord token for the user and return a session token of your own. The user is sent back to your web app with it. |
-| `getExpiringtokens(instant)` | Return the stored tokens that expire before the given time. |
+| `getExpiringTokens(instant)` | Return the stored tokens that expire before the given time. |
 
 Your stored token implements `IOAuthToken`: user id, access token, refresh token, scopes and expiry, plus
 `update(TokenResponse)` to save a refreshed token and `delete()` to remove it.
@@ -63,16 +63,20 @@ public class LoginService extends ADiscordOAuthService {
     }
 
     @Override
-    protected List<? extends IOAuthToken> getExpiringtokens(Instant instant) {
+    protected List<? extends IOAuthToken> getExpiringTokens(Instant instant) {
         return tokens.expiringBefore(instant);
     }
 }
+
+LoginService loginService = new LoginService(config, tokens);
+loginService.start();
 ```
 
 The second constructor argument is the base URL of your web app, where users land after the login.
 
-The constructor starts the token refresh: two minutes after creation and then every 60 minutes, every token that
-expires within the next hour is refreshed and saved with `update`. A token that can not be refreshed is deleted.
+`start()` starts the token refresh: two minutes later and then every 60 minutes, every token that expires within the
+next hour is refreshed and saved with `update`. A token that can not be refreshed is deleted. The service does not
+call `start()` itself.
 
 ## Routes
 
