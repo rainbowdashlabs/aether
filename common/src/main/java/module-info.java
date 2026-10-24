@@ -1,9 +1,9 @@
 module dev.chojo.aether.common {
-    requires net.dv8tion.jda;
-    requires java.desktop;
-    requires dev.goldmensch.propane;
-    requires io.github.kaktushose.jdac.core;
-    requires org.jspecify;
+    requires transitive net.dv8tion.jda;
+    requires transitive java.desktop;
+    requires transitive dev.goldmensch.propane;
+    requires transitive io.github.kaktushose.jdac.core;
+    requires transitive org.jspecify;
     requires org.slf4j;
 
     exports dev.chojo.aether.common.completion;

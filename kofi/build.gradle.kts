@@ -9,7 +9,6 @@ dependencies {
     api(project(":supporter"))
     api(project(":mailing"))
     api(project(":common"))
-    api(libs.jackson.databind)
-    api(libs.slf4j.api)
-
+    api(libs.jackson.annotations)
+    implementation(libs.slf4j.api)
 }

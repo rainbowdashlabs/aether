@@ -1,14 +1,11 @@
 module dev.chojo.aether.supporter {
-    requires net.dv8tion.jda;
+    requires transitive dev.chojo.aether.common;
+    requires transitive net.dv8tion.jda;
+    requires transitive io.github.kaktushose.jdac.core;
+    requires transitive org.jspecify;
+    requires transitive tools.jackson.databind;
     requires tools.jackson.core;
-    requires tools.jackson.databind;
-    requires io.github.kaktushose.jdac.core;
     requires org.slf4j;
-    requires org.jspecify;
-    requires com.google.common;
-    requires org.apache.commons.collections4;
-    requires org.jetbrains.annotations;
-    requires dev.chojo.aether.common;
 
     exports dev.chojo.aether.supporter.access;
     exports dev.chojo.aether.supporter.configuration;

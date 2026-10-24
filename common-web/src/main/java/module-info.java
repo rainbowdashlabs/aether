@@ -1,5 +1,5 @@
 module dev.chojo.aether.commonweb {
-    requires io.javalin;
+    requires transitive io.javalin;
     requires com.fasterxml.jackson.annotation;
 
     exports dev.chojo.aether.commonweb.error;

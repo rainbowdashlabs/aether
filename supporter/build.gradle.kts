@@ -9,5 +9,7 @@ dependencies {
     api(project(":common"))
     api(libs.jdacommands)
     api(libs.jda)
-    api(libs.jackson.core)
+    api(libs.jackson.databind)
+    api(libs.jspecify)
+    implementation(libs.slf4j.api)
 }
