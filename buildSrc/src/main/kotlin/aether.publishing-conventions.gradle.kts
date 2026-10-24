@@ -1,61 +1,47 @@
 import com.vanniktech.maven.publish.JavaLibrary
 import com.vanniktech.maven.publish.JavadocJar
-import com.vanniktech.maven.publish.MavenPublishBaseExtension
+import com.vanniktech.maven.publish.SourcesJar
 
 plugins {
     id("com.vanniktech.maven.publish")
+    id("de.chojo.publishdata")
 }
 
-if (project.version.toString() == "unspecified") {
-    project.version = rootProject.version
+publishData {
+    eldoNexus(dev = false)
+    channels {
+        clear()
+        release("https://eldonexus.de/repository/maven-releases/") { publishToMavenCentral() }
+        snapshot("https://eldonexus.de/repository/maven-snapshots/")
+    }
 }
 
-extensions.configure<MavenPublishBaseExtension>("mavenPublishing") {
-    configure(
-        JavaLibrary(javadocJar = JavadocJar.Javadoc(), sourcesJar = true)
-    )
-}
-
-afterEvaluate {
-    extensions.configure<MavenPublishBaseExtension>("mavenPublishing") {
-        publishToMavenCentral()
-        signAllPublications()
-
-        logger.warn("configured: ${rootProject.group as String}:${project.name}:${rootProject.version as String}")
-
-        coordinates(
-            groupId = rootProject.group as String,
-            artifactId = project.name,
-            version = rootProject.version as String
-        )
-
-        pom {
-            name.set("Aether")
-            description.set(project.description)
-            inceptionYear.set("2025")
-            url.set("https://github.com/rainbowdashlabs/aether")
-
-            licenses {
-                license {
-                    name.set("LGPL-3.0")
-                    url.set("https://opensource.org/license/lgpl-3-0")
-                }
+mavenPublishing {
+    configure(JavaLibrary(javadocJar = JavadocJar.Javadoc(), sourcesJar = SourcesJar.Sources()))
+    publishToMavenCentral()
+    signAllPublications()
+    coordinates(rootProject.group.toString(), project.name, project.version.toString())
+    pom {
+        url = "https://github.com/rainbowdashlabs/aether"
+        inceptionYear = "2026"
+        licenses {
+            license {
+                name = "LGPL-3.0-or-later"
+                url = "https://www.gnu.org/licenses/lgpl-3.0.html"
             }
-
-            developers {
-                developer {
-                    id.set("rainbowdashlabs")
-                    name.set("Nora Fülling")
-                    email.set("mail@chojo.dev")
-                    url.set("https://github.com/rainbowdashlabs")
-                }
+        }
+        developers {
+            developer {
+                id = "rainbowdashlabs"
+                name = "Nora Fülling"
+                email = "mail@chojo.dev"
+                url = "https://github.com/rainbowdashlabs"
             }
-
-            scm {
-                url.set("https://github.com/rainbowdashlabs/aether")
-                connection.set("scm:git:git://github.com/rainbowdashlabs/aether.git")
-                developerConnection.set("scm:git:ssh://github.com/rainbowdashlabs/aether.git")
-            }
+        }
+        scm {
+            url = "https://github.com/rainbowdashlabs/aether"
+            connection = "scm:git:git://github.com/rainbowdashlabs/aether.git"
+            developerConnection = "scm:git:ssh://github.com/rainbowdashlabs/aether.git"
         }
     }
 }

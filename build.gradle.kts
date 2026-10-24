@@ -4,8 +4,6 @@ plugins {
     id("aether.publishing-conventions")
 }
 
-group = "dev.chojo.aether"
-version = "1.2.16"
 description = "A library for discord bots based on jda-commands"
 
 dependencies {
