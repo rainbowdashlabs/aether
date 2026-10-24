@@ -1,15 +1,15 @@
 plugins {
     id("aether.java-conventions")
-    id("aether.maven-publish-conventions")
+    id("aether.publishing-conventions")
 }
 
 description = "Implementation for discord oauth integration"
 
 dependencies {
     api(libs.jackson.databind)
-    api(libs.jackson.annotation)
+    api(libs.jackson.annotations)
     api(libs.guava)
-    api(libs.javalin.core)
-    api(libs.apache.httpclient)
+    api(libs.javalin)
+    api(libs.httpclient)
     api(project(":common-web"))
 }

@@ -1,11 +1,9 @@
 plugins {
-    id("io.freefair.aggregate-javadoc") version("9.0.0")
+    alias(libs.plugins.aggregate.javadoc)
     id("aether.java-conventions")
-    id("aether.maven-publish-conventions")
+    id("aether.publishing-conventions")
 }
 
-group = "dev.chojo.aether"
-version = "1.2.16"
 description = "A library for discord bots based on jda-commands"
 
 dependencies {

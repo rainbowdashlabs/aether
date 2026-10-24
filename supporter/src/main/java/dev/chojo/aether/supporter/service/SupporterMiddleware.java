@@ -61,14 +61,13 @@ public class SupporterMiddleware<FID extends Enum<FID>> implements Middleware {
     public void accept(InvocationContext<?> context) {
         ISubscriptionContext subCtx = buildContext(context.event());
         Interactions interactions = configuration.interactions();
-        AccessCheckResult result =
-                switch (context.event()) {
-                    case UserContextInteractionEvent event -> interactions.hasAccess(event, subCtx);
-                    case MessageContextInteractionEvent event -> interactions.hasAccess(event, subCtx);
-                    case SlashCommandInteractionEvent event -> interactions.hasAccess(event, subCtx);
-                    case CommandAutoCompleteInteractionEvent event -> interactions.hasAccess(event, subCtx);
-                    default -> AccessCheckResult.success(null);
-                };
+        AccessCheckResult result = switch (context.event()) {
+            case UserContextInteractionEvent event -> interactions.hasAccess(event, subCtx);
+            case MessageContextInteractionEvent event -> interactions.hasAccess(event, subCtx);
+            case SlashCommandInteractionEvent event -> interactions.hasAccess(event, subCtx);
+            case CommandAutoCompleteInteractionEvent event -> interactions.hasAccess(event, subCtx);
+            default -> AccessCheckResult.success(null);
+        };
 
         if (!result.hasAccess()) {
             if (context.event() instanceof CommandAutoCompleteInteractionEvent event) {

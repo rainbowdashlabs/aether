@@ -1,6 +1,6 @@
 plugins {
     id("aether.java-conventions")
-    id("aether.maven-publish-conventions")
+    id("aether.publishing-conventions")
 }
 
 description = "Implementation for kofi integration"
@@ -10,6 +10,6 @@ dependencies {
     api(project(":mailing"))
     api(project(":common"))
     api(libs.jackson.databind)
-    api(libs.slf4j)
+    api(libs.slf4j.api)
 
 }

@@ -6,6 +6,7 @@ module dev.chojo.aether.common {
     requires org.jspecify;
     requires org.slf4j;
 
+    exports dev.chojo.aether.common.completion;
     exports dev.chojo.aether.common.consumer;
     exports dev.chojo.aether.common.container;
     exports dev.chojo.aether.common.eventmanager;

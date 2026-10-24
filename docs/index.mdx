@@ -1,0 +1,128 @@
+---
+title: Aether
+sidebar_position: 1
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Aether
+
+Aether is a set of building blocks for Discord bots written with [JDA](https://github.com/discord-jda/JDA) and
+[jda-commands](https://github.com/Kaktushose/jda-commands). It handles the parts many bots need again and again:
+who may use which command, Discord and Ko-fi purchases, verified mail addresses, Discord login for a web dashboard
+and JSON views of Discord objects.
+
+Aether does not store anything itself. Wherever data has to be saved, you extend an abstract class or implement an
+interface and keep the data in your own database.
+
+## Requirements
+
+| What | Version |
+|---|---|
+| Java | 25 or newer. Aether is compiled for Java 25, because jda-commands 5 needs it. |
+| JDA | 6. Aether brings JDA 6.7.0. |
+| jda-commands | 5. Aether brings jda-commands 5.1.1. |
+| Jackson | 3 (`tools.jackson`). The modules that read or write JSON bring it. |
+| Javalin | 7, only for `common-web` and `discord-oauth`. |
+
+## Modules
+
+Pick the modules you need. Each one brings the modules it builds on.
+
+| Artifact | Java module | What it does |
+|---|---|---|
+| `common` | `dev.chojo.aether.common` | Shared parts: user lookup, registries, an event manager with exception handlers, autocomplete helpers, colours. See [Common](./common.md). |
+| `supporter` | `dev.chojo.aether.supporter` | Subscriptions, features and access checks for commands. See [Supporter](./supporter/index.md). |
+| `kofi` | `dev.chojo.aether.kofi` | Turns Ko-fi webhooks into supporter purchases. See [Ko-fi](./kofi.md). |
+| `mailing` | `dev.chojo.aether.mailing` | Registers and verifies mail addresses and sends mails. See [Mailing](./mailing.md). |
+| `discord-oauth` | `dev.chojo.aether.discordoauth` | Discord login for a Javalin web app and a small Discord API client. See [Discord OAuth](./discord-oauth.md). |
+| `serialization` | `dev.chojo.aether.serialization` | Jackson serializers that turn guilds, roles, channels and members into JSON. See [Serialization](./serialization.md). |
+| `common-web` | `dev.chojo.aether.commonweb` | Error types and helpers for Javalin. See [Common web](./common-web.md). |
+| `aether` | | Every module above in one artifact. |
+
+`kofi` builds on `supporter` and `mailing`. `discord-oauth` builds on `common-web`. Every other module builds on
+`common`.
+
+## Add the dependency
+
+Aether is published to Maven Central with the group `dev.chojo.aether`. Snapshots are on EldoNexus
+(`https://eldonexus.de/repository/maven-snapshots/`).
+
+This example adds the supporter and Ko-fi modules:
+
+<Tabs groupId="build-tool">
+<TabItem value="gradle" label="Gradle (Kotlin DSL)">
+
+```kotlin
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("dev.chojo.aether:supporter:2.0.0")
+    implementation("dev.chojo.aether:kofi:2.0.0")
+}
+```
+
+</TabItem>
+<TabItem value="gradle-groovy" label="Gradle (Groovy)">
+
+```groovy
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'dev.chojo.aether:supporter:2.0.0'
+    implementation 'dev.chojo.aether:kofi:2.0.0'
+}
+```
+
+</TabItem>
+<TabItem value="maven" label="Maven">
+
+```xml
+<dependencies>
+    <dependency>
+        <groupId>dev.chojo.aether</groupId>
+        <artifactId>supporter</artifactId>
+        <version>2.0.0</version>
+    </dependency>
+    <dependency>
+        <groupId>dev.chojo.aether</groupId>
+        <artifactId>kofi</artifactId>
+        <version>2.0.0</version>
+    </dependency>
+</dependencies>
+```
+
+</TabItem>
+</Tabs>
+
+To get everything at once, use `dev.chojo.aether:aether:2.0.0`.
+
+## How the modules fit together
+
+A typical bot with paid features uses them like this:
+
+1. [Supporter](./supporter/index.md) describes your subscriptions and features and checks every command before it
+   runs.
+2. Purchases come in from Discord through the [entitlement service](./supporter/discord-entitlements.md) and from
+   Ko-fi through the [Ko-fi service](./kofi.md).
+3. Ko-fi only knows the buyer's mail address. [Mailing](./mailing.md) links that address to a Discord user.
+4. A web dashboard logs users in with [Discord OAuth](./discord-oauth.md) and shows guild data with
+   [Serialization](./serialization.md).
+
+You can use each module on its own as well.
+
+## Where to go next
+
+- [Common](./common.md)
+- [Supporter](./supporter/index.md)
+- [Ko-fi](./kofi.md)
+- [Mailing](./mailing.md)
+- [Discord OAuth](./discord-oauth.md)
+- [Serialization](./serialization.md)
+- [Common web](./common-web.md)
+- [Javadoc](pathname:///aether/javadoc/): every class and method.
