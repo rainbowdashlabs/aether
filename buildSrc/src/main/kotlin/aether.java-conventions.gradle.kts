@@ -17,7 +17,6 @@ java {
 tasks.withType<JavaCompile>().configureEach {
     options.release = 25
     options.encoding = "UTF-8"
-    dependsOn(tasks.spotlessApply)
 }
 
 tasks.withType<Javadoc>().configureEach {
@@ -40,7 +39,7 @@ spotless {
     java {
         target("src/**/*.java")
         licenseHeaderFile(rootProject.file("HEADER.txt"))
-        palantirJavaFormat("2.84.0").formatJavadoc(false)
+        palantirJavaFormat(libs.findVersion("palantir").get().requiredVersion).formatJavadoc(false)
         removeUnusedImports()
         importOrder("", "java", "javax", "\\#")
         trimTrailingWhitespace()
