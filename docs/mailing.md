@@ -19,7 +19,7 @@ implementation("dev.chojo.aether:mailing:2.0.0")
 
 | Key | Default | Meaning |
 |---|---|---|
-| `mailSalt` | random on every start | Salt for the address hashes. Set it, or stored hashes stop matching after a restart. |
+| `mailSalt` | none, required | Salt for the address hashes. Keep it secret and never change it, or stored hashes stop matching. The service does not start without it. |
 | `smtp.host`, `smtp.port`, `smtp.ssl` | `""`, `665`, `false` | The SMTP server for sending. |
 | `imap.host`, `imap.port`, `imap.ssl` | `""`, `665`, `false` | The IMAP server, where a copy of each sent mail is stored. |
 | `user` | `""` | Login and sender address. |

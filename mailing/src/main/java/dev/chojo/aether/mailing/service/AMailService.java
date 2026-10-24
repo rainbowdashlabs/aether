@@ -58,8 +58,10 @@ public abstract class AMailService<V extends AMailEntry> {
      * Create a new mail service with the given configuration.
      *
      * @param config the configuration
+     * @throws IllegalStateException if the mailing configuration has no mail salt
      */
     public AMailService(MailServiceConfig<V> config) {
+        config.mailing().requireMailSalt();
         this.config = config;
         executor.scheduleAtFixedRate(this::cleanupExpiredMails, 30, 60, TimeUnit.MINUTES);
     }
