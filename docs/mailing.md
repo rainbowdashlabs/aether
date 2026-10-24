@@ -135,4 +135,5 @@ and register it in `MailSourceRegistry.INSTANCE`.
 ## Sending other mails
 
 `sendMail(new Mail(address, subject, html))` sends any HTML mail. It sends over SMTP and then stores a copy in the
-folder `Sent` below the IMAP inbox.
+folder `Sent` below the IMAP inbox. Both steps are tried three times; failures are logged. The mail session uses only
+the properties from your configuration, not the system properties.
