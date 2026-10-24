@@ -150,10 +150,10 @@ public abstract class AKofiPurchase {
     public abstract void delete();
 
     /**
-     * Check if the purchase is still valid.
+     * Check if the purchase is still valid. A purchase without expiry, like a shop order, is always valid.
      * @return true if the purchase is still valid
      */
     public boolean isValid() {
-        return expiresAt.isAfter(Instant.now());
+        return expiresAt == null || expiresAt.isAfter(Instant.now());
     }
 }

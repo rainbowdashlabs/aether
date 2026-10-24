@@ -19,7 +19,7 @@ implementation("dev.chojo.aether:kofi:2.0.0")
 
 | Key | Meaning |
 |---|---|
-| `token` | The verification token from your Ko-fi webhook settings. It has no default; set it. |
+| `token` | The verification token from your Ko-fi webhook settings. Without it every webhook is rejected. |
 
 Ko-fi tiers and shop items are matched through the `KOFI` platform ids of your
 [supporter configuration](./supporter/configuration.md#subscriptions): the tier name for `SUBSCRIPTION`, the
@@ -95,7 +95,7 @@ app.post("/webhook/kofi", ctx -> {
 
 `handle` does this:
 
-1. It throws `UnauthorizedException` when the verification token does not match your `token`.
+1. It throws `UnauthorizedException` when no `token` is configured or the verification token does not match it.
 2. If the buyer's mail address is not known yet:
    - with a Discord user id in the transaction, the address is registered as verified for that user,
    - without one, the buyer gets the `link_account.html` mail, which asks them to link their account
@@ -109,9 +109,5 @@ Purchases are not assigned to a guild yet. Let the user pick one, then call `ena
 It returns a `SubscriptionResult` like the [Discord service](./supporter/discord-entitlements.md#assigning-purchases-to-guilds).
 `disableSubscription(purchase)` removes it from its guild again.
 
-:::warning
-
-A tier name or direct link code that is not in your configuration makes `handle` throw a `NoSuchElementException`.
-Shop order purchases have no expiry, so calling `isValid()` on them throws a `NullPointerException`.
-
-:::
+A tier name or direct link code that is not in your configuration is logged as an error and creates no purchase.
+Shop order purchases never expire; `isValid()` is always `true` for them.

@@ -84,10 +84,11 @@ public abstract class AKofiService<V extends AKofiPurchase> {
      * Handles a Ko-fi transaction from a webhook.
      *
      * @param data The transaction data.
-     * @throws UnauthorizedException If the verification token is invalid.
+     * @throws UnauthorizedException If no token is configured or the verification token does not match it.
      */
     public void handle(KofiTransaction data) {
-        if (!configuration.token().equals(data.verificationToken())) {
+        String token = configuration.token();
+        if (token == null || token.isBlank() || !token.equals(data.verificationToken())) {
             throw new UnauthorizedException();
         }
 
@@ -227,24 +228,35 @@ public abstract class AKofiService<V extends AKofiPurchase> {
         String mailHash = mailService.mailHash(transaction.email());
         Type type = transaction.type();
         if (type == Type.SUBSCRIPTION) {
-            var id = supporterConfiguration
-                    .findSubscription(KOFI, PurchaseType.SUBSCRIPTION, transaction.tierName())
-                    .orElseThrow()
-                    .id();
+            var subscription =
+                    supporterConfiguration.findSubscription(KOFI, PurchaseType.SUBSCRIPTION, transaction.tierName());
+            if (subscription.isEmpty()) {
+                log.error(
+                        "Unknown Ko-fi tier {} in transaction {}",
+                        transaction.tierName(),
+                        transaction.kofiTransactionId());
+                return purchases;
+            }
             purchases.add(buildPurchase(
                     mailHash,
                     transaction.kofiTransactionId(),
                     transaction.tierName(),
                     type,
-                    id,
+                    subscription.get().id(),
                     Instant.now().plus(32, ChronoUnit.DAYS)));
         } else if (type == Type.SHOP_ORDER) {
             int num = 0;
             for (KofiShopItem shopItem : transaction.shopItems()) {
-                var id = supporterConfiguration
-                        .findSubscription(KOFI, PurchaseType.LIFETIME, shopItem.directLinkCode())
-                        .orElseThrow()
-                        .id();
+                var subscription =
+                        supporterConfiguration.findSubscription(KOFI, PurchaseType.LIFETIME, shopItem.directLinkCode());
+                if (subscription.isEmpty()) {
+                    log.error(
+                            "Unknown Ko-fi shop item {} in transaction {}",
+                            shopItem.directLinkCode(),
+                            transaction.kofiTransactionId());
+                    continue;
+                }
+                long id = subscription.get().id();
                 for (int i = 0; i < shopItem.quantity(); i++) {
                     purchases.add(buildPurchase(
                             mailHash,
