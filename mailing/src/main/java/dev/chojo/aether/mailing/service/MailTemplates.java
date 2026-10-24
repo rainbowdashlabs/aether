@@ -74,7 +74,7 @@ public class MailTemplates {
      * @return the template content
      */
     public String loadTemplate(String name) {
-        try (InputStream is = Mail.class.getClassLoader().getResourceAsStream(mailRoot + name)) {
+        try (InputStream is = classLoader.getResourceAsStream(mailRoot + name)) {
             if (is == null) {
                 throw new RuntimeException("Template not found: " + name);
             }

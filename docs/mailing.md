@@ -57,6 +57,9 @@ You provide the mail texts as HTML files on the class path, under `mails/`:
 | `mails/account_confirmation.html` | A user registers an address. | `{{ url }}` is the confirmation link, `{{ mail }}` the address. |
 | `mails/link_account.html` | Someone buys on Ko-fi with an unknown address and no Discord account. | `{{ mail }}` is the address, `{{ host }}` your host. |
 
+To keep them somewhere else, create the templates with `new MailTemplates("my/mails/", classLoader)`. The class loader
+must see the files.
+
 The confirmation link is `<host><confirmationPath>?code=<code>&hash=<hash>`. Your web app needs a page at that path
 that reads the two parameters and calls `verifyMail`.
 
