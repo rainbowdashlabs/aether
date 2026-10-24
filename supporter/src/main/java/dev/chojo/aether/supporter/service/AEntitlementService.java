@@ -6,7 +6,6 @@
 
 package dev.chojo.aether.supporter.service;
 
-import com.google.inject.Inject;
 import dev.chojo.aether.supporter.access.ADiscordPurchase;
 import dev.chojo.aether.supporter.access.ISubscriptions;
 import dev.chojo.aether.supporter.access.SkuTarget;
@@ -52,13 +51,20 @@ public abstract class AEntitlementService<V extends ADiscordPurchase> extends Li
     private final SupporterConfiguration<?, ?, ?> configuration;
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
-    @Inject
+    /**
+     * Creates the service. Register it as a JDA event listener and call {@link #start()} once.
+     *
+     * @param configuration the supporter configuration
+     */
     public AEntitlementService(SupporterConfiguration<?, ?, ?> configuration) {
         this.configuration = configuration;
-        start();
     }
 
-    protected void start() {
+    /**
+     * Schedules disabling the subscriptions of expired purchases 30 minutes from now and every 60 minutes after that.
+     * Call it once.
+     */
+    public void start() {
         executorService.scheduleAtFixedRate(this::processExpiredPurchases, 30, 60, TimeUnit.MINUTES);
     }
 

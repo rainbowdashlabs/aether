@@ -43,7 +43,6 @@ public class KofiService extends AKofiService<KofiPurchase> {
             SupporterConfiguration<?, ?, ?> supporterConfiguration, PurchaseRepository repository) {
         super(configuration, users, mailService, supporterConfiguration);
         this.repository = repository;
-        start();
     }
 
     @Override
@@ -67,6 +66,9 @@ public class KofiService extends AKofiService<KofiPurchase> {
         return new KofiPurchase(mailHash, transactionId, key, type, subscriptionId, expiresAt);
     }
 }
+
+KofiService kofiService = new KofiService(kofi, users, mailService, supporterConfiguration, repository);
+kofiService.start();
 ```
 
 `start()` schedules the cleanup of expired purchases: every 60 minutes, starting 40 minutes later, each purchase from

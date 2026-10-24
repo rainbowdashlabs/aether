@@ -6,7 +6,6 @@ module dev.chojo.aether.supporter {
     requires org.slf4j;
     requires org.jspecify;
     requires com.google.common;
-    requires com.google.guice;
     requires org.apache.commons.collections4;
     requires org.jetbrains.annotations;
     requires dev.chojo.aether.common;

@@ -23,7 +23,7 @@ the guild it is assigned to (`0` for none). You implement:
 
 ## Your service
 
-Extend `AEntitlementService` and register it as a JDA event listener:
+Extend `AEntitlementService`, register it as a JDA event listener and call `start()`:
 
 ```java
 public class EntitlementService extends AEntitlementService<DiscordPurchase> {
@@ -69,6 +69,7 @@ public class EntitlementService extends AEntitlementService<DiscordPurchase> {
 }
 
 jda.addEventListener(entitlementService);
+entitlementService.start();
 ```
 
 ## What happens
@@ -82,8 +83,8 @@ jda.addEventListener(entitlementService);
 The service finds the subscription through the SKU id in the `DISCORD` platform ids of your
 [configuration](./configuration.md#subscriptions). An unknown SKU is logged and ignored.
 
-Every 60 minutes, starting 30 minutes after the service was created, it disables the subscriptions of all purchases
-from `getExpiredPurchases`.
+After `start()`, every 60 minutes, starting 30 minutes later, the service disables the subscriptions of all purchases
+from `getExpiredPurchases`. The service does not call `start()` itself.
 
 ## Assigning purchases to guilds
 

@@ -72,7 +72,10 @@ public abstract class AKofiService<V extends AKofiPurchase> {
         this.mailService = mailService;
     }
 
-    protected void start() {
+    /**
+     * Schedules removing expired purchases 40 minutes from now and every 60 minutes after that. Call it once.
+     */
+    public void start() {
         executorService.scheduleAtFixedRate(this::removeExpiredSubs, 40, 60, TimeUnit.MINUTES);
     }
 
