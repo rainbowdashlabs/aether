@@ -103,12 +103,9 @@ A user purchase can be moved between guilds:
 | `SUBSCRIPTION_EXPIRED` | The purchase has expired. |
 | `UNKOWN` | `assignToGuild` returned `false`. |
 
-`refresh(guild)` loads the active entitlements of a guild from Discord, removes the guild's Discord subscriptions and
-registers the purchases again.
+`refresh(guild)` loads the active entitlements of a guild from Discord, removes the guild's Discord subscriptions,
+registers the purchases again and enables them for the guild. User purchases that were assigned to the guild are not
+part of that list; enable them again with `enableSubscription`.
 
-:::warning
-
-Building a purchase from an entitlement that never ends fails with a `NullPointerException`, and `refresh` does not
-enable the subscriptions again after removing them.
-
-:::
+A purchase from an entitlement that never ends has no expiry (`null`). The subscription a purchase adds to a guild
+carries the entitlement type of the purchase.

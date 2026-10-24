@@ -26,6 +26,7 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
 import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.Executors;
@@ -35,7 +36,6 @@ import java.util.function.Function;
 
 import static dev.chojo.aether.supporter.access.SkuTarget.GUILD;
 import static dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.Platform.DISCORD;
-import static net.dv8tion.jda.api.entities.Entitlement.EntitlementType.APPLICATION_SUBSCRIPTION;
 import static org.slf4j.LoggerFactory.getLogger;
 
 /**
@@ -104,7 +104,7 @@ public abstract class AEntitlementService<V extends ADiscordPurchase> extends Li
      * Refreshes the entitlements for a guild.
      * <p>
      * This will clear all existing Discord-based subscriptions for the guild and
-     * re-register all currently active entitlements retrieved from Discord.
+     * re-register all currently active entitlements retrieved from Discord, enabling each of them for the guild again.
      *
      * @param guild The guild to refresh.
      */
@@ -117,7 +117,9 @@ public abstract class AEntitlementService<V extends ADiscordPurchase> extends Li
         ISubscriptions subscriptions = guildSubscriptions(guild.getIdLong());
         subscriptions.clear(DISCORD);
         for (Entitlement entitlement : entitlements) {
-            handleEntitlement(entitlement, this::registerPurchase);
+            handleEntitlement(entitlement, this::registerPurchase)
+                    .filter(purchase -> purchase.guildId() == guild.getIdLong())
+                    .ifPresent(purchase -> enableSubscription(purchase, guild));
         }
     }
 
@@ -144,7 +146,7 @@ public abstract class AEntitlementService<V extends ADiscordPurchase> extends Li
                 guild.getIdLong(),
                 DISCORD,
                 GUILD,
-                APPLICATION_SUBSCRIPTION,
+                purchase.type(),
                 purchase.expiresAt(),
                 purchase.isPersistent()));
 
@@ -166,7 +168,7 @@ public abstract class AEntitlementService<V extends ADiscordPurchase> extends Li
         ISubscriptions subs = guildSubscriptions(purchase.guildId());
 
         subs.deleteSubscription(new Subscription(
-                purchase.subscriptionId(), purchase.guildId(), DISCORD, GUILD, APPLICATION_SUBSCRIPTION, null, true));
+                purchase.subscriptionId(), purchase.guildId(), DISCORD, GUILD, purchase.type(), null, true));
 
         return purchase.unassignFromGuild();
     }
@@ -186,7 +188,9 @@ public abstract class AEntitlementService<V extends ADiscordPurchase> extends Li
                 SkuTarget.fromEntitlement(entitlement),
                 subscriptionId,
                 entitlement.getIdLong(),
-                entitlement.getTimeEnding().toInstant(),
+                Optional.ofNullable(entitlement.getTimeEnding())
+                        .map(OffsetDateTime::toInstant)
+                        .orElse(null),
                 entitlement.getGuildIdLong(),
                 purchaseType);
     }
