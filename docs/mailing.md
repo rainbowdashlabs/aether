@@ -20,8 +20,8 @@ implementation("dev.chojo.aether:mailing:2.0.0")
 | Key | Default | Meaning |
 |---|---|---|
 | `mailSalt` | none, required | Salt for the address hashes. Keep it secret and never change it, or stored hashes stop matching. Creating the service fails without it. |
-| `smtp.host`, `smtp.port`, `smtp.ssl` | `""`, `665`, `false` | The SMTP server for sending. |
-| `imap.host`, `imap.port`, `imap.ssl` | `""`, `665`, `false` | The IMAP server, where a copy of each sent mail is stored. |
+| `smtp.host`, `smtp.port`, `smtp.ssl` | `""`, `0`, `false` | The SMTP server for sending. Port `0` uses the default port of the protocol. |
+| `imap.host`, `imap.port`, `imap.ssl` | `""`, `0`, `false` | The IMAP server, where a copy of each sent mail is stored. Port `0` as for SMTP. |
 | `user` | `""` | Login and sender address. |
 | `password` | `""` | Password for SMTP and IMAP. |
 | `mailer` | `""` | Value of the `X-Mailer` header. Blank leaves the header out. |

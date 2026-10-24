@@ -13,7 +13,7 @@ import java.util.Properties;
  */
 public class MailSettings {
     private String host = "";
-    private int port = 665;
+    private int port = 0;
     private boolean ssl = false;
 
     /**
@@ -26,7 +26,7 @@ public class MailSettings {
     }
 
     /**
-     * Get the port of the mail service.
+     * Get the port of the mail service. {@code 0} uses the default port of the protocol.
      *
      * @return the port
      */
@@ -52,7 +52,9 @@ public class MailSettings {
     public Properties properties(String prefix) {
         Properties props = new Properties();
         props.put("mail.%s.host".formatted(prefix), host());
-        props.put("mail.%s.port".formatted(prefix), port());
+        if (port() > 0) {
+            props.put("mail.%s.port".formatted(prefix), port());
+        }
         props.put("mail.%s.ssl.enable".formatted(prefix), ssl());
         return props;
     }
