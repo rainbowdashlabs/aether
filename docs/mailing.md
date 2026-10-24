@@ -19,11 +19,13 @@ implementation("dev.chojo.aether:mailing:2.0.0")
 
 | Key | Default | Meaning |
 |---|---|---|
-| `mailSalt` | none, required | Salt for the address hashes. Keep it secret and never change it, or stored hashes stop matching. The service does not start without it. |
+| `mailSalt` | none, required | Salt for the address hashes. Keep it secret and never change it, or stored hashes stop matching. Creating the service fails without it. |
 | `smtp.host`, `smtp.port`, `smtp.ssl` | `""`, `665`, `false` | The SMTP server for sending. |
 | `imap.host`, `imap.port`, `imap.ssl` | `""`, `665`, `false` | The IMAP server, where a copy of each sent mail is stored. |
 | `user` | `""` | Login and sender address. |
 | `password` | `""` | Password for SMTP and IMAP. |
+| `mailer` | `""` | Value of the `X-Mailer` header. Blank leaves the header out. |
+| `confirmationPath` | `/user/settings` | Path of the page that confirms an address, see [Templates](#templates). |
 | `properties` | empty | Extra Jakarta Mail properties, for example `mail.smtp.auth: "true"`. |
 
 ```yaml
@@ -39,6 +41,8 @@ mailing:
     ssl: true
   user: bot@example.com
   password: secret
+  mailer: My Bot
+  confirmationPath: /account/mail
 ```
 
 Like the supporter configuration, these classes keep their values in private fields. Read them with a mapper that
@@ -53,8 +57,8 @@ You provide the mail texts as HTML files on the class path, under `mails/`:
 | `mails/account_confirmation.html` | A user registers an address. | `{{ url }}` is the confirmation link, `{{ mail }}` the address. |
 | `mails/link_account.html` | Someone buys on Ko-fi with an unknown address and no Discord account. | `{{ mail }}` is the address, `{{ host }}` your host. |
 
-The confirmation link is `<host>/user/settings?code=<code>&hash=<hash>`. Your web app needs a page at that path that
-reads the two parameters and calls `verifyMail`.
+The confirmation link is `<host><confirmationPath>?code=<code>&hash=<hash>`. Your web app needs a page at that path
+that reads the two parameters and calls `verifyMail`.
 
 ## Your classes
 

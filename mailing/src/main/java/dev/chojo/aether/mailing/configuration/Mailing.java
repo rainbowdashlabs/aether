@@ -22,6 +22,8 @@ public class Mailing {
     private MailSettings imap = new MailSettings();
     private String user = "";
     private String password = "";
+    private String mailer = "";
+    private String confirmationPath = "/user/settings";
     private Map<String, String> properties = Collections.emptyMap();
 
     /**
@@ -92,6 +94,25 @@ public class Mailing {
      */
     public String password() {
         return password;
+    }
+
+    /**
+     * Get the value of the X-Mailer header. Blank means the header is not set.
+     *
+     * @return the mailer name
+     */
+    public String mailer() {
+        return mailer;
+    }
+
+    /**
+     * Get the path of the page that confirms a mail address, relative to the host of the mail service. The confirmation
+     * link adds the query parameters {@code code} and {@code hash}.
+     *
+     * @return the confirmation path
+     */
+    public String confirmationPath() {
+        return confirmationPath;
     }
 
     /**

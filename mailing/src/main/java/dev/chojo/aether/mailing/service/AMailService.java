@@ -31,6 +31,8 @@ import org.eclipse.angus.mail.imap.IMAPStore;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -91,12 +93,19 @@ public abstract class AMailService<V extends AMailEntry> {
             mailProvider().byUser(user).addMail(mailEntry);
         }
 
-        executor.execute(() -> {
-            // This takes a while
-            sendMail(templates().accountConfirmation(mail, config.host(), hash, mailEntry.verificationCode()));
-        });
+        String url = confirmationUrl(hash, mailEntry.verificationCode());
+        executor.execute(() -> sendMail(templates().accountConfirmation(mail, url)));
 
         return Result.success(mailEntry);
+    }
+
+    private String confirmationUrl(String mailHash, String code) {
+        return "%s%s?code=%s&hash=%s"
+                .formatted(
+                        host(),
+                        mailing().confirmationPath(),
+                        URLEncoder.encode(code, StandardCharsets.UTF_8),
+                        URLEncoder.encode(mailHash, StandardCharsets.UTF_8));
     }
 
     /**
@@ -289,7 +298,9 @@ public abstract class AMailService<V extends AMailEntry> {
         message.setRecipient(Message.RecipientType.TO, new InternetAddress(mail.address(), false));
         message.setDataHandler(new DataHandler(mail.text(), "text/html; charset=UTF-8"));
         message.setSubject(mail.subject());
-        message.setHeader("X-Mailer", "Reputation Bot");
+        if (!mailing().mailer().isBlank()) {
+            message.setHeader("X-Mailer", mailing().mailer());
+        }
         message.setSentDate(new Date());
         return message;
     }
