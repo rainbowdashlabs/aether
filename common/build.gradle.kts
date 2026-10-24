@@ -1,6 +1,6 @@
 plugins {
     id("aether.java-conventions")
-    id("aether.maven-publish-conventions")
+    id("aether.publishing-conventions")
 }
 
 description = "Common implementation for all modules"
