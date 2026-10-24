@@ -6,6 +6,7 @@
 
 package dev.chojo.aether.serialization.pojo.guild.channel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import net.dv8tion.jda.api.entities.channel.concrete.Category;
 
 import java.util.LinkedList;
@@ -16,8 +17,13 @@ import java.util.List;
  */
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "unused", "MismatchedQueryAndUpdateOfCollection"})
 public class CategoryPOJO {
+    @JsonProperty
     private List<ChannelPOJO> channels;
+
+    @JsonProperty
     private String name;
+
+    @JsonProperty
     private String id;
 
     public CategoryPOJO(String name, String id) {

@@ -6,6 +6,7 @@
 
 package dev.chojo.aether.serialization.pojo.guild;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 
 /**
@@ -13,8 +14,13 @@ import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
  */
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "unused"})
 public class ReactionPOJO {
+    @JsonProperty
     private String name;
+
+    @JsonProperty
     private String id;
+
+    @JsonProperty
     private String url;
 
     public ReactionPOJO(String name, String id, String url) {

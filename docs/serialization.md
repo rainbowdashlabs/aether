@@ -14,13 +14,11 @@ implementation("dev.chojo.aether:serialization:2.0.0")
 
 ## Setup
 
-Add `DiscordSerializationModule` to your Jackson 3 mapper. The views keep their values in private fields, so the
-mapper has to see private fields:
+Add `DiscordSerializationModule` to your Jackson 3 mapper:
 
 ```java
 JsonMapper mapper = JsonMapper.builder()
         .addModule(new DiscordSerializationModule())
-        .changeDefaultVisibility(checker -> checker.withFieldVisibility(JsonAutoDetect.Visibility.ANY))
         .build();
 
 String json = mapper.writeValueAsString(guild);

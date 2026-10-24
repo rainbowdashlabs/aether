@@ -6,6 +6,7 @@
 
 package dev.chojo.aether.serialization.pojo.guild;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.chojo.aether.serialization.pojo.guild.channel.CategoryPOJO;
 import dev.chojo.aether.serialization.pojo.guild.channel.ChannelPOJO;
 import net.dv8tion.jda.api.entities.Guild;
@@ -24,7 +25,10 @@ import java.util.Map;
  */
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "unused"})
 public class ChannelViewPOJO {
+    @JsonProperty
     private List<ChannelPOJO> channels;
+
+    @JsonProperty
     private List<CategoryPOJO> categories;
 
     public ChannelViewPOJO(List<ChannelPOJO> channels, List<CategoryPOJO> categories) {

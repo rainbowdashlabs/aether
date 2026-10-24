@@ -27,8 +27,8 @@ app.get("/guilds/{id}", ctx -> {
 });
 ```
 
-`ErrorResponseWrapper` holds an `error` title, a `message` and optional `details`. Its values are private fields
-read through `error()`, `message()` and `details()`, so the JSON mapper has to see private fields to write them.
+`ErrorResponseWrapper` holds an `error` title, a `message` and optional `details`, written as JSON fields of the same
+names.
 
 ## Query strings
 
