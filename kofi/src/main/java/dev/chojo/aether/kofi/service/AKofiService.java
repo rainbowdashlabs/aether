@@ -41,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 import static dev.chojo.aether.supporter.access.SkuTarget.GUILD;
 import static dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.Platform.KOFI;
 import static net.dv8tion.jda.api.entities.Entitlement.EntitlementType.APPLICATION_SUBSCRIPTION;
+import static net.dv8tion.jda.api.entities.Entitlement.EntitlementType.PURCHASE;
 
 /**
  * Service for handling Ko-fi webhooks and managing purchases and subscriptions.
@@ -148,7 +149,7 @@ public abstract class AKofiService<V extends AKofiPurchase> {
                     GUILD,
                     APPLICATION_SUBSCRIPTION,
                     purchase.expiresAt(),
-                    true));
+                    false));
         } else if (purchase.type() == Type.SHOP_ORDER) {
             var sub = supporterConfiguration.byId(purchase.subscriptionId());
             if (sub.isEmpty()) {
@@ -157,8 +158,8 @@ public abstract class AKofiService<V extends AKofiPurchase> {
             }
             if (subs.hasAccess(sub.get().id())) return SubscriptionResult.ALREADY_SUBSCRIBED;
             if (purchase.guildId() != 0) disableSubscription(purchase);
-            subs.addSubscription(new Subscription(
-                    sub.get().id(), guild.getIdLong(), KOFI, GUILD, APPLICATION_SUBSCRIPTION, null, true));
+            subs.addSubscription(
+                    new Subscription(sub.get().id(), guild.getIdLong(), KOFI, GUILD, PURCHASE, null, true));
         } else {
             // This should never happen
             log.error("Unknown purchase type {}", purchase.type());
@@ -190,8 +191,8 @@ public abstract class AKofiService<V extends AKofiPurchase> {
                 log.error("Could not find subscription for lifetime sku {}", purchase.subscriptionId());
                 return false;
             }
-            subs.deleteSubscription(new Subscription(
-                    sub.get().id(), purchase.guildId(), KOFI, GUILD, APPLICATION_SUBSCRIPTION, null, true));
+            subs.deleteSubscription(
+                    new Subscription(sub.get().id(), purchase.guildId(), KOFI, GUILD, PURCHASE, null, true));
         }
 
         return purchase.unassignFromGuild();
