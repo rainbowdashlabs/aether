@@ -27,15 +27,10 @@ app.get("/guilds/{id}", ctx -> {
 });
 ```
 
-`ErrorResponseWrapper` holds an `error` title, a `message` and optional `details`. Its values are private fields
-read through `error()`, `message()` and `details()`, so the JSON mapper has to see private fields to write them.
+`ErrorResponseWrapper` holds an `error` title, a `message` and optional `details`, written as JSON fields of the same
+names.
 
 ## Query strings
 
-`Urls.splitQuery("a=1&b=2")` splits a query string into a map and decodes the keys and values.
-
-:::warning
-
-`splitQuery` fails on a parameter without a value (`a&b=2`) and on a parameter that appears twice.
-
-:::
+`Urls.splitQuery("a=1&b=2")` splits a query string into a map and decodes the keys and values. A parameter without
+a value (`a&b=2`) maps to an empty string. A parameter that appears twice keeps its last value.

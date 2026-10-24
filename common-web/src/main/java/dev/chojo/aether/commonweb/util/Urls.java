@@ -16,16 +16,24 @@ import static java.net.URLDecoder.decode;
 import static java.util.stream.Collectors.toMap;
 
 public class Urls {
+    /**
+     * Splits a query string into its decoded parameters.
+     * <p>
+     * A parameter without a value maps to an empty string. A parameter that appears more than once keeps its last value.
+     *
+     * @param url the query string without the leading {@code ?}
+     * @return the parameters by name
+     */
     public static Map<String, String> splitQuery(String url) {
         return Arrays.stream(url.split("&"))
                 .map(Urls::splitQueryParameter)
-                .collect(toMap(Entry::getKey, Entry::getValue));
+                .collect(toMap(Entry::getKey, Entry::getValue, (first, last) -> last));
     }
 
     private static Entry<String, String> splitQueryParameter(String it) {
         final int idx = it.indexOf("=");
         final String key = idx > 0 ? it.substring(0, idx) : it;
-        final String value = idx > 0 && it.length() > idx + 1 ? it.substring(idx + 1) : null;
+        final String value = idx > 0 ? it.substring(idx + 1) : "";
         return new SimpleImmutableEntry<>(decode(key, StandardCharsets.UTF_8), decode(value, StandardCharsets.UTF_8));
     }
 }

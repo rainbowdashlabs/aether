@@ -13,7 +13,7 @@ import net.dv8tion.jda.api.entities.User;
  * Provider for {@link ISubscriptionContext}s.
  * This interface should be implemented to provide subscription information for users and guilds.
  */
-public interface SubcriptionContextProvider {
+public interface SubscriptionContextProvider {
     /**
      * Returns the merged subscription context for a user and a guild.
      *

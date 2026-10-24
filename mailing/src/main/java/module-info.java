@@ -1,14 +1,12 @@
 module dev.chojo.aether.mailing {
-    requires net.dv8tion.jda;
+    requires transitive dev.chojo.aether.common;
+    requires transitive net.dv8tion.jda;
+    requires transitive org.jspecify;
     requires org.slf4j;
     requires jakarta.mail;
     requires com.google.common;
-    requires org.jspecify;
     requires org.apache.commons.validator;
     requires org.eclipse.angus.mail;
-    requires java.rmi;
-    requires dev.goldmensch.propane;
-    requires dev.chojo.aether.common;
 
     exports dev.chojo.aether.mailing;
     exports dev.chojo.aether.mailing.configuration;

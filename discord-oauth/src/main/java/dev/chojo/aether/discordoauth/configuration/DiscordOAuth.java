@@ -19,7 +19,7 @@ public class DiscordOAuth {
     private String clientSecret = "";
     private String redirectUri = "";
     private int cacheRetentionMinutes = 10;
-    private Set<OAuthScope> OAuthScopes = Set.of(OAuthScope.IDENTIFY, OAuthScope.EMAIL, OAuthScope.GUILDS);
+    private Set<OAuthScope> scopes = Set.of(OAuthScope.IDENTIFY, OAuthScope.EMAIL, OAuthScope.GUILDS);
     private Prompt prompt = Prompt.NONE;
 
     /**
@@ -54,7 +54,7 @@ public class DiscordOAuth {
      * @return The OAuth scopes to request, space-separated
      */
     public Set<OAuthScope> scopes() {
-        return OAuthScopes;
+        return scopes;
     }
 
     /**

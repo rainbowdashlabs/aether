@@ -6,6 +6,7 @@
 
 package dev.chojo.aether.serialization.pojo.guild;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.chojo.aether.common.util.Colors;
 import net.dv8tion.jda.api.entities.Member;
 
@@ -17,9 +18,16 @@ import java.util.Objects;
  */
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "unused"})
 public class MemberPOJO {
+    @JsonProperty
     private String color;
+
+    @JsonProperty
     private String displayName;
+
+    @JsonProperty
     private String id;
+
+    @JsonProperty
     private String profilePictureUrl;
 
     public MemberPOJO(String displayName, String id, String color, String profilePictureUrl) {
@@ -43,6 +51,6 @@ public class MemberPOJO {
                 "unknown",
                 id,
                 "#ffffff",
-                "https://cdn.discordapp.com/embed/avatars/%s.png".formatted(id.hashCode() % 5));
+                "https://cdn.discordapp.com/embed/avatars/%s.png".formatted(Math.floorMod(id.hashCode(), 5)));
     }
 }

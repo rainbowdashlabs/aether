@@ -6,6 +6,7 @@
 
 package dev.chojo.aether.serialization.pojo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.chojo.aether.serialization.pojo.guild.ChannelViewPOJO;
 import dev.chojo.aether.serialization.pojo.guild.ReactionPOJO;
 import dev.chojo.aether.serialization.pojo.guild.RolePOJO;
@@ -20,12 +21,25 @@ import java.util.List;
  */
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "unused"})
 public final class GuildPOJO {
+    @JsonProperty
     private RolePOJO highestBotRole;
+
+    @JsonProperty
     private String name;
+
+    @JsonProperty
     private String id;
+
+    @JsonProperty
     private String iconUrl;
+
+    @JsonProperty
     private List<RolePOJO> roles;
+
+    @JsonProperty
     private ChannelViewPOJO channels;
+
+    @JsonProperty
     private List<ReactionPOJO> reactions;
 
     /**

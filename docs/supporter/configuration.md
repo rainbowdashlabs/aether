@@ -123,10 +123,4 @@ public class ProfileFeature extends AFeature<Integer, String> {
 | `findPurchaseTypeBySkuID(platform, sku)` | The purchase type an id stands for. |
 | `interactions()` | The interaction rules. |
 
-:::warning
-
-The lookups by platform fail with a `NullPointerException` when a subscription has no entry for the platform you ask
-for, and `findSubscription` also when it has no id for the purchase type. Give every subscription an id for each
-platform and purchase type you use.
-
-:::
+The lookups by platform skip subscriptions that have no entry for that platform or no id for that purchase type.

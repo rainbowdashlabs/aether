@@ -46,11 +46,11 @@ public interface IOAuthToken {
     /**
      * Returns true if the token has the specified scope
      *
-     * @param OAuthScope the scope to check
+     * @param scope the scope to check
      * @return true if the token has the specified scope
      */
-    default boolean hasScope(OAuthScope OAuthScope) {
-        return scopes().contains(OAuthScope);
+    default boolean hasScope(OAuthScope scope) {
+        return scopes().contains(scope);
     }
 
     /**

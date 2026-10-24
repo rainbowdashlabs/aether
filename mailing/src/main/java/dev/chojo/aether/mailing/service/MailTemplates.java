@@ -55,19 +55,12 @@ public class MailTemplates {
     /**
      * Prepare a mail for account confirmation.
      *
-     * @param address  the mail address
-     * @param host     the configured host
-     * @param mailHash the mail hash
-     * @param code     the verification code
+     * @param address the mail address
+     * @param url     the confirmation link
      * @return the prepared mail
      */
-    public Mail accountConfirmation(String address, String host, String mailHash, String code) {
+    public Mail accountConfirmation(String address, String url) {
         String subject = "Confirm your email address";
-        String url = "{{ host }}/user/settings?code={{ code }}&hash={{ mailhash }}"
-                .replace("{{ host }}", host)
-                .replace("{{ mailhash }}", mailHash)
-                .replace("{{ code }}", code);
-
         String html = loadTemplate("account_confirmation.html")
                 .replace("{{ url }}", url)
                 .replace("{{ mail }}", address);
@@ -81,7 +74,7 @@ public class MailTemplates {
      * @return the template content
      */
     public String loadTemplate(String name) {
-        try (InputStream is = Mail.class.getClassLoader().getResourceAsStream(mailRoot + name)) {
+        try (InputStream is = classLoader.getResourceAsStream(mailRoot + name)) {
             if (is == null) {
                 throw new RuntimeException("Template not found: " + name);
             }

@@ -10,4 +10,4 @@ import dev.chojo.aether.discordoauth.access.OAuthScope;
 
 import java.util.Set;
 
-public record AuthorizeUrl(String url, Set<OAuthScope> OAuthScopes) {}
+public record AuthorizeUrl(String url, Set<OAuthScope> scopes) {}

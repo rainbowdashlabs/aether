@@ -22,7 +22,8 @@ public interface ISupporterErrorSupplier {
     MessageCreateData getCommandError(AccessCheckResult result);
 
     /**
-     * Returns the error message for auto-complete interactions.
+     * Returns the error shown as the only choice when an auto-complete request is denied. Discord allows at most 100
+     * characters. A blank message answers with no choices.
      *
      * @return The error message.
      */

@@ -11,7 +11,7 @@ import dev.chojo.aether.supporter.configuration.modules.Interactions;
 import dev.chojo.aether.supporter.service.context.AccessCheckResult;
 import dev.chojo.aether.supporter.service.context.ISubscriptionContext;
 import dev.chojo.aether.supporter.service.context.ISupporterErrorSupplier;
-import dev.chojo.aether.supporter.service.context.SubcriptionContextProvider;
+import dev.chojo.aether.supporter.service.context.SubscriptionContextProvider;
 import dev.chojo.aether.supporter.service.context.SupporterValidator;
 import io.github.kaktushose.jdac.dispatching.context.InvocationContext;
 import io.github.kaktushose.jdac.dispatching.middleware.Middleware;
@@ -21,8 +21,8 @@ import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInterac
 import net.dv8tion.jda.api.events.interaction.command.MessageContextInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.UserContextInteractionEvent;
+import net.dv8tion.jda.api.interactions.commands.Command;
 
-import java.util.Collections;
 import java.util.stream.Collectors;
 
 /**
@@ -30,12 +30,12 @@ import java.util.stream.Collectors;
  * This middleware manages the subscription context and access validation for Discord interactions.
  */
 public class SupporterMiddleware<FID extends Enum<FID>> implements Middleware {
-    private final SubcriptionContextProvider contextProvider;
+    private final SubscriptionContextProvider contextProvider;
     private final SupporterConfiguration<FID, ?, ?> configuration;
     private final ISupporterErrorSupplier errorSupplier;
 
     public SupporterMiddleware(
-            SubcriptionContextProvider contextProvider,
+            SubscriptionContextProvider contextProvider,
             SupporterConfiguration<FID, ?, ?> configuration,
             ISupporterErrorSupplier errorSupplier) {
         this.contextProvider = contextProvider;
@@ -70,9 +70,8 @@ public class SupporterMiddleware<FID extends Enum<FID>> implements Middleware {
         };
 
         if (!result.hasAccess()) {
-            if (context.event() instanceof CommandAutoCompleteInteractionEvent event) {
-                event.replyChoices(Collections.emptyList()).complete();
-                Thread.currentThread().interrupt();
+            if (context.event() instanceof CommandAutoCompleteInteractionEvent) {
+                cancelAutoComplete(context);
             } else {
                 context.cancel(errorSupplier.getCommandError(result));
             }
@@ -82,6 +81,15 @@ public class SupporterMiddleware<FID extends Enum<FID>> implements Middleware {
         context.keyValueStore()
                 .put(SupporterKeys.SUBSCRIPTION_CONTEXT, subCtx)
                 .put(SupporterKeys.SUBSCRIPTION_VALIDATOR, new SupporterValidator<>(subCtx, configuration));
+    }
+
+    private void cancelAutoComplete(InvocationContext<?> context) {
+        String error = errorSupplier.getAutoCompleteError();
+        if (error == null || error.isBlank()) {
+            context.cancelAutoComplete();
+            return;
+        }
+        context.cancel(new Command.Choice(error, error));
     }
 
     private ISubscriptionContext convert(GenericInteractionCreateEvent event) {

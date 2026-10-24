@@ -41,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 import static dev.chojo.aether.supporter.access.SkuTarget.GUILD;
 import static dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.Platform.KOFI;
 import static net.dv8tion.jda.api.entities.Entitlement.EntitlementType.APPLICATION_SUBSCRIPTION;
+import static net.dv8tion.jda.api.entities.Entitlement.EntitlementType.PURCHASE;
 
 /**
  * Service for handling Ko-fi webhooks and managing purchases and subscriptions.
@@ -48,7 +49,7 @@ import static net.dv8tion.jda.api.entities.Entitlement.EntitlementType.APPLICATI
 public abstract class AKofiService<V extends AKofiPurchase> {
     private static final Logger log = LoggerFactory.getLogger(AKofiService.class);
     private final Kofi configuration;
-    private final IUserProvider IUserProvider;
+    private final IUserProvider userProvider;
     private final SupporterConfiguration<?, ?, ?> supporterConfiguration;
     private final AMailService mailService;
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
@@ -57,22 +58,25 @@ public abstract class AKofiService<V extends AKofiPurchase> {
      * Creates a new KofiService.
      *
      * @param configuration          The Ko-fi configuration.
-     * @param IUserProvider           The user provider for resolving Discord users.
+     * @param userProvider           The user provider for resolving Discord users.
      * @param mailService            The mail service for managing user emails and sending notifications.
      * @param supporterConfiguration The supporter configuration for mapping products to subscriptions.
      */
     public AKofiService(
             Kofi configuration,
-            IUserProvider IUserProvider,
+            IUserProvider userProvider,
             AMailService mailService,
             SupporterConfiguration<?, ?, ?> supporterConfiguration) {
-        this.IUserProvider = IUserProvider;
+        this.userProvider = userProvider;
         this.supporterConfiguration = supporterConfiguration;
         this.configuration = configuration;
         this.mailService = mailService;
     }
 
-    protected void start() {
+    /**
+     * Schedules removing expired purchases 40 minutes from now and every 60 minutes after that. Call it once.
+     */
+    public void start() {
         executorService.scheduleAtFixedRate(this::removeExpiredSubs, 40, 60, TimeUnit.MINUTES);
     }
 
@@ -80,10 +84,11 @@ public abstract class AKofiService<V extends AKofiPurchase> {
      * Handles a Ko-fi transaction from a webhook.
      *
      * @param data The transaction data.
-     * @throws UnauthorizedException If the verification token is invalid.
+     * @throws UnauthorizedException If no token is configured or the verification token does not match it.
      */
     public void handle(KofiTransaction data) {
-        if (!configuration.token().equals(data.verificationToken())) {
+        String token = configuration.token();
+        if (token == null || token.isBlank() || !token.equals(data.verificationToken())) {
             throw new UnauthorizedException();
         }
 
@@ -145,27 +150,27 @@ public abstract class AKofiService<V extends AKofiPurchase> {
                     GUILD,
                     APPLICATION_SUBSCRIPTION,
                     purchase.expiresAt(),
-                    true));
+                    false));
         } else if (purchase.type() == Type.SHOP_ORDER) {
             var sub = supporterConfiguration.byId(purchase.subscriptionId());
             if (sub.isEmpty()) {
                 log.error("Could not find subscription for lifetime sku {}", purchase.subscriptionId());
-                return SubscriptionResult.UNKOWN;
+                return SubscriptionResult.UNKNOWN;
             }
             if (subs.hasAccess(sub.get().id())) return SubscriptionResult.ALREADY_SUBSCRIBED;
             if (purchase.guildId() != 0) disableSubscription(purchase);
-            subs.addSubscription(new Subscription(
-                    sub.get().id(), guild.getIdLong(), KOFI, GUILD, APPLICATION_SUBSCRIPTION, null, true));
+            subs.addSubscription(
+                    new Subscription(sub.get().id(), guild.getIdLong(), KOFI, GUILD, PURCHASE, null, true));
         } else {
             // This should never happen
             log.error("Unknown purchase type {}", purchase.type());
-            return SubscriptionResult.UNKOWN;
+            return SubscriptionResult.UNKNOWN;
         }
 
         if (purchase.assignToGuild(guild.getIdLong())) {
             return SubscriptionResult.SUCCESS;
         }
-        return SubscriptionResult.UNKOWN;
+        return SubscriptionResult.UNKNOWN;
     }
 
     /**
@@ -187,8 +192,8 @@ public abstract class AKofiService<V extends AKofiPurchase> {
                 log.error("Could not find subscription for lifetime sku {}", purchase.subscriptionId());
                 return false;
             }
-            subs.deleteSubscription(new Subscription(
-                    sub.get().id(), purchase.guildId(), KOFI, GUILD, APPLICATION_SUBSCRIPTION, null, true));
+            subs.deleteSubscription(
+                    new Subscription(sub.get().id(), purchase.guildId(), KOFI, GUILD, PURCHASE, null, true));
         }
 
         return purchase.unassignFromGuild();
@@ -196,7 +201,7 @@ public abstract class AKofiService<V extends AKofiPurchase> {
 
     private Optional<User> resolveUser(KofiTransaction data) {
         if (data.discordUserId() == null) return Optional.empty();
-        return IUserProvider.byId(data.discordUserId());
+        return userProvider.byId(data.discordUserId());
     }
 
     private void removeExpiredSubs() {
@@ -223,24 +228,35 @@ public abstract class AKofiService<V extends AKofiPurchase> {
         String mailHash = mailService.mailHash(transaction.email());
         Type type = transaction.type();
         if (type == Type.SUBSCRIPTION) {
-            var id = supporterConfiguration
-                    .findSubscription(KOFI, PurchaseType.SUBSCRIPTION, transaction.tierName())
-                    .orElseThrow()
-                    .id();
+            var subscription =
+                    supporterConfiguration.findSubscription(KOFI, PurchaseType.SUBSCRIPTION, transaction.tierName());
+            if (subscription.isEmpty()) {
+                log.error(
+                        "Unknown Ko-fi tier {} in transaction {}",
+                        transaction.tierName(),
+                        transaction.kofiTransactionId());
+                return purchases;
+            }
             purchases.add(buildPurchase(
                     mailHash,
                     transaction.kofiTransactionId(),
                     transaction.tierName(),
                     type,
-                    id,
+                    subscription.get().id(),
                     Instant.now().plus(32, ChronoUnit.DAYS)));
         } else if (type == Type.SHOP_ORDER) {
             int num = 0;
             for (KofiShopItem shopItem : transaction.shopItems()) {
-                var id = supporterConfiguration
-                        .findSubscription(KOFI, PurchaseType.LIFETIME, shopItem.directLinkCode())
-                        .orElseThrow()
-                        .id();
+                var subscription =
+                        supporterConfiguration.findSubscription(KOFI, PurchaseType.LIFETIME, shopItem.directLinkCode());
+                if (subscription.isEmpty()) {
+                    log.error(
+                            "Unknown Ko-fi shop item {} in transaction {}",
+                            shopItem.directLinkCode(),
+                            transaction.kofiTransactionId());
+                    continue;
+                }
+                long id = subscription.get().id();
                 for (int i = 0; i < shopItem.quantity(); i++) {
                     purchases.add(buildPurchase(
                             mailHash,

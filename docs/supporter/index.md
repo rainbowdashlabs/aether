@@ -32,10 +32,13 @@ Aether stores nothing itself. You implement:
 
 | Type | Purpose |
 |---|---|
-| `SubcriptionContextProvider` | Returns the subscription context of a user and of a guild, usually from your database. |
+| `SubscriptionContextProvider` | Returns the subscription context of a user and of a guild, usually from your database. |
 | `ISupporterErrorSupplier` | The message a user sees when a command is locked. |
 | `ISubscriptions` | The subscriptions of one guild, with add, delete and clear. Used by the entitlement and Ko-fi services. |
 | `ADiscordPurchase` and `AEntitlementService` | Only for Discord purchases. See [Discord entitlements](./discord-entitlements.md). |
+
+The services call `ISubscriptions.deleteSubscription` with a new `Subscription` object. It equals the stored one when
+subscription id, target id, target type and platform match, so `List.remove` finds it.
 
 ## Where to go next
 

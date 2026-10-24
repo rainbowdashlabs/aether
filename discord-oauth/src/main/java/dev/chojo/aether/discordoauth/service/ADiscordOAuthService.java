@@ -23,6 +23,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -34,9 +35,10 @@ public abstract class ADiscordOAuthService {
     private static final Logger log = getLogger(ADiscordOAuthService.class);
     private final DiscordClient discordClient;
     private final String host;
+    private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
     /**
-     * Creates a new Discord OAuth service.
+     * Creates a new Discord OAuth service. Call {@link #start()} once to refresh expiring tokens.
      *
      * @param config The Discord OAuth configuration
      * @param host   The frontend host to redirect back to after login
@@ -44,20 +46,18 @@ public abstract class ADiscordOAuthService {
     public ADiscordOAuthService(DiscordOAuth config, String host) {
         this.discordClient = new DiscordClient(config);
         this.host = host;
-        start();
     }
 
     /**
-     * Starts the scheduled task {@link #refreshExpiredTokens()}
+     * Schedules {@link #refreshExpiredTokens()} two minutes from now and every 60 minutes after that. Call it once.
      */
     public void start() {
-        Executors.newSingleThreadScheduledExecutor()
-                .scheduleAtFixedRate(this::refreshExpiredTokens, 2, 60, TimeUnit.MINUTES);
+        executor.scheduleAtFixedRate(this::refreshExpiredTokens, 2, 60, TimeUnit.MINUTES);
     }
 
     protected void refreshExpiredTokens() {
         log.info("Refreshing expired discord tokens");
-        var expiringTokens = getExpiringtokens(Instant.now().plus(1, ChronoUnit.HOURS));
+        var expiringTokens = getExpiringTokens(Instant.now().plus(1, ChronoUnit.HOURS));
         for (var token : expiringTokens) {
             try {
                 token.update(discordClient.refreshToken(token.refreshToken()));
@@ -76,7 +76,7 @@ public abstract class ADiscordOAuthService {
      * @return the tokens that will expire before the given instant
      * @see IOAuthToken
      */
-    protected abstract List<? extends IOAuthToken> getExpiringtokens(Instant instant);
+    protected abstract List<? extends IOAuthToken> getExpiringTokens(Instant instant);
 
     /**
      * Starts the Discord login flow by redirecting the user to Discord.

@@ -12,4 +12,5 @@ dependencies {
     api(libs.javalin)
     api(libs.httpclient)
     api(project(":common-web"))
+    implementation(libs.slf4j.api)
 }

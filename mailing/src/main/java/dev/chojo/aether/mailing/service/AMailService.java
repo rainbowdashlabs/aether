@@ -26,16 +26,16 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import org.apache.commons.validator.routines.EmailValidator;
-import org.eclipse.angus.mail.imap.IMAPFolder;
 import org.eclipse.angus.mail.imap.IMAPStore;
 import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Optional;
-import java.util.Properties;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -55,12 +55,20 @@ public abstract class AMailService<V extends AMailEntry> {
     private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
     /**
-     * Create a new mail service with the given configuration.
+     * Create a new mail service with the given configuration. Call {@link #start()} once to run the cleanup task.
      *
      * @param config the configuration
+     * @throws IllegalStateException if the mailing configuration has no mail salt
      */
     public AMailService(MailServiceConfig<V> config) {
+        config.mailing().requireMailSalt();
         this.config = config;
+    }
+
+    /**
+     * Schedules the cleanup task of the configuration 30 minutes from now and every 60 minutes after that. Call it once.
+     */
+    public void start() {
         executor.scheduleAtFixedRate(this::cleanupExpiredMails, 30, 60, TimeUnit.MINUTES);
     }
 
@@ -89,12 +97,19 @@ public abstract class AMailService<V extends AMailEntry> {
             mailProvider().byUser(user).addMail(mailEntry);
         }
 
-        executor.execute(() -> {
-            // This takes a while
-            sendMail(templates().accountConfirmation(mail, config.host(), hash, mailEntry.verificationCode()));
-        });
+        String url = confirmationUrl(hash, mailEntry.verificationCode());
+        executor.execute(() -> sendMail(templates().accountConfirmation(mail, url)));
 
         return Result.success(mailEntry);
+    }
+
+    private String confirmationUrl(String mailHash, String code) {
+        return "%s%s?code=%s&hash=%s"
+                .formatted(
+                        host(),
+                        mailing().confirmationPath(),
+                        URLEncoder.encode(code, StandardCharsets.UTF_8),
+                        URLEncoder.encode(mailHash, StandardCharsets.UTF_8));
     }
 
     /**
@@ -199,7 +214,7 @@ public abstract class AMailService<V extends AMailEntry> {
     public long getRetryAfterSeconds(long user) {
         IUserMails<V> userMails = mailProvider().byUser(user);
         return userMails.mails().values().stream()
-                .filter(m -> m.source() == MailSource.USER)
+                .filter(m -> MailSource.USER.equals(m.source()))
                 .map(m -> m.verificationRequested().plus(5, ChronoUnit.MINUTES).getEpochSecond()
                         - Instant.now().getEpochSecond())
                 .max(Long::compareTo)
@@ -217,7 +232,10 @@ public abstract class AMailService<V extends AMailEntry> {
     }
 
     /**
-     * Send an email.
+     * Send an email over SMTP and store a copy in the folder {@code Sent} below the IMAP inbox.
+     * <p>
+     * Sending and storing are tried three times each. A mail that could not be sent is not stored, and a mail that
+     * could not be stored is not sent again.
      *
      * @param mail the email to send
      */
@@ -231,37 +249,33 @@ public abstract class AMailService<V extends AMailEntry> {
             return;
         }
 
-        Optional<Boolean> sendResult = Retry.retryAndReturn(3, () -> sendMessage(mimeMessage), err -> {
-            log.error("Could not sent mail", err);
-            sendMail(mail);
-        });
-
-        if (sendResult.isEmpty()) {
-            log.error("Retries exceeded. Aborting.");
+        boolean sent = Retry.retryAndReturn(
+                        3, () -> sendMessage(mimeMessage), err -> log.error("Could not send mail", err))
+                .isPresent();
+        if (!sent) {
+            log.error("Could not send mail after three tries.");
             return;
         }
 
         try (IMAPStore imapStore = createImapStore(session)) {
-            Optional<Boolean> result = Retry.retryAndReturn(3, () -> storeMessage(imapStore, mimeMessage), err -> {
-                log.error("Could not store mail");
-                sendMail(mail);
-            });
-
-            if (result.isPresent() && result.get()) {
+            boolean stored = Retry.retryAndReturn(
+                            3,
+                            () -> storeMessage(imapStore, mimeMessage),
+                            err -> log.error("Could not store mail", err))
+                    .isPresent();
+            if (stored) {
                 log.debug("Mail stored");
             } else {
-                log.error("Retries exceeded. Aborting.");
+                log.error("Could not store mail after three tries.");
             }
         } catch (MessagingException e) {
-            log.error("Error occurred while sending a mail", e);
+            log.error("Could not connect to the IMAP store", e);
         }
     }
 
     private Session createSession() {
         log.debug("Creating new mail session");
-        Properties props = System.getProperties();
-        props.putAll(mailing().properties());
-        return Session.getInstance(props, new Authenticator() {
+        return Session.getInstance(mailing().properties(), new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(mailing().user(), mailing().password());
@@ -269,15 +283,10 @@ public abstract class AMailService<V extends AMailEntry> {
         });
     }
 
-    private IMAPStore createImapStore(Session session) {
+    private IMAPStore createImapStore(Session session) throws MessagingException {
         log.debug("Creating imap store");
-        IMAPStore imapStore = null;
-        try {
-            imapStore = (IMAPStore) session.getStore("imap");
-            imapStore.connect();
-        } catch (MessagingException e) {
-            throw new RuntimeException(e);
-        }
+        IMAPStore imapStore = (IMAPStore) session.getStore("imap");
+        imapStore.connect();
         return imapStore;
     }
 
@@ -287,39 +296,20 @@ public abstract class AMailService<V extends AMailEntry> {
         message.setRecipient(Message.RecipientType.TO, new InternetAddress(mail.address(), false));
         message.setDataHandler(new DataHandler(mail.text(), "text/html; charset=UTF-8"));
         message.setSubject(mail.subject());
-        message.setHeader("X-Mailer", "Reputation Bot");
+        if (!mailing().mailer().isBlank()) {
+            message.setHeader("X-Mailer", mailing().mailer());
+        }
         message.setSentDate(new Date());
         return message;
     }
 
     private boolean storeMessage(IMAPStore store, MimeMessage message) throws MessagingException {
-        store.getFolder("inbox");
-        Folder sent = getInbox(store).getFolder("Sent");
+        Folder sent = store.getFolder("inbox").getFolder("Sent");
         if (!sent.exists()) {
             sent.create(Folder.HOLDS_MESSAGES);
         }
         sent.appendMessages(new Message[] {message});
         return true;
-    }
-
-    private IMAPFolder getInbox(IMAPStore store) {
-        return getFolder(store, "inbox");
-    }
-
-    private IMAPFolder getFolder(IMAPStore store, String name) {
-        return Retry.retryAndReturn(
-                        3,
-                        () -> {
-                            log.debug("Connecting to folder {}", name);
-                            IMAPFolder folder = (IMAPFolder) store.getFolder(name);
-                            folder.open(Folder.READ_WRITE);
-                            return folder;
-                        },
-                        err -> {
-                            log.error("Could not connect to folder. Retrying.");
-                            getFolder(store, name);
-                        })
-                .orElseThrow(() -> new RuntimeException("Reconnecting to folder failed."));
     }
 
     private boolean sendMessage(MimeMessage message) throws MessagingException {

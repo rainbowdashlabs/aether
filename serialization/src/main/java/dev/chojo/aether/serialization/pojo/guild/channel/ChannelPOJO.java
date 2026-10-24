@@ -6,6 +6,7 @@
 
 package dev.chojo.aether.serialization.pojo.guild.channel;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import net.dv8tion.jda.api.entities.channel.ChannelType;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 
@@ -14,9 +15,16 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
  */
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "unused"})
 public class ChannelPOJO {
+    @JsonProperty
     private String name;
+
+    @JsonProperty
     private String id;
+
+    @JsonProperty
     private ChannelType type;
+
+    @JsonProperty
     private boolean visible;
 
     public ChannelPOJO(String name, String id, ChannelType type, boolean visible) {

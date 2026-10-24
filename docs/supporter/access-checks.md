@@ -11,7 +11,7 @@ sidebar_position: 3
 and checks the [interaction rules](./configuration.md#interactions).
 
 ```java
-SubcriptionContextProvider contexts = new SubcriptionContextProvider() {
+SubscriptionContextProvider contexts = new SubscriptionContextProvider() {
     @Override
     public ISubscriptionContext getSubscriptionContext(User user) {
         return () -> repository.user(user.getIdLong()).subscriptionIds();
@@ -55,7 +55,8 @@ So a rule or feature can list the subscription `id`, which your context provider
 Discord sends with the interaction.
 
 When the check fails, a command is cancelled and the user gets the message from `getCommandError`. An autocomplete
-request gets an empty list of choices. `getAutoCompleteError` is not used at the moment.
+request gets a single choice with the text from `getAutoCompleteError` (at most 100 characters), or no choices when
+that text is blank.
 
 ## Checking features in a command
 
@@ -84,6 +85,8 @@ public class ProfileCommands {
     }
 }
 ```
+
+`hasAccess` throws an `IllegalArgumentException` for a feature that is not in your configuration.
 
 `AccessCheckResult` holds the `feature` that was checked and whether the context `hasAccess`.
 `accessOrThrow(feature -> new MyException(feature))` throws your exception when access is denied.

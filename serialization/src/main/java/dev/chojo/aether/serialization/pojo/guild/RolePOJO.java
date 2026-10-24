@@ -6,6 +6,7 @@
 
 package dev.chojo.aether.serialization.pojo.guild;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import dev.chojo.aether.common.util.Colors;
 import net.dv8tion.jda.api.entities.Role;
 
@@ -17,9 +18,16 @@ import java.util.Objects;
  */
 @SuppressWarnings({"FieldCanBeLocal", "FieldMayBeFinal", "unused"})
 public class RolePOJO {
+    @JsonProperty
     private String name;
+
+    @JsonProperty
     private String id;
+
+    @JsonProperty
     private int position;
+
+    @JsonProperty
     private String color;
 
     public RolePOJO(String name, String id, Color color, int position) {

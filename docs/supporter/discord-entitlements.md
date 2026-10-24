@@ -23,7 +23,7 @@ the guild it is assigned to (`0` for none). You implement:
 
 ## Your service
 
-Extend `AEntitlementService` and register it as a JDA event listener:
+Extend `AEntitlementService`, register it as a JDA event listener and call `start()`:
 
 ```java
 public class EntitlementService extends AEntitlementService<DiscordPurchase> {
@@ -69,6 +69,7 @@ public class EntitlementService extends AEntitlementService<DiscordPurchase> {
 }
 
 jda.addEventListener(entitlementService);
+entitlementService.start();
 ```
 
 ## What happens
@@ -82,8 +83,8 @@ jda.addEventListener(entitlementService);
 The service finds the subscription through the SKU id in the `DISCORD` platform ids of your
 [configuration](./configuration.md#subscriptions). An unknown SKU is logged and ignored.
 
-Every 60 minutes, starting 30 minutes after the service was created, it disables the subscriptions of all purchases
-from `getExpiredPurchases`.
+After `start()`, every 60 minutes, starting 30 minutes later, the service disables the subscriptions of all purchases
+from `getExpiredPurchases`. The service does not call `start()` itself.
 
 ## Assigning purchases to guilds
 
@@ -101,14 +102,11 @@ A user purchase can be moved between guilds:
 | `ALREADY_SUBSCRIBED` | The guild has this subscription already. |
 | `LOCKED` | A guild purchase can not move to another guild. |
 | `SUBSCRIPTION_EXPIRED` | The purchase has expired. |
-| `UNKOWN` | `assignToGuild` returned `false`. |
+| `UNKNOWN` | `assignToGuild` returned `false`. |
 
-`refresh(guild)` loads the active entitlements of a guild from Discord, removes the guild's Discord subscriptions and
-registers the purchases again.
+`refresh(guild)` loads the active entitlements of a guild from Discord, removes the guild's Discord subscriptions,
+registers the purchases again and enables them for the guild. User purchases that were assigned to the guild are not
+part of that list; enable them again with `enableSubscription`.
 
-:::warning
-
-Building a purchase from an entitlement that never ends fails with a `NullPointerException`, and `refresh` does not
-enable the subscriptions again after removing them.
-
-:::
+A purchase from an entitlement that never ends has no expiry (`null`). The subscription a purchase adds to a guild
+carries the entitlement type of the purchase.
