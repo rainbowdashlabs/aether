@@ -101,13 +101,8 @@ Any error in the callback answers with status 400 and an `ErrorResponseWrapper` 
 | `guilds(token)` | `GUILDS` | The user's guilds as `DiscordGuild`. Empty without the scope. |
 | `connections(token)` | `CONNECTIONS` | Linked accounts as `Connection`. Empty without the scope. |
 | `guildMember(token, guildId)` | `GUILDS_MEMBERS_READ` | The user's `Member` in a guild, or `null`. |
-| `joinGuild(data, token, botToken, guildId)` | `GUILDS_JOIN` | Adds the user to a guild your bot is in. Returns the `Member`, or `null`. |
-| `revokeToken(token)` | | Revokes the token at Discord. |
+| `joinGuild(data, token, botToken, guildId)` | `GUILDS_JOIN` | Adds the user to a guild your bot is in. Returns the new `Member`, or empty when the user is a member already. |
+| `revokeToken(token)` | | Revokes the token at Discord and drops its cached data. |
 
-`user`, `guilds` and `connections` are cached per access token for `cacheRetentionMinutes`.
-
-:::warning
-
-`joinGuild` sends its JSON body without a `Content-Type` header.
-
-:::
+`user`, `guilds` and `connections` are cached per access token for `cacheRetentionMinutes`. `user`, `guilds`,
+`connections` and `joinGuild` throw when Discord answers with an error.

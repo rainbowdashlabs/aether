@@ -35,6 +35,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
@@ -45,7 +46,7 @@ import java.util.stream.Collectors;
  */
 public class DiscordClient {
     private static final String DISCORD_BASE = "discord.com";
-    private static final String DISCORD_API = "https://" + DISCORD_BASE + "/api/";
+    private static final String DISCORD_API = "https://" + DISCORD_BASE + "/api";
     private final HttpClient httpClient = HttpClient.newHttpClient();
     private final ObjectMapper mapper = JsonMapper.builder()
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
@@ -222,22 +223,29 @@ public class DiscordClient {
      * @param token    The user's access token
      * @param botToken Bot token for authorization
      * @param guildId  ID of the guild to join
+     * @return the new member, or empty if the token lacks the scope or the user is already a member of the guild
+     * @throws IOException          If Discord rejects the request
+     * @throws InterruptedException If the request is interrupted
      */
-    public Member joinGuild(JoinGuildData data, IOAuthToken token, String botToken, long guildId)
+    public Optional<Member> joinGuild(JoinGuildData data, IOAuthToken token, String botToken, long guildId)
             throws IOException, InterruptedException {
         if (!token.hasScope(OAuthScope.GUILDS_JOIN)) {
-            return null;
+            return Optional.empty();
         }
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(DISCORD_API + "/guilds/" + guildId + "/members/" + token.userId()))
                 .header("Authorization", "Bot " + botToken)
+                .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(data.withToken(token))))
                 .build();
         HttpResponse<String> res = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
         if (res.statusCode() / 100 != 2) {
-            return null;
+            throw new IOException("Discord guild join failed: %d - %s".formatted(res.statusCode(), res.body()));
         }
-        return mapper.readValue(res.body(), Member.class);
+        if (res.statusCode() == 204) {
+            return Optional.empty();
+        }
+        return Optional.of(mapper.readValue(res.body(), Member.class));
     }
 
     /**
@@ -303,6 +311,7 @@ public class DiscordClient {
     public void revokeToken(IOAuthToken token) throws IOException, InterruptedException {
         userCache.invalidate(token.accessToken());
         userGuildsCache.invalidate(token.accessToken());
+        userConnectionsCache.invalidate(token.accessToken());
         String form = "token=" + enc(token.accessToken());
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(DISCORD_API + "/oauth2/token/revoke"))
