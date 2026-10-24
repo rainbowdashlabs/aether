@@ -51,6 +51,6 @@ public class MemberPOJO {
                 "unknown",
                 id,
                 "#ffffff",
-                "https://cdn.discordapp.com/embed/avatars/%s.png".formatted(id.hashCode() % 5));
+                "https://cdn.discordapp.com/embed/avatars/%s.png".formatted(Math.floorMod(id.hashCode(), 5)));
     }
 }
