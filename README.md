@@ -1,68 +1,53 @@
 # Aether
 
-[![Maven Central](https://img.shields.io/maven-central/v/dev.chojo.aether/aether)](https://central.sonatype.com/artifact/dev.chojo.aether/aether)
-[![License](https://img.shields.io/github/license/rainbowdashlabs/aether)](https://github.com/rainbowdashlabs/aether/blob/master/LICENSE.md)
-[![Build Status](https://github.com/rainbowdashlabs/aether/actions/workflows/verify.yml/badge.svg)](https://github.com/rainbowdashlabs/aether/actions/workflows/verify.yml)
-[![Javadocs Status](https://github.com/rainbowdashlabs/aether/actions/workflows/javadocs.yml/badge.svg)](https://github.com/rainbowdashlabs/aether/actions/workflows/javadocs.yml)
-[![Last Commit](https://img.shields.io/github/last-commit/rainbowdashlabs/aether)](https://github.com/rainbowdashlabs/aether/commits/master)
-[![Issues](https://img.shields.io/github/issues/rainbowdashlabs/aether)](https://github.com/rainbowdashlabs/aether/issues)
+[![Maven Central](https://img.shields.io/maven-central/v/dev.chojo.aether/aether?style=for-the-badge&label=Release)](https://central.sonatype.com/artifact/dev.chojo.aether/aether)
+[![Snapshot](https://img.shields.io/nexus/s/dev.chojo.aether/aether?server=https%3A%2F%2Feldonexus.de&style=for-the-badge&label=Snapshot&color=orange)](https://eldonexus.de/#browse/browse:maven-snapshots:dev%2Fchojo%2Faether)
 
-A library for Discord bots based on [JDA](https://github.com/discord-jda/JDA) and [jda-commands](https://github.com/kaktushose/jda-commands).
+Building blocks for Discord bots on [JDA](https://github.com/discord-jda/JDA) and
+[jda-commands](https://github.com/Kaktushose/jda-commands): subscriptions and access checks for commands, Discord
+and Ko-fi purchases, verified mail addresses, Discord login for Javalin web apps and JSON views of Discord objects.
+You bring the storage; Aether brings the logic.
 
-The Aether framework provides a set of modules designed to simplify common tasks for Discord bot developers, including user email management, Ko-fi integration, flexible subscription/feature access control, and seamless Discord OAuth2 authentication.
+**Documentation: [docs.chojo.dev/aether](https://docs.chojo.dev/aether)**
 
-The project is available on **Maven Central**.
+## Requirements
 
-## Installation
+- Java 25 or newer
+- JDA 6 and jda-commands 5
 
-### Gradle (Kotlin DSL)
+## Dependency
+
+Gradle (Kotlin DSL):
 
 ```kotlin
-implementation("dev.chojo.aether:aether:version")
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("dev.chojo.aether:supporter:2.0.0")
+}
 ```
 
-### Maven
+Maven:
 
 ```xml
 <dependency>
     <groupId>dev.chojo.aether</groupId>
-    <artifactId>aether</artifactId>
-    <version>version</version>
+    <artifactId>supporter</artifactId>
+    <version>2.0.0</version>
 </dependency>
 ```
 
-## Modules
+The modules are `common`, `common-web`, `discord-oauth`, `kofi`, `mailing`, `serialization` and `supporter`.
+`dev.chojo.aether:aether` brings all of them. Snapshots are on EldoNexus:
+`https://eldonexus.de/repository/maven-snapshots/`.
 
-### Common
-The `common` module provides shared interfaces and utilities used across other Aether modules, such as `UserProvider` for abstracting Discord user and member lookups.
+## Contributing and releases
 
-### Common Web
-The `common-web` module provides web-related utilities and error handling for Discord-related web services, including common URL management and exception handling.
+See [CONTRIBUTING.md](CONTRIBUTING.md). Versions come from publishdata: a `vX.Y.Z` tag publishes the release, `main`
+publishes snapshots.
 
-### Mailing
-The `mailing` module handles user email management. It supports:
-- **Registration & Verification**: Securely register and verify user email addresses via SMTP/IMAP.
-- **Privacy**: Email addresses are stored as hashes to protect user privacy.
-- **Templates**: Integrated support for HTML email templates.
+## License
 
-### Ko-fi
-The `kofi` module provides seamless integration with [Ko-fi](https://ko-fi.com) via webhooks. It allows:
-- **Webhook Handling**: Receive and validate Ko-fi notifications for donations, subscriptions, and shop orders.
-- **User Mapping**: Automatically link Ko-fi transactions to Discord users.
-- **Subscription Management**: Track and manage user-assigned guild benefits.
-
-### Supporter
-The `supporter` module offers a flexible system for managing and validating user and guild subscriptions and features. It includes:
-- **Access Control**: Middleware-based access validation for Discord interactions (Slash Commands, Context Menus).
-- **Extensibility**: Support for multiple platforms (e.g., Discord, Ko-fi) and custom subscription tiers.
-- **JDAC Integration**: Seamlessly integrates with the JDA Commands (JDAC) framework for automated permission checks.
-
-### Discord OAuth
-The `discord-oauth` module provides a simple way to integrate Discord OAuth2 authentication into a Javalin application, handling the authorization code grant flow, token management, and retrieval of user and guild information.
-
-### Serialization
-The `serialization` module provides Jackson serializers for [JDA](https://github.com/discord-jda/JDA) entities, converting them into POJOs that can be easily serialized to JSON.
-
-## Framework Overview
-
-Aether is designed to be modular. You can use individual modules as needed, or combine them to build a comprehensive supporter and management system for your Discord bot. The framework focuses on decoupling logic from specific persistence layers, allowing you to implement your own storage solutions by extending the provided services and interfaces.
+LGPL-3.0-or-later, see [LICENSE.md](LICENSE.md).
