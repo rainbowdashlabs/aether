@@ -29,8 +29,13 @@ public class SupporterValidator<FeatureID extends Enum<?>> {
      *
      * @param feature The feature.
      * @return The result of the access check.
+     * @throws IllegalArgumentException if the feature is not in the configuration
      */
     public AccessCheckResult hasAccess(FeatureID feature) {
-        return subscriptionContext.hasAccess(configuration.feature(feature));
+        var configured = configuration.feature(feature);
+        if (configured == null) {
+            throw new IllegalArgumentException("Feature %s is not configured.".formatted(feature));
+        }
+        return subscriptionContext.hasAccess(configured);
     }
 }

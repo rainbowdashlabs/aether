@@ -85,6 +85,8 @@ public class ProfileCommands {
 }
 ```
 
+`hasAccess` throws an `IllegalArgumentException` for a feature that is not in your configuration.
+
 `AccessCheckResult` holds the `feature` that was checked and whether the context `hasAccess`.
 `accessOrThrow(feature -> new MyException(feature))` throws your exception when access is denied.
 

@@ -11,12 +11,15 @@ import dev.chojo.aether.supporter.configuration.modules.feature.AFeature;
 import dev.chojo.aether.supporter.configuration.modules.subscriptions.Subscription;
 import dev.chojo.aether.supporter.configuration.modules.subscriptions.SubscriptionKey;
 import dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.Platform;
+import dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.PlatformSubscription;
 import dev.chojo.aether.supporter.configuration.modules.subscriptions.platform.purchase.PurchaseType;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 /**
  * Configuration for the supporter module.
@@ -52,19 +55,40 @@ public class SupporterConfiguration<FeatureID extends Enum<?>, Price, FeatureMet
         return subscriptions.get(subscriptionID);
     }
 
+    /**
+     * Finds the purchase type a platform specific id stands for. Subscriptions without the platform are skipped.
+     *
+     * @param platform The platform.
+     * @param sku      The platform specific id.
+     * @return An optional containing the purchase type if found.
+     */
     public Optional<PurchaseType> findPurchaseTypeBySkuID(Platform platform, String sku) {
-        return subscriptions().stream()
-                .map(p -> p.platformSubscription(platform).subscriptionType(sku))
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+        return platformSubscriptions(platform)
+                .map(p -> p.subscriptionType(sku))
+                .flatMap(Optional::stream)
                 .findFirst();
     }
 
+    /**
+     * Finds the subscription that lists a platform specific id for any purchase type. Subscriptions without the platform
+     * are skipped.
+     *
+     * @param platform The platform.
+     * @param sku      The platform specific id.
+     * @return An optional containing the subscription if found.
+     */
     public Optional<Subscription> findSubscriptionBySkuID(Platform platform, String sku) {
         return subscriptions().stream()
-                .filter(p ->
-                        p.platformSubscription(platform).subscriptionType(sku).isPresent())
+                .filter(sub -> sub.platformSubscription(platform) != null)
+                .filter(sub ->
+                        sub.platformSubscription(platform).subscriptionType(sku).isPresent())
                 .findFirst();
+    }
+
+    private Stream<PlatformSubscription> platformSubscriptions(Platform platform) {
+        return subscriptions().stream()
+                .map(sub -> sub.platformSubscription(platform))
+                .filter(Objects::nonNull);
     }
 
     /**
@@ -87,7 +111,8 @@ public class SupporterConfiguration<FeatureID extends Enum<?>, Price, FeatureMet
     }
 
     /**
-     * Finds a subscription by platform, type, and platform-specific id.
+     * Finds a subscription by platform, type, and platform-specific id. Subscriptions without the platform or without an
+     * id for the type are skipped.
      *
      * @param platform The platform.
      * @param type     The purchase type.
@@ -96,8 +121,8 @@ public class SupporterConfiguration<FeatureID extends Enum<?>, Price, FeatureMet
      */
     public Optional<Subscription> findSubscription(Platform platform, PurchaseType type, String id) {
         return subscriptions().stream()
-                .filter(sub ->
-                        sub.platformSubscription(platform).subscriptionId(type).equals(id))
+                .filter(sub -> sub.platformSubscription(platform) != null)
+                .filter(sub -> Objects.equals(sub.platformSubscription(platform).subscriptionId(type), id))
                 .findFirst();
     }
 
