@@ -55,7 +55,7 @@ public abstract class AMailService<V extends AMailEntry> {
     private final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
 
     /**
-     * Create a new mail service with the given configuration.
+     * Create a new mail service with the given configuration. Call {@link #start()} once to run the cleanup task.
      *
      * @param config the configuration
      * @throws IllegalStateException if the mailing configuration has no mail salt
@@ -63,6 +63,12 @@ public abstract class AMailService<V extends AMailEntry> {
     public AMailService(MailServiceConfig<V> config) {
         config.mailing().requireMailSalt();
         this.config = config;
+    }
+
+    /**
+     * Schedules the cleanup task of the configuration 30 minutes from now and every 60 minutes after that. Call it once.
+     */
+    public void start() {
         executor.scheduleAtFixedRate(this::cleanupExpiredMails, 30, 60, TimeUnit.MINUTES);
     }
 

@@ -91,11 +91,12 @@ MailService mailService = new MailService(new MailServiceConfig<>(
         new MailTemplates(),
         userMailsProvider,
         repository::deleteUnverifiedMails));
+mailService.start();
 ```
 
 `MailServiceConfig` takes the public host of your web app, the `Mailing` configuration, the templates, your
-`IUserMailsProvider` and a cleanup task. The service runs the cleanup every 60 minutes, starting 30 minutes after it
-was created.
+`IUserMailsProvider` and a cleanup task. `start()` runs the cleanup every 60 minutes, starting 30 minutes later. The
+service does not call `start()` itself.
 
 ## Register and verify an address
 
