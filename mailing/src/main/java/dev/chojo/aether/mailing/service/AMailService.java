@@ -208,7 +208,7 @@ public abstract class AMailService<V extends AMailEntry> {
     public long getRetryAfterSeconds(long user) {
         IUserMails<V> userMails = mailProvider().byUser(user);
         return userMails.mails().values().stream()
-                .filter(m -> m.source() == MailSource.USER)
+                .filter(m -> MailSource.USER.equals(m.source()))
                 .map(m -> m.verificationRequested().plus(5, ChronoUnit.MINUTES).getEpochSecond()
                         - Instant.now().getEpochSecond())
                 .max(Long::compareTo)
