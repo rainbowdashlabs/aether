@@ -55,7 +55,8 @@ So a rule or feature can list the subscription `id`, which your context provider
 Discord sends with the interaction.
 
 When the check fails, a command is cancelled and the user gets the message from `getCommandError`. An autocomplete
-request gets an empty list of choices. `getAutoCompleteError` is not used at the moment.
+request gets a single choice with the text from `getAutoCompleteError` (at most 100 characters), or no choices when
+that text is blank.
 
 ## Checking features in a command
 
