@@ -24,36 +24,36 @@ public enum OAuthScope {
     /**
      * allows your app to read build data for a user’s applications
      */
-    APPLICATIONS_BUILD_READ,
+    APPLICATIONS_BUILDS_READ,
 
     /**
      * allows your app to upload/update builds for a user’s applications - only available to approved partners
      */
-    APPLICATIONS_BUILD_UPDATE,
+    APPLICATIONS_BUILDS_UPLOAD,
 
     /**
      * allows your app to add commands to a guild - included by default with the bot scope
      */
-    APPPLICATIONS_COMMANDS,
+    APPLICATIONS_COMMANDS,
 
     /**
      * allows your app to update its commands using a Bearer token - client credentials grant only
      */
-    APPPLICATIONS_COMMANDS_UPDATE,
+    APPLICATIONS_COMMANDS_UPDATE,
     /**
      * allows your app to update permissions for its commands in a guild a user has permissions to
      */
-    APPPLICATIONS_COMMANDS_PERMISSIONS_UPDATE,
+    APPLICATIONS_COMMANDS_PERMISSIONS_UPDATE,
 
     /**
      * allows your app to read entitlements for a user’s applications
      */
-    APPPLICATIONS_ENTITLEMENTS,
+    APPLICATIONS_ENTITLEMENTS,
 
     /**
      * allows your app to read and update store data (SKUs, store listings, achievements, etc.) for a user’s applications
      */
-    APPPLICATIONS_STORE_UPDATE,
+    APPLICATIONS_STORE_UPDATE,
 
     /**
      * for oauth2 bots, this puts the bot in the user’s selected guild by default
@@ -68,7 +68,7 @@ public enum OAuthScope {
     /**
      * allows your app to see information about the user’s DMs and group DMs - only available to approved partners
      */
-    DB_CHANNELS_READ("dm_channels.read"),
+    DM_CHANNELS_READ("dm_channels.read"),
 
     /**
      * enables /users/@me to return an email
@@ -166,10 +166,22 @@ public enum OAuthScope {
         return this.scope;
     }
 
+    /**
+     * Checks whether a space separated list of scopes, as Discord returns it, contains this scope.
+     *
+     * @param scope the space separated scopes
+     * @return true if the list names this scope
+     */
     public boolean isContained(String scope) {
-        return scope.contains(this.scope);
+        return Arrays.asList(scope.split(" ")).contains(this.scope);
     }
 
+    /**
+     * Parses a space separated list of scopes, as Discord returns it. Unknown scopes are skipped.
+     *
+     * @param scope the space separated scopes
+     * @return the scopes named in the list
+     */
     public static Set<OAuthScope> fromScope(String scope) {
         return Arrays.stream(values()).filter(s -> s.isContained(scope)).collect(Collectors.toSet());
     }

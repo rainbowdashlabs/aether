@@ -108,8 +108,6 @@ Any error in the callback answers with status 400 and an `ErrorResponseWrapper` 
 
 :::warning
 
-The scopes `APPPLICATIONS_COMMANDS`, `APPPLICATIONS_COMMANDS_UPDATE`, `APPPLICATIONS_COMMANDS_PERMISSIONS_UPDATE`,
-`APPPLICATIONS_ENTITLEMENTS` and `APPPLICATIONS_STORE_UPDATE` produce scope names Discord does not know. Do not use
-them. `joinGuild` sends its JSON body without a `Content-Type` header.
+`joinGuild` sends its JSON body without a `Content-Type` header.
 
 :::
