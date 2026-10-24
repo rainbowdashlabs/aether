@@ -37,6 +37,9 @@ Aether stores nothing itself. You implement:
 | `ISubscriptions` | The subscriptions of one guild, with add, delete and clear. Used by the entitlement and Ko-fi services. |
 | `ADiscordPurchase` and `AEntitlementService` | Only for Discord purchases. See [Discord entitlements](./discord-entitlements.md). |
 
+The services call `ISubscriptions.deleteSubscription` with a new `Subscription` object. It equals the stored one when
+subscription id, target id, target type and platform match, so `List.remove` finds it.
+
 ## Where to go next
 
 1. [Configuration](./configuration.md): describe your subscriptions, features and locked commands.

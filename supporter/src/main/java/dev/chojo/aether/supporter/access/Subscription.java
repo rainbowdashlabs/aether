@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.entities.Entitlement;
 
 import java.time.Instant;
 import java.time.OffsetDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
 public class Subscription {
@@ -105,19 +106,22 @@ public class Subscription {
         return source;
     }
 
+    /**
+     * Two subscriptions are equal when they grant the same subscription to the same target from the same platform. Expiry,
+     * purchase type and persistence are not compared.
+     */
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-
         Subscription that = (Subscription) o;
-        return targetId == that.targetId && target == that.target;
+        return subscriptionId == that.subscriptionId
+                && targetId == that.targetId
+                && target == that.target
+                && Objects.equals(source, that.source);
     }
 
     @Override
     public int hashCode() {
-        int result = Long.hashCode(targetId);
-        result = 31 * result + target.hashCode();
-        return result;
+        return Objects.hash(subscriptionId, targetId, target, source);
     }
 }
