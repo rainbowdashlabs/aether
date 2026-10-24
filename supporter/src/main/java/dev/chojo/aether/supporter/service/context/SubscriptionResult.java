@@ -25,7 +25,7 @@ public enum SubscriptionResult {
     /**
      * An unknown error occurred.
      */
-    UNKOWN,
+    UNKNOWN,
     /**
      * The subscription was successfully enabled.
      */

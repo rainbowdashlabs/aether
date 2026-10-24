@@ -48,7 +48,7 @@ import static net.dv8tion.jda.api.entities.Entitlement.EntitlementType.APPLICATI
 public abstract class AKofiService<V extends AKofiPurchase> {
     private static final Logger log = LoggerFactory.getLogger(AKofiService.class);
     private final Kofi configuration;
-    private final IUserProvider IUserProvider;
+    private final IUserProvider userProvider;
     private final SupporterConfiguration<?, ?, ?> supporterConfiguration;
     private final AMailService mailService;
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
@@ -57,16 +57,16 @@ public abstract class AKofiService<V extends AKofiPurchase> {
      * Creates a new KofiService.
      *
      * @param configuration          The Ko-fi configuration.
-     * @param IUserProvider           The user provider for resolving Discord users.
+     * @param userProvider           The user provider for resolving Discord users.
      * @param mailService            The mail service for managing user emails and sending notifications.
      * @param supporterConfiguration The supporter configuration for mapping products to subscriptions.
      */
     public AKofiService(
             Kofi configuration,
-            IUserProvider IUserProvider,
+            IUserProvider userProvider,
             AMailService mailService,
             SupporterConfiguration<?, ?, ?> supporterConfiguration) {
-        this.IUserProvider = IUserProvider;
+        this.userProvider = userProvider;
         this.supporterConfiguration = supporterConfiguration;
         this.configuration = configuration;
         this.mailService = mailService;
@@ -153,7 +153,7 @@ public abstract class AKofiService<V extends AKofiPurchase> {
             var sub = supporterConfiguration.byId(purchase.subscriptionId());
             if (sub.isEmpty()) {
                 log.error("Could not find subscription for lifetime sku {}", purchase.subscriptionId());
-                return SubscriptionResult.UNKOWN;
+                return SubscriptionResult.UNKNOWN;
             }
             if (subs.hasAccess(sub.get().id())) return SubscriptionResult.ALREADY_SUBSCRIBED;
             if (purchase.guildId() != 0) disableSubscription(purchase);
@@ -162,13 +162,13 @@ public abstract class AKofiService<V extends AKofiPurchase> {
         } else {
             // This should never happen
             log.error("Unknown purchase type {}", purchase.type());
-            return SubscriptionResult.UNKOWN;
+            return SubscriptionResult.UNKNOWN;
         }
 
         if (purchase.assignToGuild(guild.getIdLong())) {
             return SubscriptionResult.SUCCESS;
         }
-        return SubscriptionResult.UNKOWN;
+        return SubscriptionResult.UNKNOWN;
     }
 
     /**
@@ -199,7 +199,7 @@ public abstract class AKofiService<V extends AKofiPurchase> {
 
     private Optional<User> resolveUser(KofiTransaction data) {
         if (data.discordUserId() == null) return Optional.empty();
-        return IUserProvider.byId(data.discordUserId());
+        return userProvider.byId(data.discordUserId());
     }
 
     private void removeExpiredSubs() {

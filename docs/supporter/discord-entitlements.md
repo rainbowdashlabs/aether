@@ -102,7 +102,7 @@ A user purchase can be moved between guilds:
 | `ALREADY_SUBSCRIBED` | The guild has this subscription already. |
 | `LOCKED` | A guild purchase can not move to another guild. |
 | `SUBSCRIPTION_EXPIRED` | The purchase has expired. |
-| `UNKOWN` | `assignToGuild` returned `false`. |
+| `UNKNOWN` | `assignToGuild` returned `false`. |
 
 `refresh(guild)` loads the active entitlements of a guild from Discord, removes the guild's Discord subscriptions,
 registers the purchases again and enables them for the guild. User purchases that were assigned to the guild are not

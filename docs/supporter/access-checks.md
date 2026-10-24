@@ -11,7 +11,7 @@ sidebar_position: 3
 and checks the [interaction rules](./configuration.md#interactions).
 
 ```java
-SubcriptionContextProvider contexts = new SubcriptionContextProvider() {
+SubscriptionContextProvider contexts = new SubscriptionContextProvider() {
     @Override
     public ISubscriptionContext getSubscriptionContext(User user) {
         return () -> repository.user(user.getIdLong()).subscriptionIds();

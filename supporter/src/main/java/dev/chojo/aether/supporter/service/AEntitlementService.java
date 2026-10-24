@@ -159,7 +159,7 @@ public abstract class AEntitlementService<V extends ADiscordPurchase> extends Li
         if (purchase.assignToGuild(guild.getIdLong())) {
             return SubscriptionResult.SUCCESS;
         }
-        return SubscriptionResult.UNKOWN;
+        return SubscriptionResult.UNKNOWN;
     }
 
     /**
